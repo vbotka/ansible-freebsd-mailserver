@@ -12,6 +12,8 @@ galaxy_info:
   - system
   galaxy_tags:
     - installer
+    - mail
+    - mailserver
     - freebsd
     - postfix
     - dovecot
