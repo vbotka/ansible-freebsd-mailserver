@@ -2,7 +2,7 @@ freebsd-mailserver
 ==================
 
 This role installs and configures postfix and dovecot2 with FreeBSD.
-Tested with FreeBSD 10.3 at [https://cloud.digitalocean.com]
+Tested with FreeBSD 10.3 at https://cloud.digitalocean.com
 
 
 Requirements
@@ -23,7 +23,7 @@ Workflow
 1) Change shell to /bin/sh.
 
 ```
-ansible do-bsd-test -e 'ansible_shell_type=csh ansible_shell_executable=/bin/csh' -a 'sudo pw usermod freebsd -s /bin/sh'
+ansible mailserver -e 'ansible_shell_type=csh ansible_shell_executable=/bin/csh' -a 'sudo pw usermod freebsd -s /bin/sh'
 ```
 
 2) Install role.
@@ -56,7 +56,7 @@ ansible-galaxy install vbotka.ansible-freebsd-mailserver
 ansible-playbook ~/.ansible/playbooks/freebsd-mailserver.yml
 ```
 
-6) Consider to test the mailserver with [http://mxtoolbox.com/]
+6) Consider to test the mailserver with http://mxtoolbox.com/
 
 
 License
@@ -68,4 +68,4 @@ BSD
 Author Information
 ------------------
 
-Vladimir Botka [https://botka.link]
+Vladimir Botka https://botka.link
