@@ -14,4 +14,5 @@ galaxy_info:
     - installer
     - freebsd
     - postfix
+    - dovecot
 dependencies: []
