@@ -1,0 +1,26 @@
+---
+# handlers for freebsd-mailserver
+
+- name: newaliases
+  command: newaliases
+
+- name: postmap virtual domains
+  command: postmap "{{postfix_virtual}}"
+
+- name: set hostname
+  command: hostname "{{rc_conf_hostname}}"
+
+- name: reload postfix
+  service: name=postfix state=reloaded
+
+- name: restart postfix
+  service: name=postfix state=restarted
+
+- name: reload dovecot
+  service: name=dovecot state=reloaded
+
+- name: restart dovecot
+  service: name=dovecot state=restarted
+
+- name: stop sendmail
+  service: name=sendmail state=stopped

@@ -1,0 +1,8 @@
+---
+
+- name: Configure virtual aliases
+  lineinfile: "dest={{postfix_virtual}} regexp='^{{ item.alias }}' line='{{ item.alias }}\t {{ item.user }}' backup=yes create=yes"
+  with_items: virtual_aliases
+  when: virtual_aliases > 0
+  notify: postmap virtual domains
+  tags: config_virtual_aliases

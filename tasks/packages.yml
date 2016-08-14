@@ -1,0 +1,8 @@
+
+- name: Install packages
+  pkgng: name={{item}} state="present"
+  become: yes
+  become_method: sudo
+  with_items:
+    - postfix
+    - dovecot2

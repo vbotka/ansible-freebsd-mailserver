@@ -1,0 +1,29 @@
+---
+# tasks file for freebsd-mailserver
+
+- include: packages.yml
+  tags: packages
+
+- include: config_rc_conf.yml
+  tags: config_rc_conf
+
+- include: config_mailer_conf.yml
+  tags: config_mailer_conf
+
+- include: config_periodic_conf.yml
+  tags: config_periodic_conf
+
+- include: config_postfix.yml
+  tags: config_postfix
+
+- include: config_postfix_master.yml
+  tags: config_postfix_master
+
+- include: config_virtual_aliases.yml
+  tags: config_virtual_aliases
+
+- include: config_aliases.yml
+  tags: config_aliases
+
+- include: config_dovecot.yml
+  tags: config_dovecot

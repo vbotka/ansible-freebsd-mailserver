@@ -1,0 +1,10 @@
+---
+
+- name: Configure /etc/periodic.conf
+  lineinfile: dest="/etc/periodic.conf" regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes" create="yes"
+  with_items:
+    - { regexp: "^daily_clean_hoststat_enable",  line: "daily_clean_hoststat_enable=\"NO\""}
+    - { regexp: "^daily_status_mail_rejects_enable",  line: "daily_status_mail_rejects_enable=\"NO\""}
+    - { regexp: "^daily_status_include_submit_mailq",  line: "daily_status_include_submit_mailq=\"NO\""}
+    - { regexp: "^daily_submit_queuerun",  line: "daily_submit_queuerun=\"NO\""}
+  tags: config_periodic_conf

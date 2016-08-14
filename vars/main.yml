@@ -1,0 +1,28 @@
+---
+# vars for freebsd-mailserver
+
+# CHANGE THIS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#
+# letsencrypt.org certificate and key are present in
+# postfix_main_cf_smtpd_tls_key_file_PATH/postfix_main_cf_myhostname
+#letsencrypt: "no"
+#
+#rc_conf_hostname: "srv.example.com"
+#postfix_main_cf_myhostname: "mail.examle.com"
+#postfix_main_cf_mydomain: "example.com"
+#postfix_main_cf_virtual_alias_domains: "example.net, example.org, example.co"
+#postfix_main_cf_message_size_limit: "40960000"
+#
+#aliases: []
+#aliases:
+#  - { alias: "firstname", user: "user1" }
+#  - { alias: "firstname.lastname",  user: "user1" }
+#  - { alias: "flastname", user: "user1" }
+#
+#virtual_aliases: []
+#virtual_aliases:
+#  - { alias: "firstname@example.net", user: "user1" }
+#  - { alias: "firstname.lastname@example.net", user: "user1" }
+#  - { alias: "flastname@example.net", user: "user1" }
+#
+# CHANGE THIS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

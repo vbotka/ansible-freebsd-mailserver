@@ -1,0 +1,36 @@
+---
+
+- name: Configure Dovecot /usr/local/etc/dovecot/dovecot.conf
+  shell: cd /usr/local/etc/dovecot; if [ ! -f dovecot.conf ]; then cp -R example-config/* .; fi
+
+- name: Configure /usr/local/etc/dovecot/dovecot.conf
+  lineinfile: dest=/usr/local/etc/dovecot/dovecot.conf regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
+  with_items:
+    - { regexp: "^protocols",  line: "protocols = imap pop3 lmtp"}
+    - { regexp: "^listen",  line: "listen = *, ::"}
+  notify: reload dovecot
+  tags: config_dovecot
+
+- name: Configure /usr/local/etc/dovecot/conf.d/10-master.conf
+  blockinfile:
+    dest: /usr/local/etc/dovecot/conf.d/10-master.conf
+    backup: yes
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    insertafter: "Postfix smtp-auth"
+    block: |
+      unix_listener /var/spool/postfix/private/auth {
+      mode = 0660
+      user = postfix
+      group = postfix
+      }
+  notify: reload dovecot
+  tags: config_dovecot
+  
+- name: Configure /usr/local/etc/dovecot/conf.d/10-ssl.conf
+  lineinfile: dest=/usr/local/etc/dovecot/conf.d/10-ssl.conf regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
+  with_items:
+    - { regexp: "^ssl_cert",  line: "ssl_cert = <{{postfix_main_cf_smtpd_tls_cert_file_PATH}}/{{postfix_main_cf_myhostname}}/fullchain.pem"}
+    - { regexp: "^ssl_key",  line: "ssl_key = <{{postfix_main_cf_smtpd_tls_key_file_PATH}}/{{postfix_main_cf_myhostname}}/privkey.pem"}
+  when: letsencrypt == "yes"
+  notify: reload dovecot
+  tags: config_dovecot_tls

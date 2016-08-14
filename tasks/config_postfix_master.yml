@@ -1,0 +1,24 @@
+---
+
+- name: Configure submission {{postfix_master_cf}}
+  lineinfile: dest={{postfix_master_cf}} regexp="^submission" line="submission inet n       -       n       -       -       smtpd" backup="yes"
+  notify: reload postfix
+  tags:
+    - config_potfix_master_cf_submission
+
+- name: Configure submission options {{postfix_master_cf}}
+  lineinfile: dest={{postfix_master_cf}} regexp="{{ item.regexp }}" line="{{ item.line }}" insertafter="^submission" backup="yes"
+  with_items:
+    - { regexp: "^  -o smtpd_tls_security_level", line: "  -o smtpd_tls_security_level={{postfix_master_cf_smtpd_tls_security_level}}"}
+    - { regexp: "^  -o smtpd_sasl_auth_enable", line: "  -o smtpd_sasl_auth_enable={{postfix_master_cf_smtpd_sasl_auth_enable}}"}
+    - { regexp: "^  -o smtpd_sasl_type", line: "  -o smtpd_sasl_type={{postfix_master_cf_smtpd_sasl_type}}"}
+    - { regexp: "^  -o smtpd_sasl_path", line: "  -o smtpd_sasl_path={{postfix_master_cf_smtpd_sasl_path}}"}
+    - { regexp: "^  -o smtpd_sasl_security_options", line: "  -o smtpd_sasl_security_options={{postfix_master_cf_smtpd_sasl_security_options}}"}
+    - { regexp: "^  -o smtpd_sasl_local_domain", line: "  -o smtpd_sasl_local_domain={{postfix_master_cf_smtpd_sasl_local_domain}}"}
+    - { regexp: "^  -o smtpd_client_restrictions", line: "  -o smtpd_client_restrictions={{postfix_master_cf_smtpd_client_restrictions}}"}
+    - { regexp: "^  -o smtpd_recipient_restrictions", line: "  -o smtpd_recipient_restrictions={{postfix_master_cf_smtpd_recipient_restrictions}}"}
+    - { regexp: "^  -o smtpd_reject_unlisted_recipient", line: "  -o smtpd_reject_unlisted_recipient={{postfix_master_cf_smtpd_reject_unlisted_recipient}}"}
+    - { regexp: "^  -o smtpd_relay_restrictions", line: "  -o smtpd_relay_restrictions={{postfix_master_cf_smtpd_relay_restrictions}}"}
+  notify: reload postfix
+  tags:
+    - config_potfix_master_cf_submission

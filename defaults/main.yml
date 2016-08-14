@@ -1,0 +1,104 @@
+---
+# defaults for freebsd-mailserver 
+
+# CHANGE THIS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+# letsencrypt.org certificate and key are present in
+# postfix_main_cf_smtpd_tls_key_file_PATH/postfix_main_cf_myhostname
+letsencrypt: "no"
+
+rc_conf_hostname: "srv.example.com"
+postfix_main_cf_myhostname: "mail.examle.com"
+postfix_main_cf_mydomain: "example.com"
+postfix_main_cf_virtual_alias_domains: "example.net, example.org, example.co"
+postfix_main_cf_message_size_limit: "40960000"
+
+aliases: []
+#aliases:
+  #  - { alias: "firstname", user: "user1" }
+  #  - { alias: "firstname.lastname",  user: "user1" }
+  #  - { alias: "flastname", user: "user1" }
+
+virtual_aliases: []
+#virtual_aliases:
+  #  - { alias: "firstname@example.net", user: "user1" }
+  #  - { alias: "firstname.lastname@example.net", user: "user1" }
+  #  - { alias: "flastname@example.net", user: "user1" }
+
+# CHANGE THIS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+# paths
+postfix_main_cf: "/usr/local/etc/postfix/main.cf"
+postfix_master_cf: "/usr/local/etc/postfix/master.cf"
+postfix_virtual: "/usr/local/etc/postfix/virtual"
+postfix_alias: "/etc/mail/aliases"
+#
+# main.cf
+postfix_main_cf_inet_interfaces: "all"
+postfix_main_cf_mynetworks_style: "host"
+postfix_main_cf_mydestination: "$myhostname, localhost.$mydomain, localhost, $mydomain, mail.$mydomain, www.$mydomain, ftp.$mydomain"
+postfix_main_cf_relay_domains: "$mydestination"
+#
+postfix_main_cf_alias_maps: "hash:/etc/mail/aliases"
+postfix_main_cf_alias_database: "hash:/etc/mail/aliases"
+postfix_main_cf_recipient_delimiter: "+"
+postfix_main_cf_home_mailbox: "Maildir/"
+postfix_main_cf_smtpd_banner: "$myhostname ESMTP $mail_name"
+postfix_main_cf_html_directory: "no"
+postfix_main_cf_readme_directory: "no"
+postfix_main_cf_meta_directory: "/usr/local/libexec/postfix"
+postfix_main_cf_shlib_directory: "/usr/local/lib/postfix"
+#
+# VIRTUAL DOMAINS
+postfix_main_cf_virtual_alias_maps: "hash:/usr/local/etc/postfix/virtual"
+#
+# TLS
+postfix_main_cf_smtpd_use_tls: "yes"
+postfix_main_cf_smtpd_tls_auth_only: "yes"
+postfix_main_cf_smtpd_tls_loglevel: "1"
+#
+#postfix_main_cf_smtpd_tls_key_file: "/usr/local/etc/letsencrypt/live/mail.example.com/privkey.pem"
+#postfix_main_cf_smtpd_tls_cert_file: "/usr/local/etc/letsencrypt/live/mail.example.com/fullchain.pem"
+postfix_main_cf_smtpd_tls_key_file_PATH: "/usr/local/etc/letsencrypt/live"
+postfix_main_cf_smtpd_tls_cert_file_PATH: "/usr/local/etc/letsencrypt/live"
+postfix_main_cf_smtpd_tls_CAfile: "/etc/ssl/cert.pem"
+#smtpd_tls_CApath = /path/to/certs/
+#
+postfix_main_cf_tls_random_source: "dev:/dev/urandom"
+postfix_main_cf_smtpd_tls_received_header: "yes"
+postfix_main_cf_smtpd_tls_security_level: "may"
+postfix_main_cf_smtpd_tls_ciphers: "medium"
+postfix_main_cf_smtpd_tls_exclude_ciphers: "aNULL, DES, 3DES, MD5, DES+MD5, RC4"
+postfix_main_cf_smtpd_tls_protocols: "!SSLv2, !SSLv3"
+#
+postfix_main_cf_smtpd_tls_session_cache_database: "btree:${data_directory}/smtpd_scache"
+postfix_main_cf_smtpd_tls_session_cache_timeout: "3600s"
+postfix_main_cf_smtpd_relay_restrictions: "permit_mynetworks permit_sasl_authenticated reject_unauth_destination"
+postfix_main_cf_smtpd_recipient_restrictions: "permit_mynetworks permit_sasl_authenticated reject_unauth_destination"
+#
+postfix_main_cf_smtp_use_tls: "yes"
+postfix_main_cf_smtp_tls_CAfile: "/etc/ssl/cert.pem"
+postfix_main_cf_smtp_tls_security_level: "may"
+postfix_main_cf_smtp_tls_note_starttls_offer: "yes"
+postfix_main_cf_smtp_tls_loglevel: "1"
+#
+# DOVECOT
+postfix_main_cf_smtpd_sasl_type: "dovecot"
+postfix_main_cf_smtpd_sasl_path: "private/auth"
+postfix_main_cf_smtpd_sasl_auth_enable: "yes"
+postfix_main_cf_broken_sasl_auth_clients: "no"
+#virtual_transport = lmtp:unix:private/dovecot-lmtp
+#mailbox_transport = lmtp:unix:private/dovecot-lmtp
+
+# master.cf
+postfix_master_cf_smtpd_tls_security_level: "encrypt"
+postfix_master_cf_smtpd_sasl_auth_enable: "yes"
+postfix_master_cf_smtpd_sasl_type: "dovecot"
+postfix_master_cf_smtpd_sasl_path: "private/auth"
+postfix_master_cf_smtpd_sasl_security_options: "noanonymous"
+postfix_master_cf_smtpd_sasl_local_domain: "$myhostname"
+postfix_master_cf_smtpd_client_restrictions: "permit_sasl_authenticated,reject"
+postfix_master_cf_smtpd_recipient_restrictions: "permit_sasl_authenticated,reject"
+postfix_master_cf_smtpd_relay_restrictions: "permit_sasl_authenticated,reject"
+postfix_master_cf_smtpd_reject_unlisted_recipient: "no"
+#postfix_master_cf_content_filter=spamfilter

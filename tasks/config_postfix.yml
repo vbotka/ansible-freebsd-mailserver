@@ -1,0 +1,96 @@
+---
+# NOTES
+# - consider lineinfile option validate=''
+# - consider postfix check, and/or postconf -e
+- name: Configure {{postfix_main_cf}}
+  lineinfile: dest={{postfix_main_cf}} regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
+  with_items:
+    - { regexp: "^myhostname",  line: "myhostname = {{postfix_main_cf_myhostname}}"}
+    - { regexp: "^mydomain",  line: "mydomain = {{postfix_main_cf_mydomain}}"}
+    - { regexp: "^inet_interfaces", line: "inet_interfaces = {{postfix_main_cf_inet_interfaces}}"}
+    - { regexp: "^mydestination", line: "mydestination = {{postfix_main_cf_mydestination}}"}
+    - { regexp: "^relay_domains", line: "relay_domains = {{postfix_main_cf_relay_domains}}"}
+    - { regexp: "^recipient_delimiter", line: "recipient_delimiter = {{postfix_main_cf_recipient_delimiter}}"}
+    - { regexp: "^home_mailbox", line: "home_mailbox = {{postfix_main_cf_home_mailbox}}"}
+    - { regexp: "^smtpd_banner", line: "smtpd_banner = {{postfix_main_cf_smtpd_banner}}"}
+    - { regexp: "^html_directory", line: "html_directory = {{postfix_main_cf_html_directory}}"}
+    - { regexp: "^readme_directory", line: "readme_directory = {{postfix_main_cf_readme_directory}}"}
+    - { regexp: "^message_size_limit", line: "message_size_limit = {{postfix_main_cf_message_size_limit}}"}
+    - { regexp: "^meta_directory", line: "meta_directory = {{postfix_main_cf_meta_directory}}"}
+    - { regexp: "^shlib_directory", line: "shlib_directory = {{postfix_main_cf_shlib_directory}}"}
+    - { regexp: "^alias_maps", line: "alias_maps = {{postfix_main_cf_alias_maps}}"}
+    - { regexp: "^alias_database", line: "alias_database = {{postfix_main_cf_alias_database}}"}
+    - { regexp: "^virtual_alias_domains", line: "virtual_alias_domains = {{postfix_main_cf_virtual_alias_domains}}"}
+    - { regexp: "^virtual_alias_maps", line: "virtual_alias_maps = {{postfix_main_cf_virtual_alias_maps}}"}
+  notify: reload postfix
+  tags: config_potfix_main_cf
+
+- name: Configure VIRTUAL DOMAINS {{postfix_main_cf}}
+  lineinfile: dest={{postfix_main_cf}} regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
+  with_items:
+    - { regexp: "^virtual_alias_domains", line: "virtual_alias_domains = {{postfix_main_cf_virtual_alias_domains}}"}
+    - { regexp: "^virtual_alias_maps", line: "virtual_alias_maps = {{postfix_main_cf_virtual_alias_maps}}"}
+  notify:
+    - postmap virtual domains
+    - reload postfix
+  tags:
+    - config_potfix_main_cf
+    - config_potfix_main_cf_virtual_domains
+
+- name: Configure SMTPD {{postfix_main_cf}}
+  lineinfile: dest={{postfix_main_cf}} regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
+  with_items:
+    - { regexp: "^smtpd_use_tls",  line: "smtpd_use_tls = {{postfix_main_cf_smtpd_use_tls}}"}
+    - { regexp: "^smtpd_tls_auth_only",  line: "smtpd_tls_auth_only = {{postfix_main_cf_smtpd_tls_auth_only}}"}
+    - { regexp: "^smtpd_tls_loglevel",  line: "smtpd_tls_loglevel = {{postfix_main_cf_smtpd_tls_loglevel}}"}
+    - { regexp: "^smtpd_tls_CAfile",  line: "smtpd_tls_CAfile = {{postfix_main_cf_smtpd_tls_CAfile}}"}
+    - { regexp: "^smtpd_tls_received_header",  line: "smtpd_tls_received_header = {{postfix_main_cf_smtpd_tls_received_header}}"}
+    - { regexp: "^tls_random_source",  line: "tls_random_source = {{postfix_main_cf_tls_random_source}}"}
+    - { regexp: "^smtpd_tls_security_level",  line: "smtpd_tls_security_level = {{postfix_main_cf_smtpd_tls_security_level}}"}
+    - { regexp: "^smtpd_tls_ciphers",  line: "smtpd_tls_ciphers = {{postfix_main_cf_smtpd_tls_ciphers}}"}
+    - { regexp: "^smtpd_tls_exclude_ciphers",  line: "smtpd_tls_exclude_ciphers = {{postfix_main_cf_smtpd_tls_exclude_ciphers}}"}
+    - { regexp: "^smtpd_tls_protocols",  line: "smtpd_tls_protocols = {{postfix_main_cf_smtpd_tls_protocols}}"}
+    - { regexp: "^smtpd_tls_session_cache_database",  line: "smtpd_tls_session_cache_database = {{postfix_main_cf_smtpd_tls_session_cache_database}}"}
+    - { regexp: "^smtpd_tls_session_cache_timeout",  line: "smtpd_tls_session_cache_timeout = {{postfix_main_cf_smtpd_tls_session_cache_timeout}}"}
+    - { regexp: "^smtpd_relay_restrictions",  line: "smtpd_relay_restrictions = {{postfix_main_cf_smtpd_relay_restrictions}}"}
+    - { regexp: "^smtpd_recipient_restrictions",  line: "smtpd_recipient_restrictions = {{postfix_main_cf_smtpd_recipient_restrictions}}"}
+  notify: reload postfix
+  tags:
+    - config_potfix_main_cf
+    - config_potfix_main_cf_smtpd
+
+- name: Configure Certificate {{postfix_main_cf}}
+  lineinfile: dest={{postfix_main_cf}} regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
+  with_items:
+    - { regexp: "^smtpd_tls_key_file",  line: "smtpd_tls_key_file = {{postfix_main_cf_smtpd_tls_key_file_PATH}}/{{postfix_main_cf_myhostname}}/privkey.pem"}
+    - { regexp: "^smtpd_tls_cert_file",  line: "smtpd_tls_cert_file = {{postfix_main_cf_smtpd_tls_cert_file_PATH}}/{{postfix_main_cf_myhostname}}/fullchain.pem"}
+  when: letsencrypt == "yes"
+  notify: reload postfix
+  tags:
+    - config_potfix_main_cf
+    - config_potfix_main_cf_certificate
+
+- name: Configure SMTP {{postfix_main_cf}}
+  lineinfile: dest={{postfix_main_cf}} regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
+  with_items:
+    - { regexp: "^smtp_use_tls",  line: "smtp_use_tls = {{postfix_main_cf_smtp_use_tls}}"}
+    - { regexp: "^smtp_tls_CAfile",  line: "smtp_tls_CAfile = {{postfix_main_cf_smtp_tls_CAfile}}"}
+    - { regexp: "^smtp_tls_security_level",  line: "smtp_tls_security_level = {{postfix_main_cf_smtp_tls_security_level}}"}
+    - { regexp: "^smtp_tls_note_starttls_offer",  line: "smtp_tls_note_starttls_offer = {{postfix_main_cf_smtp_tls_note_starttls_offer}}"}
+    - { regexp: "^smtp_tls_loglevel",  line: "smtp_tls_loglevel = {{postfix_main_cf_smtp_tls_loglevel}}"}
+  notify: reload postfix
+  tags:
+    - config_potfix_main_cf
+    - config_potfix_main_cf_smtp
+
+- name: Configure SASL {{postfix_main_cf}}
+  lineinfile: dest={{postfix_main_cf}} regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
+  with_items:
+    - { regexp: "^smtpd_sasl_type",  line: "smtpd_sasl_type = {{postfix_main_cf_smtpd_sasl_type}}"}
+    - { regexp: "^smtpd_sasl_path",  line: "smtpd_sasl_path = {{postfix_main_cf_smtpd_sasl_path}}"}
+    - { regexp: "^smtpd_sasl_auth_enable",  line: "smtpd_sasl_auth_enable = {{postfix_main_cf_smtpd_sasl_auth_enable}}"}
+    - { regexp: "^broken_sasl_auth_clients",  line: "broken_sasl_auth_clients = {{postfix_main_cf_broken_sasl_auth_clients}}"}
+  notify: reload postfix
+  tags:
+    - config_potfix_main_cf
+    - config_potfix_main_cf_sasl
