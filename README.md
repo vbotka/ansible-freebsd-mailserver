@@ -35,7 +35,7 @@ ansible-galaxy install vbotka.ansible-freebsd-mailserver
 3) Fit variables.
 
 ```
-~/.ansible/roles/ansible-freebsd-mailserver/vars/main.yml
+~/.ansible/roles/vbotka.ansible-freebsd-mailserver/vars/main.yml
 ```
 
 4) Create playbook.
