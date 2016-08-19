@@ -2,7 +2,8 @@ freebsd-mailserver
 ==================
 
 This role installs and configures postfix and dovecot2 with FreeBSD.
-Tested with FreeBSD 10.3 at https://cloud.digitalocean.com
+
+Tested with FreeBSD 10.3 at [digitalocean.com](https://cloud.digitalocean.com)
 
 
 Requirements
@@ -68,4 +69,4 @@ BSD
 Author Information
 ------------------
 
-Vladimir Botka https://botka.link
+[Vladimir Botka](https://botka.link)
