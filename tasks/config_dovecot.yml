@@ -1,7 +1,11 @@
 ---
 
 - name: Configure Dovecot /usr/local/etc/dovecot/dovecot.conf
-  shell: cd /usr/local/etc/dovecot; if [ ! -f dovecot.conf ]; then cp -R example-config/* .; fi
+  shell: cd /usr/local/etc/dovecot; \
+         if [ ! -f dovecot.conf ]; then cp -R example-config/* .; printf "changed"; \
+         fi
+  register: command_result
+  changed_when: command_result.stdout == "changed"
 
 - name: Configure /usr/local/etc/dovecot/dovecot.conf
   lineinfile: dest=/usr/local/etc/dovecot/dovecot.conf regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"

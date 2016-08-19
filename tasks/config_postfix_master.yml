@@ -1,11 +1,22 @@
 ---
 
 - name: Configure submission {{postfix_master_cf}}
-  lineinfile: dest={{postfix_master_cf}} regexp="^submission" line="submission inet n       -       n       -       -       smtpd" backup="yes"
+  lineinfile: dest={{postfix_master_cf}} regexp="^submission " line="submission  {{postfix_master_cf_service_def}}" backup="yes"
   notify: reload postfix
   tags:
     - config_potfix_master_cf_submission
 
+- name: Configure smtps {{postfix_master_cf}}
+  lineinfile: dest={{postfix_master_cf}} regexp="^smtps " line="smtps  {{postfix_master_cf_service_def}}" backup="yes"
+  notify: reload postfix
+  tags:
+    - config_potfix_master_cf_smtps
+
+# Ansible module lineinfile strictly handles lines only. No way to configure same options for various services.
+# Workaround: Differentiate service by indentation.
+# service: submission indent: 2 spaces
+# service: smtps      indent: 3 spacse
+# TODO: find idempotent solution
 - name: Configure submission options {{postfix_master_cf}}
   lineinfile: dest={{postfix_master_cf}} regexp="{{ item.regexp }}" line="{{ item.line }}" insertafter="^submission" backup="yes"
   with_items:
@@ -22,3 +33,14 @@
   notify: reload postfix
   tags:
     - config_potfix_master_cf_submission
+
+- name: Configure smtps options {{postfix_master_cf}}
+  lineinfile: dest={{postfix_master_cf}} regexp="{{ item.regexp }}" line="{{ item.line }}" insertafter="^smtps" backup="yes"
+  with_items:
+    - { regexp: "^   -o smtpd_tls_wrappermode", line: "   -o smtpd_tls_wrappermode=yes"}
+    - { regexp: "^   -o smtpd_sasl_auth_enable", line: "   -o smtpd_sasl_auth_enable={{postfix_master_cf_smtpd_sasl_auth_enable}}"}
+    - { regexp: "^   -o smtpd_reject_unlisted_recipient", line: "   -o smtpd_reject_unlisted_recipient={{postfix_master_cf_smtpd_reject_unlisted_recipient}}"}
+    - { regexp: "^   -o smtpd_relay_restrictions", line: "   -o smtpd_relay_restrictions={{postfix_master_cf_smtpd_relay_restrictions}}"}
+  notify: reload postfix
+  tags:
+    - config_potfix_master_cf_smtps

@@ -25,4 +25,12 @@
 #  - { alias: "firstname.lastname@example.net", user: "user1" }
 #  - { alias: "flastname@example.net", user: "user1" }
 #
+# Spamassassin
+# For spamassassin use -o content_filter=spamfilter. Role
+# freebsd-ansible-maiserver-spamassasin will configure it, but
+# playbook with both freebsd-ansible-maiserver and
+# freebsd-ansible-maiserver-spamassasin would change it repeatidly and
+# report as changed". When not sure, keep the default.
+#postfix_master_cf_service_def: "inet  n       -       -       -       -       smtpd -o content_filter=spamfilter"
+#
 # CHANGE THIS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<

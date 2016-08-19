@@ -20,8 +20,6 @@
     - { regexp: "^shlib_directory", line: "shlib_directory = {{postfix_main_cf_shlib_directory}}"}
     - { regexp: "^alias_maps", line: "alias_maps = {{postfix_main_cf_alias_maps}}"}
     - { regexp: "^alias_database", line: "alias_database = {{postfix_main_cf_alias_database}}"}
-    - { regexp: "^virtual_alias_domains", line: "virtual_alias_domains = {{postfix_main_cf_virtual_alias_domains}}"}
-    - { regexp: "^virtual_alias_maps", line: "virtual_alias_maps = {{postfix_main_cf_virtual_alias_maps}}"}
   notify: reload postfix
   tags: config_potfix_main_cf
 
