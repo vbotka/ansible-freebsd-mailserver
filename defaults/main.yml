@@ -3,6 +3,9 @@
 
 # CHANGE THIS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #
+# digitalocean.com droplet
+digitalocean: "no"
+#
 # letsencrypt.org certificate and key are present in
 # postfix_main_cf_smtpd_tls_key_file_PATH/postfix_main_cf_myhostname
 letsencrypt: "no"

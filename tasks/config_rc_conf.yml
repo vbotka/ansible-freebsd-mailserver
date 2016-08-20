@@ -29,6 +29,7 @@
   lineinfile: dest="/etc/rc.digitalocean.d/droplet.conf" regexp="{{ item.regexp }}" line="{{ item.line }}" backup=yes
   with_items:
     - { regexp: "^hostname",  line: "hostname=\"{{rc_conf_hostname}}\""}
+  when: digitalocean == "yes"
   tags:
     - config_rc_digitalocean
     - config_rc_conf_hostname
