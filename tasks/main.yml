@@ -4,6 +4,9 @@
 - include: packages.yml
   tags: packages, freebsd-mailserver
 
+- include: create_files.yml
+  tags: create_files, freebsd-mailserver
+
 - include: config_rc_conf.yml
   tags: config_rc_conf, freebsd-mailserver
 

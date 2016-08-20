@@ -4,7 +4,7 @@
 - name: newaliases
   command: newaliases
 
-- name: postmap virtual domains
+- name: postmap virtual aliases
   command: postmap "{{postfix_virtual}}"
 
 - name: set hostname
