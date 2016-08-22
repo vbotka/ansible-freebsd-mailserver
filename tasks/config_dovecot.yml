@@ -43,9 +43,9 @@
 - name: Configure letsencrypt in /usr/local/etc/dovecot/conf.d/10-ssl.conf
   lineinfile: dest=/usr/local/etc/dovecot/conf.d/10-ssl.conf regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
   with_items:
-    - { regexp: "^ssl_cert",  line: "ssl_cert = <{{postfix_main_cf_smtpd_tls_cert_file_PATH}}/{{postfix_main_cf_myhostname}}/fullchain.pem"}
-    - { regexp: "^ssl_key",  line: "ssl_key = <{{postfix_main_cf_smtpd_tls_key_file_PATH}}/{{postfix_main_cf_myhostname}}/privkey.pem"}
-  when: letsencrypt == "yes"
+    - { regexp: "^ssl_cert",  line: "ssl_cert = <{{postfix_main_cf_smtpd_tls_cert_file}}"}
+    - { regexp: "^ssl_key",  line: "ssl_key = <{{postfix_main_cf_smtpd_tls_key_file}}"}
+  when: postfix_tls_cert == "yes"
   notify: reload dovecot
   tags: config_dovecot_tls
 

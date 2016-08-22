@@ -65,9 +65,9 @@
 - name: Configure Certificate {{postfix_main_cf}}
   lineinfile: dest={{postfix_main_cf}} regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
   with_items:
-    - { regexp: "^smtpd_tls_key_file",  line: "smtpd_tls_key_file = {{postfix_main_cf_smtpd_tls_key_file_PATH}}/{{postfix_main_cf_myhostname}}/privkey.pem"}
-    - { regexp: "^smtpd_tls_cert_file",  line: "smtpd_tls_cert_file = {{postfix_main_cf_smtpd_tls_cert_file_PATH}}/{{postfix_main_cf_myhostname}}/fullchain.pem"}
-  when: letsencrypt == "yes"
+    - { regexp: "^smtpd_tls_key_file",  line: "smtpd_tls_key_file = {{postfix_main_cf_smtpd_tls_key_file}}"}
+    - { regexp: "^smtpd_tls_cert_file",  line: "smtpd_tls_cert_file = {{postfix_main_cf_smtpd_tls_cert_file}}"}
+  when: postfix_tls_cert == "yes"
   notify: reload postfix
   tags:
     - config_potfix_main_cf

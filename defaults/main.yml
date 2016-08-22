@@ -6,9 +6,14 @@
 # digitalocean.com droplet
 digitalocean: "no"
 #
-# letsencrypt.org certificate and key are present in
-# postfix_main_cf_smtpd_tls_key_file_PATH/postfix_main_cf_myhostname
-letsencrypt: "no"
+# TLS certificate and key are present
+postfix_tls_cert: "no"
+# example for letsencrypt:
+#postfix_main_cf_smtpd_tls_key_file: "/usr/local/etc/letsencrypt/live/mail.example.com/privkey.pem"
+#postfix_main_cf_smtpd_tls_cert_file: "/usr/local/etc/letsencrypt/live/mail.example.com/fullchain.pem"
+# other example:
+#postfix_main_cf_smtpd_tls_key_file: "/usr/local/etc/postfix/ssl.key/dovecot.pem"
+#postfix_main_cf_smtpd_tls_cert_file: "/usr/local/etc/postfix/ssl.key/dovecot.pem"
 #
 rc_conf_hostname: "srv.example.com"
 postmaster_address: "postmaster@example.com"
@@ -70,10 +75,6 @@ postfix_main_cf_smtpd_use_tls: "yes"
 postfix_main_cf_smtpd_tls_auth_only: "yes"
 postfix_main_cf_smtpd_tls_loglevel: "1"
 #
-#postfix_main_cf_smtpd_tls_key_file: "/usr/local/etc/letsencrypt/live/mail.example.com/privkey.pem"
-#postfix_main_cf_smtpd_tls_cert_file: "/usr/local/etc/letsencrypt/live/mail.example.com/fullchain.pem"
-postfix_main_cf_smtpd_tls_key_file_PATH: "/usr/local/etc/letsencrypt/live"
-postfix_main_cf_smtpd_tls_cert_file_PATH: "/usr/local/etc/letsencrypt/live"
 postfix_main_cf_smtpd_tls_CAfile: "/etc/ssl/cert.pem"
 #smtpd_tls_CApath = /path/to/certs/
 #
