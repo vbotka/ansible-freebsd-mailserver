@@ -1,12 +1,12 @@
 ---
 
-- name: Configure Dovecot /usr/local/etc/dovecot/dovecot.conf
+- name: Create /usr/local/etc/dovecot/dovecot.conf
   shell: cd /usr/local/etc/dovecot; \
-         if [ ! -f dovecot.conf ]; then cp -R example-config/* .; printf "changed"; \
-         fi
+         if [ ! -f dovecot.conf ]; then cp -R example-config/* .; printf "changed"; fi
   register: command_result
   changed_when: command_result.stdout == "changed"
 
+# dovecot.conf
 - name: Configure /usr/local/etc/dovecot/dovecot.conf
   lineinfile: dest=/usr/local/etc/dovecot/dovecot.conf regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
   with_items:
@@ -15,6 +15,7 @@
   notify: reload dovecot
   tags: config_dovecot
 
+# conf.d/10-master.conf
 - name: Configure /usr/local/etc/dovecot/conf.d/10-master.conf
   blockinfile:
     dest: /usr/local/etc/dovecot/conf.d/10-master.conf
@@ -29,12 +30,131 @@
       }
   notify: reload dovecot
   tags: config_dovecot
-  
+
+# conf.d/10-ssl.conf
 - name: Configure /usr/local/etc/dovecot/conf.d/10-ssl.conf
   lineinfile: dest=/usr/local/etc/dovecot/conf.d/10-ssl.conf regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
   with_items:
     - { regexp: "^ssl_cert",  line: "ssl_cert = <{{postfix_main_cf_smtpd_tls_cert_file_PATH}}/{{postfix_main_cf_myhostname}}/fullchain.pem"}
     - { regexp: "^ssl_key",  line: "ssl_key = <{{postfix_main_cf_smtpd_tls_key_file_PATH}}/{{postfix_main_cf_myhostname}}/privkey.pem"}
+    - { regexp: "^ssl_ca",  line: "ssl_ca = <{{postfix_main_cf_smtpd_tls_CAfile}}"}
   when: letsencrypt == "yes"
   notify: reload dovecot
   tags: config_dovecot_tls
+
+# conf.d/10-mail.conf
+- name: Configure /usr/local/etc/dovecot/conf.d/10-mail.conf
+  lineinfile: dest=/usr/local/etc/dovecot/conf.d/10-mail.conf regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
+  with_items:
+    - { regexp: "^mail_location",  line: "mail_location = maildir:~/Maildir:LAYOUT=fs"}
+    - { regexp: "^mail_privileged_group",  line: "mail_privileged_group = mail"}
+    - { regexp: "^maildir_copy_with_hardlinks",  line: "maildir_copy_with_hardlinks = yes"}
+  notify: reload dovecot
+  tags: config_dovecot_mail_location
+
+# conf.d/10-auth.conf
+- name: Configure /usr/local/etc/dovecot/conf.d/10-auth.conf
+  lineinfile: dest=/usr/local/etc/dovecot/conf.d/10-mail.conf regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
+  with_items:
+    - { regexp: "^disable_plaintext_auth",  line: "disable_plaintext_auth = yes"}
+    - { regexp: "^auth_mechanisms",  line: "auth_mechanisms = plain login"}
+  notify: reload dovecot
+  tags: config_dovecot_auth
+
+# conf.d/10-logging.conf
+- name: Configure /usr/local/etc/dovecot/conf.d/10-logging.conf
+  lineinfile: dest=/usr/local/etc/dovecot/conf.d/10-logging.conf regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
+  with_items:
+    - { regexp: "^auth_verbose",  line: "auth_verbose = {{dovecot_auth_verbose}}"}
+    - { regexp: "^auth_debug",  line: "auth_debug = {{dovecot_auth_debug}}"}
+    - { regexp: "^mail_debug",  line: "mail_debug = {{dovecot_mail_debug}}"}
+    - { regexp: "^verbose_ssl",  line: "verbose_ssl = {{dovecot_verbose_ssl}}"}
+  notify: reload dovecot
+  tags: config_dovecot_logging
+
+# conf.d/15-lda.conf
+- name: Configure /usr/local/etc/dovecot/conf.d/15-lda.conf
+  lineinfile: dest=/usr/local/etc/dovecot/conf.d/15-lda.conf regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
+  with_items:
+    - { regexp: "^postmaster_address",  line: "postmaster_address = {{postmaster_address}}"}
+    - { regexp: "^hostname",  line: "hostname = {{postfix_main_cf_myhostname}}"}
+    - { regexp: "^auth_socket_path",  line: "auth_socket_path = /var/run/dovecot/auth-master"}
+    - { regexp: "^log_path",  line: "log_path = /var/log/dovecot-lda-errors.log"}
+    - { regexp: "^info_log_path",  line: "info_log_path = /var/log/dovecot-lda.log"}
+    - { regexp: "^syslog_facility",  line: "syslog_facility = mail"}
+  notify: reload dovecot
+  tags: config_dovecot_lda
+
+# conf.d/15-mailboxes.conf
+#- name: Configure /usr/local/etc/dovecot/conf.d/15-mailboxes.conf
+#  lineinfile: dest=/usr/local/etc/dovecot/conf.d/15-mailboxes.conf regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
+#  with_items:
+#    - { regexp: "^",  line: ""}
+#  notify: reload dovecot
+#  tags: config_dovecot_mailboxes
+
+
+
+# NOTES ON SIEVE
+
+#diff -r /usr/local/etc/dovecot/conf.d/10-director.conf /usr/local/etc/dovecot/example-config/conf.d/10-director.conf
+#60,63c60
+#<        mail_plugins = $mail_plugins sieve
+#<        log_path = /var/log/dovecot-lmtp-errors.log
+#<        info_log_path = /var/log/dovecot-lmtp.log
+#< #auth_socket_path = director-userdb
+#---
+#>-
+#     #auth_socket_path = director-userdb
+
+#diff -r /usr/local/etc/dovecot/conf.d/15-lda.conf /usr/local/etc/dovecot/example-config/conf.d/15-lda.conf
+#46,57c46,47
+#< # Space separated list of plugins to load (default is global mail_plugins).
+#< #mail_plugins = $mail_plugins
+#<   mail_plugins = $mail_plugins sieve
+#<
+
+#diff -r /usr/local/etc/dovecot/conf.d/20-lmtp.conf /usr/local/etc/dovecot/example-config/conf.d/20-lmtp.conf
+#15a16,22
+#>-
+#19d25
+#<   mail_plugins = quota, sieve
+
+#diff -r /usr/local/etc/dovecot/conf.d/90-plugin.conf /usr/local/etc/dovecot/example-config/conf.d/90-plugin.conf
+#10,29c10
+#<        quota = maildir
+#<        sieve_max_script_size = 512K
+#<        sieve = ~/.dovecot.sieve
+#<        sieve_dir = ~/sieve
+#< }
+#<
+#< service managesieve-login {
+#<       inet_listener sieve {
+#<                     address = localhost
+#<                     port = 4190
+#<                     }
+#<       inet_listener sieve_deprecated {
+#<                     address = localhost
+#<                     port = 2000
+#<                     }
+#<       }
+#<
+#< service managesieve {
+#< # Max. number of ManageSieve processes (connections)
+#< #    pocess_count = 1024
+#---
+#>-
+#     #setting_name = value
+#     31,42d11
+#     <
+#     < protocol sieve {
+#     <        info_log_path = /var/log/dovecot-sieve-info.log
+#     <        log_path = /var/log/dovecot-sieve.log
+#     <        managesieve_max_line_length = 65536
+#     <        mail_max_userip_connections = 10
+#     <        managesieve_logout_format = bytes=%i/%o
+#     <        managesieve_implementation_string = Dovecot Pigeonhole
+#     <  #managesieve_sieve_capability =
+#     <  #managesieve_notify_capability =
+#     <        managesieve_max_compile_errors = 5
+#     <        }

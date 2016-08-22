@@ -8,6 +8,7 @@
 #letsencrypt: "no"
 #
 #rc_conf_hostname: "srv.example.com"
+#postmaster_address: "postmaster@example.com"
 #postfix_main_cf_myhostname: "mail.examle.com"
 #postfix_main_cf_mydomain: "example.com"
 #postfix_main_cf_virtual_alias_domains: "example.net, example.org, example.co"

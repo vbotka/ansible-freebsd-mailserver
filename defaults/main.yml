@@ -11,6 +11,7 @@ digitalocean: "no"
 letsencrypt: "no"
 #
 rc_conf_hostname: "srv.example.com"
+postmaster_address: "postmaster@example.com"
 postfix_main_cf_myhostname: "mail.examle.com"
 postfix_main_cf_mydomain: "example.com"
 postfix_main_cf_virtual_alias_domains: "example.net, example.org, example.co"
@@ -94,7 +95,7 @@ postfix_main_cf_smtp_tls_security_level: "may"
 postfix_main_cf_smtp_tls_note_starttls_offer: "yes"
 postfix_main_cf_smtp_tls_loglevel: "1"
 #
-# DOVECOT
+# dovecot in postfix
 postfix_main_cf_smtpd_sasl_type: "dovecot"
 postfix_main_cf_smtpd_sasl_path: "private/auth"
 postfix_main_cf_smtpd_sasl_auth_enable: "yes"
@@ -114,3 +115,12 @@ postfix_master_cf_smtpd_recipient_restrictions: "permit_sasl_authenticated,rejec
 postfix_master_cf_smtpd_relay_restrictions: "permit_sasl_authenticated,reject"
 postfix_master_cf_smtpd_reject_unlisted_recipient: "no"
 #postfix_master_cf_content_filter=spamfilter
+
+
+# DOVECOT
+
+# conf.d/10-logging.conf
+dovecot_auth_verbose: "yes"
+dovecot_auth_debug: "no"
+dovecot_mail_debug: "no"
+dovecot_verbose_ssl: "no"
