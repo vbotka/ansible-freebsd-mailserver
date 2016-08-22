@@ -2,6 +2,8 @@
 # NOTES
 # - consider lineinfile option validate=''
 # - consider postfix check, and/or postconf -e
+
+# main.cf
 - name: Configure {{postfix_main_cf}}
   lineinfile: dest={{postfix_main_cf}} regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
   with_items:
@@ -23,6 +25,7 @@
   notify: reload postfix
   tags: config_potfix_main_cf
 
+# main.cf virtual domains
 - name: Configure VIRTUAL DOMAINS {{postfix_main_cf}}
   lineinfile: dest={{postfix_main_cf}} regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
   with_items:
@@ -35,6 +38,7 @@
     - config_potfix_main_cf
     - config_potfix_main_cf_virtual_domains
 
+# main.cf smtpd
 - name: Configure SMTPD {{postfix_main_cf}}
   lineinfile: dest={{postfix_main_cf}} regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
   with_items:
@@ -57,6 +61,7 @@
     - config_potfix_main_cf
     - config_potfix_main_cf_smtpd
 
+# main.cf certificates
 - name: Configure Certificate {{postfix_main_cf}}
   lineinfile: dest={{postfix_main_cf}} regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
   with_items:
@@ -68,6 +73,7 @@
     - config_potfix_main_cf
     - config_potfix_main_cf_certificate
 
+# main.cf smtp
 - name: Configure SMTP {{postfix_main_cf}}
   lineinfile: dest={{postfix_main_cf}} regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
   with_items:
@@ -81,6 +87,7 @@
     - config_potfix_main_cf
     - config_potfix_main_cf_smtp
 
+# main.cf sasl
 - name: Configure SASL {{postfix_main_cf}}
   lineinfile: dest={{postfix_main_cf}} regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
   with_items:
