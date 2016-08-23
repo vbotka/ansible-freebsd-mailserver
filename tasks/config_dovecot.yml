@@ -36,6 +36,8 @@
   lineinfile: dest=/usr/local/etc/dovecot/conf.d/10-ssl.conf regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
   with_items:
     - { regexp: "^ssl_ca",  line: "ssl_ca = <{{postfix_main_cf_smtpd_tls_CAfile}}"}
+    - { regexp: "^ssl_protocols",  line: "ssl_protocols = {{dovecot_ssl_protocols}}"}
+    - { regexp: "^ssl_cipher_list",  line: "ssl_cipher_list = {{dovecot_ssl_cipher_list}}"}
   notify: reload dovecot
   tags: config_dovecot_tls
 

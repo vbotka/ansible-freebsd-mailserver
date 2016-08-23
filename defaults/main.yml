@@ -124,4 +124,12 @@ postfix_master_cf_smtpd_reject_unlisted_recipient: "no"
 dovecot_auth_verbose: "yes"
 dovecot_auth_debug: "no"
 dovecot_mail_debug: "no"
-dovecot_verbose_ssl: "no"
+dovecot_verbose_ssl: "yes"
+
+# conf.d/10-ssl.conf
+dovecot_ssl_protocols: "!SSLv2 !SSLv3"
+dovecot_ssl_cipher_list: "ALL:!LOW:!SSLv2:!EXP:!aNULL:!RC4:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!SRP:!DSS"
+# NOTES
+# test command: openssl s_client -connect $SERVERIP:993 -ssl3
+# http://wiki2.dovecot.org/SSL
+# http://dovecot.markmail.org/message/5lyjagmrzcmmuyr4?q=SSLv3+disable
