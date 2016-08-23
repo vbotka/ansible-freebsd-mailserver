@@ -39,7 +39,7 @@ ansible-galaxy install vbotka.ansible-freebsd-mailserver
 ~/.ansible/roles/vbotka.ansible-freebsd-mailserver/vars/main.yml
 ```
 
-4) Create playbook.
+4) Create playbook and inventory.
 
 ```
 > cat ~/.ansible/playbooks/freebsd-mailserver.yml
@@ -49,6 +49,18 @@ ansible-galaxy install vbotka.ansible-freebsd-mailserver
   become_method: sudo
   roles:
     - role: vbotka.ansible-freebsd-mailserver
+```
+
+```
+> cat ~/.ansible/hosts
+[mailserver]
+<MAILSERVER-IP-OR-FQDN>
+
+[mailserver:vars]
+ansible_connection=ssh
+ansible_user=freebsd
+ansible_python_interpreter=/usr/local/bin/python2
+ansible_perl_interpreter=/usr/local/bin/perl
 ```
 
 5) Install and configure the mailserver.
