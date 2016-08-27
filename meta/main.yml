@@ -2,6 +2,7 @@ galaxy_info:
   author: Vladimir Botka
   description: Install and configure postfix and dovecot2
   company: https://botka.link
+  github_branch: release
   license: BSD
   min_ansible_version: 1.2
   platforms:
