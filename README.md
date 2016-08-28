@@ -1,7 +1,7 @@
 freebsd-mailserver
 ==================
 
-![Build Status](https://travis-ci.org/vbotka/ansible-freebsd-mailserver.svg?branch=master)
+[![Build Status](https://travis-ci.org/vbotka/ansible-freebsd-mailserver.svg?branch=master)](https://travis-ci.org/vbotka/ansible-freebsd-mailserver)
 
 This role installs and configures postfix and dovecot2 with FreeBSD.
 
