@@ -2,15 +2,13 @@ galaxy_info:
   author: Vladimir Botka
   description: Install and configure postfix and dovecot2
   company: https://botka.link
-  github_branch: release
+  github_branch: master
   license: BSD
   min_ansible_version: 1.2
   platforms:
     - name: FreeBSD
-  versions:
-    - 10.3
-  categories:
-  - system
+      versions:
+        - 10.3
   galaxy_tags:
     - installer
     - mail
