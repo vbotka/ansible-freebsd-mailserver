@@ -4,7 +4,6 @@
 # CHANGE THIS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #
 # TLS certificate and key are present
-#postfix_tls_cert: "no"
 # example for letsencrypt:
 #postfix_main_cf_smtpd_tls_key_file: "/usr/local/etc/letsencrypt/live/mail.example.com/privkey.pem"
 #postfix_main_cf_smtpd_tls_cert_file: "/usr/local/etc/letsencrypt/live/mail.example.com/fullchain.pem"

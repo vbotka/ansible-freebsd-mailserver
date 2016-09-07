@@ -67,7 +67,6 @@
   with_items:
     - { regexp: "^smtpd_tls_key_file",  line: "smtpd_tls_key_file = {{postfix_main_cf_smtpd_tls_key_file}}"}
     - { regexp: "^smtpd_tls_cert_file",  line: "smtpd_tls_cert_file = {{postfix_main_cf_smtpd_tls_cert_file}}"}
-  when: postfix_tls_cert == "yes"
   notify: reload postfix
   tags:
     - config_potfix_main_cf
