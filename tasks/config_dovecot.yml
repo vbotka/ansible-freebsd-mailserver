@@ -10,7 +10,7 @@
 - name: Configure /usr/local/etc/dovecot/dovecot.conf
   lineinfile: dest=/usr/local/etc/dovecot/dovecot.conf regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
   with_items:
-    - { regexp: "^protocols",  line: "protocols = imap pop3 lmtp"}
+    - { regexp: "^protocols",  line: "protocols = {{freebsd_mailserver_dovecot_protocols}}"}
     - { regexp: "^listen",  line: "listen = *, ::"}
   notify: reload dovecot
   tags: config_dovecot

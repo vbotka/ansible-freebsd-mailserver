@@ -128,6 +128,7 @@ dovecot_auth_verbose: "yes"
 dovecot_auth_debug: "no"
 dovecot_mail_debug: "no"
 dovecot_verbose_ssl: "yes"
+freebsd_mailserver_dovecot_protocols: "imap pop3 lmtp"
 
 # conf.d/10-ssl.conf
 dovecot_ssl_protocols: "!SSLv2 !SSLv3"
