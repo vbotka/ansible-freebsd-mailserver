@@ -90,8 +90,8 @@
     - { regexp: "^postmaster_address",  line: "postmaster_address = {{postmaster_address}}"}
     - { regexp: "^hostname",  line: "hostname = {{postfix_main_cf_myhostname}}"}
     - { regexp: "^auth_socket_path",  line: "auth_socket_path = /var/run/dovecot/auth-master"}
-    - { regexp: "^log_path",  line: "log_path = /var/log/dovecot-lda-errors.log"}
-    - { regexp: "^info_log_path",  line: "info_log_path = /var/log/dovecot-lda.log"}
+    - { regexp: "^log_path",  line: "log_path = "}
+    - { regexp: "^info_log_path",  line: "info_log_path = "}
     - { regexp: "^syslog_facility",  line: "syslog_facility = mail"}
   notify: reload dovecot
   tags: config_dovecot_lda

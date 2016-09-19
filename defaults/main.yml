@@ -1,5 +1,5 @@
 ---
-# defaults for freebsd-mailserver 
+# defaults for freebsd-mailserver
 
 # CHANGE THIS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #
@@ -47,6 +47,13 @@ postfix_master_cf_service_def: "inet  n       -       -       -       -       sm
 #postfix_master_cf_service_def: "inet  n       -       -       -       -       smtpd -o content_filter=spamfilter"
 #
 # CHANGE THIS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+freebsd_install_method: "packages"
+#freebsd_install_method: "ports"
+#freebsd_use_packages: "yes"
+freebsd_mailserver_packages:
+  - postfix
+  - dovecot2
 
 # paths
 postfix_main_cf: "/usr/local/etc/postfix/main.cf"
