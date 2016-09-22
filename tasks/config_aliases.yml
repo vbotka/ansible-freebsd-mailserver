@@ -1,8 +1,12 @@
 ---
 
 - name: Configure {{postfix_alias}}
-  lineinfile: dest={{postfix_alias}} regexp="^{{ item.alias }}{{':'}}" line="{{ item.alias }}{{':'}} {{ item.user }}" backup=yes
-  with_items: aliases
+  lineinfile: >
+    dest="{{postfix_alias}}"
+    regexp="^{{ item.alias }}{{':'}}"
+    line="{{ item.alias }}{{':'}} {{ item.user }}"
+    backup="yes"
+  with_items: "{{aliases}}"
   when: aliases > 0
   notify: newaliases
   tags: config_aliases

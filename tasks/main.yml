@@ -2,34 +2,57 @@
 # tasks file for freebsd-mailserver
 
 - include: packages.yml
-  tags: packages, freebsd-mailserver
+  tags:
+    - packages
+    - freebsd-mailserver-packages
+    - freebsd-mailserver
 
 - include: create_files.yml
-  tags: create_files, freebsd-mailserver
+  tags:
+    - freebsd-mailserver-create_files
+    - freebsd-mailserver
 
 - include: create_certificates.yml
-  tags: create_certificates, freebsd-mailserver
+  tags:
+    - freebsd-mailserver-create_certificates
+    - freebsd-mailserver
 
 - include: config_rc_conf.yml
-  tags: config_rc_conf, freebsd-mailserver
+  tags:
+    - freebsd-mailserver-config_rc_conf
+    - freebsd-mailserver
 
 - include: config_mailer_conf.yml
-  tags: config_mailer_conf, freebsd-mailserver
+  tags:
+    - freebsd-mailserver-config_mailer_conf
+    - freebsd-mailserver
 
 - include: config_periodic_conf.yml
-  tags: config_periodic_conf, freebsd-mailserver
+  tags:
+    - freebsd-mailserver-config_periodic_conf
+    - freebsd-mailserver
 
 - include: config_postfix.yml
-  tags: config_postfix, freebsd-mailserver
+  tags:
+    - freebsd-mailserver-config_postfix
+    - freebsd-mailserver
 
 - include: config_postfix_master.yml
-  tags: config_postfix_master, freebsd-mailserver
+  tags:
+    - freebsd-mailserver-config_postfix_master
+    - freebsd-mailserver
 
 - include: config_virtual_aliases.yml
-  tags: config_virtual_aliases, freebsd-mailserver
+  tags:
+    - freebsd-mailserver-config_virtual_aliases
+    - freebsd-mailserver
 
 - include: config_aliases.yml
-  tags: config_aliases, freebsd-mailserver
+  tags:
+    - freebsd-mailserver-config_aliases
+    - freebsd-mailserver
 
 - include: config_dovecot.yml
-  tags: config_dovecot, freebsd-mailserver
+  tags:
+    - freebsd-mailserver-config_dovecot
+    - freebsd-mailserver
