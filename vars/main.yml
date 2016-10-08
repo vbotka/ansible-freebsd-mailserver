@@ -39,3 +39,8 @@
 #postfix_master_cf_service_def: "inet  n       -       -       -       -       smtpd -o content_filter=spamfilter"
 #
 # CHANGE THIS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+# Examples
+#postfix_main_cf_relayhost: "[relayhost.example.com]:587"
+#postfix_smtp_sasl_passwords:
+#    - { relayhost: "relayhost.example.com", line: "[relayhost.example.com]:587 smtp_client:password" }

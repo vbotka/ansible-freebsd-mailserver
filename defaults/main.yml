@@ -66,6 +66,7 @@ postfix_main_cf_inet_interfaces: "all"
 postfix_main_cf_mynetworks_style: "host"
 postfix_main_cf_mydestination: "$myhostname, localhost.$mydomain, localhost, $mydomain, mail.$mydomain, www.$mydomain, ftp.$mydomain"
 postfix_main_cf_relay_domains: "$mydestination"
+postfix_main_cf_relayhost: ""
 #
 postfix_main_cf_alias_maps: "hash:/etc/mail/aliases"
 postfix_main_cf_alias_database: "hash:/etc/mail/aliases"
@@ -105,6 +106,9 @@ postfix_main_cf_smtp_tls_CAfile: "/etc/ssl/cert.pem"
 postfix_main_cf_smtp_tls_security_level: "may"
 postfix_main_cf_smtp_tls_note_starttls_offer: "yes"
 postfix_main_cf_smtp_tls_loglevel: "1"
+#
+postfix_main_cf_smtp_sasl_password_maps: "/usr/local/etc/postfix/sasl_passwd"
+postfix_smtp_sasl_passwords: []
 #
 # dovecot in postfix
 postfix_main_cf_smtpd_sasl_type: "dovecot"

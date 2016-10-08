@@ -37,6 +37,11 @@
     - freebsd-mailserver-config_postfix
     - freebsd-mailserver
 
+- include: config_postfix_sasl.yml
+  tags:
+    - freebsd-mailserver-config_postfix_sasl
+    - freebsd-mailserver
+
 - include: config_postfix_master.yml
   tags:
     - freebsd-mailserver-config_postfix_master

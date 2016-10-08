@@ -1,0 +1,27 @@
+---
+
+# smtp_sasl_password_maps
+- name: Configure smtp_sasl_password_maps in {{postfix_main_cf}}
+  lineinfile: >
+    dest="{{postfix_main_cf}}"
+    regexp="^smtp_sasl_password_maps"
+    line="smtp_sasl_password_maps = hash:{{postfix_main_cf_smtp_sasl_password_maps}}"
+    backup="yes"
+  when: not("{{postfix_main_cf_smtp_sasl_password_maps}}" | trim == "")
+  notify: reload postfix
+  tags: config_potfix_main_cf_smtp_sasl_password_maps
+
+# smtp_sasl_passwords
+- name: Configure SMTP SASL passwords in {{postfix_main_cf_smtp_sasl_password_maps}}
+  lineinfile: >
+    dest="{{postfix_main_cf_smtp_sasl_password_maps}}"
+    regexp="{{item.relayhost}}"
+    line="{{item.line}}"
+    create="yes"
+    owner="root"
+    group="wheel"
+    mode="0640"
+    backup="yes"
+  with_items: postfix_smtp_sasl_passwords
+  notify: postmap smtp sasl passwords
+  tags: config_potfix_smtp_sasl_passwords

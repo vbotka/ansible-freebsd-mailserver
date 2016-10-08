@@ -5,7 +5,11 @@
 
 # main.cf
 - name: Configure {{postfix_main_cf}}
-  lineinfile: dest={{postfix_main_cf}} regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
+  lineinfile: >
+    dest="{{postfix_main_cf}}"
+    regexp="{{item.regexp}}"
+    line="{{item.line}}"
+    backup="yes"
   with_items:
     - { regexp: "^myhostname",  line: "myhostname = {{postfix_main_cf_myhostname}}"}
     - { regexp: "^mydomain",  line: "mydomain = {{postfix_main_cf_mydomain}}"}
@@ -25,9 +29,24 @@
   notify: reload postfix
   tags: config_potfix_main_cf
 
-# main.cf virtual domains
+# relayhost
+- name: Configure relayhost in {{postfix_main_cf}}
+  lineinfile: >
+    dest="{{postfix_main_cf}}"
+    regexp="^relayhost"
+    line="relayhost = {{postfix_main_cf_relayhost}}"
+    backup="yes"
+  when: not("{{postfix_main_cf_relayhost}}" | trim == "")
+  notify: reload postfix
+  tags: config_potfix_main_cf_relayhost
+
+# VIRTUAL DOMAINS
 - name: Configure VIRTUAL DOMAINS {{postfix_main_cf}}
-  lineinfile: dest={{postfix_main_cf}} regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
+  lineinfile: >
+    dest="{{postfix_main_cf}}"
+    regexp="{{item.regexp}}"
+    line="{{item.line}}"
+    backup="yes"
   with_items:
     - { regexp: "^virtual_alias_domains", line: "virtual_alias_domains = {{postfix_main_cf_virtual_alias_domains}}"}
     - { regexp: "^virtual_alias_maps", line: "virtual_alias_maps = {{postfix_main_cf_virtual_alias_maps}}"}
@@ -38,9 +57,13 @@
     - config_potfix_main_cf
     - config_potfix_main_cf_virtual_domains
 
-# main.cf smtpd
+# SMTPD
 - name: Configure SMTPD {{postfix_main_cf}}
-  lineinfile: dest={{postfix_main_cf}} regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
+  lineinfile: >
+    dest="{{postfix_main_cf}}"
+    regexp="{{item.regexp}}"
+    line="{{item.line}}"
+    backup="yes"
   with_items:
     - { regexp: "^smtpd_use_tls",  line: "smtpd_use_tls = {{postfix_main_cf_smtpd_use_tls}}"}
     - { regexp: "^smtpd_tls_auth_only",  line: "smtpd_tls_auth_only = {{postfix_main_cf_smtpd_tls_auth_only}}"}
@@ -61,9 +84,13 @@
     - config_potfix_main_cf
     - config_potfix_main_cf_smtpd
 
-# main.cf certificates
+# Certificate
 - name: Configure Certificate {{postfix_main_cf}}
-  lineinfile: dest={{postfix_main_cf}} regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
+  lineinfile: >
+    dest="{{postfix_main_cf}}"
+    regexp="{{item.regexp}}"
+    line="{{item.line}}"
+    backup="yes"
   with_items:
     - { regexp: "^smtpd_tls_key_file",  line: "smtpd_tls_key_file = {{postfix_main_cf_smtpd_tls_key_file}}"}
     - { regexp: "^smtpd_tls_cert_file",  line: "smtpd_tls_cert_file = {{postfix_main_cf_smtpd_tls_cert_file}}"}
@@ -72,9 +99,13 @@
     - config_potfix_main_cf
     - config_potfix_main_cf_certificate
 
-# main.cf smtp
+# SMTP
 - name: Configure SMTP {{postfix_main_cf}}
-  lineinfile: dest={{postfix_main_cf}} regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
+  lineinfile: >
+    dest="{{postfix_main_cf}}"
+    regexp="{{item.regexp}}"
+    line="{{item.line}}"
+    backup="yes"
   with_items:
     - { regexp: "^smtp_use_tls",  line: "smtp_use_tls = {{postfix_main_cf_smtp_use_tls}}"}
     - { regexp: "^smtp_tls_CAfile",  line: "smtp_tls_CAfile = {{postfix_main_cf_smtp_tls_CAfile}}"}
@@ -86,14 +117,18 @@
     - config_potfix_main_cf
     - config_potfix_main_cf_smtp
 
-# main.cf sasl
+# SASL
 - name: Configure SASL {{postfix_main_cf}}
-  lineinfile: dest={{postfix_main_cf}} regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
+  lineinfile: >
+    dest="{{postfix_main_cf}}"
+    regexp="{{item.regexp}}"
+    line="{{item.line}}"
+    backup="yes"
   with_items:
-    - { regexp: "^smtpd_sasl_type",  line: "smtpd_sasl_type = {{postfix_main_cf_smtpd_sasl_type}}"}
-    - { regexp: "^smtpd_sasl_path",  line: "smtpd_sasl_path = {{postfix_main_cf_smtpd_sasl_path}}"}
-    - { regexp: "^smtpd_sasl_auth_enable",  line: "smtpd_sasl_auth_enable = {{postfix_main_cf_smtpd_sasl_auth_enable}}"}
-    - { regexp: "^broken_sasl_auth_clients",  line: "broken_sasl_auth_clients = {{postfix_main_cf_broken_sasl_auth_clients}}"}
+    - { regexp: "^smtpd_sasl_type", line: "smtpd_sasl_type = {{postfix_main_cf_smtpd_sasl_type}}"}
+    - { regexp: "^smtpd_sasl_path", line: "smtpd_sasl_path = {{postfix_main_cf_smtpd_sasl_path}}"}
+    - { regexp: "^smtpd_sasl_auth_enable", line: "smtpd_sasl_auth_enable = {{postfix_main_cf_smtpd_sasl_auth_enable}}"}
+    - { regexp: "^broken_sasl_auth_clients", line: "broken_sasl_auth_clients = {{postfix_main_cf_broken_sasl_auth_clients}}"}
   notify: reload postfix
   tags:
     - config_potfix_main_cf

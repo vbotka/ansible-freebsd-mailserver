@@ -4,6 +4,9 @@
 - name: newaliases
   command: newaliases
 
+- name: postmap smtp sasl passwords
+  command: postmap "{{postfix_main_cf_smtp_sasl_password_maps}}"
+
 - name: postmap virtual aliases
   command: postmap "{{postfix_virtual}}"
 
