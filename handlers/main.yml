@@ -14,16 +14,26 @@
   command: hostname "{{rc_conf_hostname}}"
 
 - name: reload postfix
-  service: name=postfix state=reloaded
+  service: >
+    name="postfix"
+    state="reloaded"
 
 - name: restart postfix
-  service: name=postfix state=restarted
+  service: >
+    name="postfix"
+    state="restarted"
 
 - name: reload dovecot
-  service: name=dovecot state=reloaded
+  service: >
+    name="dovecot"
+    state="reloaded"
 
 - name: restart dovecot
-  service: name=dovecot state=restarted
+  service: >
+    name="dovecot"
+    state="restarted"
 
 - name: stop sendmail
-  service: name=sendmail state=stopped
+  service: >
+    name="sendmail"
+    state="stopped"

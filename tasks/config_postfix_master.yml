@@ -1,64 +1,39 @@
 ---
 
-- name: Configure submission {{postfix_master_cf}}
-  lineinfile: >
-    dest="{{postfix_master_cf}}"
-    regexp="^submission "
-    line="submission  {{postfix_master_cf_service_def}}"
-    backup="yes"
-  notify: reload postfix
-  tags:
-    - config_potfix_master_cf_submission
-
-- name: Configure smtps {{postfix_master_cf}}
-  lineinfile: >
-    dest="{{postfix_master_cf}}"
-    regexp="^smtps "
-    line="smtps  {{postfix_master_cf_service_def}}"
-    backup="yes"
-  notify: reload postfix
-  tags:
-    - config_potfix_master_cf_smtps
-
-# Ansible module lineinfile strictly handles lines only. No way to configure same options for various services.
-# Workaround: Differentiate service by indentation.
-# service: submission indent: 2 spaces
-# service: smtps      indent: 3 spacse
-# TODO: find idempotent solution
 - name: Configure submission options {{postfix_master_cf}}
-  lineinfile: >
-    dest="{{postfix_master_cf}}"
-    regexp="{{item.regexp}}"
-    line="{{item.line}}"
-    insertafter="^submission"
-    backup="yes"
-  with_items:
-    - { regexp: "^  -o smtpd_tls_security_level", line: "  -o smtpd_tls_security_level={{postfix_master_cf_smtpd_tls_security_level}}"}
-    - { regexp: "^  -o smtpd_sasl_auth_enable", line: "  -o smtpd_sasl_auth_enable={{postfix_master_cf_smtpd_sasl_auth_enable}}"}
-    - { regexp: "^  -o smtpd_sasl_type", line: "  -o smtpd_sasl_type={{postfix_master_cf_smtpd_sasl_type}}"}
-    - { regexp: "^  -o smtpd_sasl_path", line: "  -o smtpd_sasl_path={{postfix_master_cf_smtpd_sasl_path}}"}
-    - { regexp: "^  -o smtpd_sasl_security_options", line: "  -o smtpd_sasl_security_options={{postfix_master_cf_smtpd_sasl_security_options}}"}
-    - { regexp: "^  -o smtpd_sasl_local_domain", line: "  -o smtpd_sasl_local_domain={{postfix_master_cf_smtpd_sasl_local_domain}}"}
-    - { regexp: "^  -o smtpd_client_restrictions", line: "  -o smtpd_client_restrictions={{postfix_master_cf_smtpd_client_restrictions}}"}
-    - { regexp: "^  -o smtpd_recipient_restrictions", line: "  -o smtpd_recipient_restrictions={{postfix_master_cf_smtpd_recipient_restrictions}}"}
-    - { regexp: "^  -o smtpd_reject_unlisted_recipient", line: "  -o smtpd_reject_unlisted_recipient={{postfix_master_cf_smtpd_reject_unlisted_recipient}}"}
-    - { regexp: "^  -o smtpd_relay_restrictions", line: "  -o smtpd_relay_restrictions={{postfix_master_cf_smtpd_relay_restrictions}}"}
+  blockinfile:
+    dest: "{{postfix_master_cf}}"
+    marker: "# {mark} submission options ANSIBLE MANAGED BLOCK"
+    insertafter: "^#submission "
+    backup: "yes"
+    block: |
+      submission  {{postfix_master_cf_service_def}}
+        -o smtpd_tls_security_level={{postfix_master_cf_smtpd_tls_security_level}}
+        -o smtpd_sasl_auth_enable={{postfix_master_cf_smtpd_sasl_auth_enable}}
+        -o smtpd_sasl_type={{postfix_master_cf_smtpd_sasl_type}}
+        -o smtpd_sasl_path={{postfix_master_cf_smtpd_sasl_path}}
+        -o smtpd_sasl_security_options={{postfix_master_cf_smtpd_sasl_security_options}}
+        -o smtpd_sasl_local_domain={{postfix_master_cf_smtpd_sasl_local_domain}}
+        -o smtpd_client_restrictions={{postfix_master_cf_smtpd_client_restrictions}}
+        -o smtpd_recipient_restrictions={{postfix_master_cf_smtpd_recipient_restrictions}}
+        -o smtpd_reject_unlisted_recipient={{postfix_master_cf_smtpd_reject_unlisted_recipient}}
+        -o smtpd_relay_restrictions={{postfix_master_cf_smtpd_relay_restrictions}}
   notify: reload postfix
   tags:
     - config_potfix_master_cf_submission
 
 - name: Configure smtps options {{postfix_master_cf}}
-  lineinfile: >
-    dest="{{postfix_master_cf}}"
-    regexp="{{item.regexp}}"
-    line="{{item.line}}"
-    insertafter="^smtps"
-    backup="yes"
-  with_items:
-    - { regexp: "^   -o smtpd_tls_wrappermode", line: "   -o smtpd_tls_wrappermode=yes"}
-    - { regexp: "^   -o smtpd_sasl_auth_enable", line: "   -o smtpd_sasl_auth_enable={{postfix_master_cf_smtpd_sasl_auth_enable}}"}
-    - { regexp: "^   -o smtpd_reject_unlisted_recipient", line: "   -o smtpd_reject_unlisted_recipient={{postfix_master_cf_smtpd_reject_unlisted_recipient}}"}
-    - { regexp: "^   -o smtpd_relay_restrictions", line: "   -o smtpd_relay_restrictions={{postfix_master_cf_smtpd_relay_restrictions}}"}
+  blockinfile:
+    dest: "{{postfix_master_cf}}"
+    marker: "# {mark} smtps options ANSIBLE MANAGED BLOCK"
+    insertafter: "^#smtps "
+    backup: "yes"
+    block: |
+      smtps  {{postfix_master_cf_service_def}}
+        -o smtpd_tls_wrappermode=yes
+        -o smtpd_sasl_auth_enable={{postfix_master_cf_smtpd_sasl_auth_enable}}
+        -o smtpd_reject_unlisted_recipient={{postfix_master_cf_smtpd_reject_unlisted_recipient}}
+        -o smtpd_relay_restrictions={{postfix_master_cf_smtpd_relay_restrictions}}
   notify: reload postfix
   tags:
     - config_potfix_master_cf_smtps
