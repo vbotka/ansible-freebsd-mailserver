@@ -22,6 +22,6 @@
     group="wheel"
     mode="0640"
     backup="yes"
-  with_items: postfix_smtp_sasl_passwords
+  with_items: "{{postfix_smtp_sasl_passwords}}"
   notify: postmap smtp sasl passwords
   tags: config_potfix_smtp_sasl_passwords

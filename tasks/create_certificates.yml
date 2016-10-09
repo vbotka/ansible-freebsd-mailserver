@@ -4,16 +4,21 @@
 # http://wiki2.dovecot.org/SSL/CertificateCreation
 
 - name: Create directory /etc/ssl/certs
-  file: state="directory" path="/etc/ssl/certs"
+  file: >
+    state="directory"
+    path="/etc/ssl/certs"
   tags: freebsd_mailserver_create_certificates
     
 - name: Create directory /etc/ssl/private
-  file: state="directory" path="/etc/ssl/private"
+  file: >
+    state="directory"
+    path="/etc/ssl/private"
   tags: freebsd_mailserver_create_certificates
 
 - name: Chmod 755 /usr/local/share/examples/dovecot/mkcert.sh
-  file: path="/usr/local/share/examples/dovecot/mkcert.sh"
-        mode="755"
+  file: >
+    path="/usr/local/share/examples/dovecot/mkcert.sh"
+    mode="755"
   tags: freebsd_mailserver_create_certificates
 
 - name: Create Self-signed SSL certificates

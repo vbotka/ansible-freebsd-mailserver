@@ -4,9 +4,10 @@
   register: present
 
 - name: Create files
-  file: path="{{postfix_virtual}}"
-        owner="root"
-        group="wheel"
-        mode="644"
-        state={{ "file" if present.stat.exists else "touch"}}
+  file: >
+    path="{{postfix_virtual}}"
+    owner="root"
+    group="wheel"
+    mode="644"
+    state={{ "file" if present.stat.exists else "touch"}}
   tags: freebsd_mailserver_create_files

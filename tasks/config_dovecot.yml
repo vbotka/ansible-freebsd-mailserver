@@ -8,7 +8,11 @@
 
 # dovecot.conf
 - name: Configure /usr/local/etc/dovecot/dovecot.conf
-  lineinfile: dest=/usr/local/etc/dovecot/dovecot.conf regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
+  lineinfile: >
+    dest="/usr/local/etc/dovecot/dovecot.conf"
+    regexp="{{ item.regexp }}"
+    line="{{ item.line }}"
+    backup="yes"
   with_items:
     - { regexp: "^protocols",  line: "protocols = {{freebsd_mailserver_dovecot_protocols}}"}
     - { regexp: "^listen",  line: "listen = *, ::"}
@@ -33,7 +37,11 @@
 
 # conf.d/10-ssl.conf
 - name: Configure /usr/local/etc/dovecot/conf.d/10-ssl.conf
-  lineinfile: dest=/usr/local/etc/dovecot/conf.d/10-ssl.conf regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
+  lineinfile: >
+    dest="/usr/local/etc/dovecot/conf.d/10-ssl.conf"
+    regexp="{{ item.regexp }}"
+    line="{{ item.line }}"
+    backup="yes"
   with_items:
     - { regexp: "^ssl ", line: "ssl  = yes"}
     - { regexp: "^ssl_ca", line: "ssl_ca = <{{postfix_main_cf_smtpd_tls_CAfile}}"}
@@ -46,7 +54,11 @@
 
 # conf.d/10-mail.conf
 - name: Configure /usr/local/etc/dovecot/conf.d/10-mail.conf
-  lineinfile: dest=/usr/local/etc/dovecot/conf.d/10-mail.conf regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
+  lineinfile: >
+    dest="/usr/local/etc/dovecot/conf.d/10-mail.conf"
+    regexp="{{ item.regexp }}"
+    line="{{ item.line }}"
+    backup="yes"
   with_items:
     - { regexp: "^mail_location",  line: "mail_location = maildir:~/Maildir:LAYOUT=fs"}
     - { regexp: "^mail_privileged_group",  line: "mail_privileged_group = mail"}
@@ -69,7 +81,11 @@
 
 # conf.d/10-logging.conf
 - name: Configure /usr/local/etc/dovecot/conf.d/10-logging.conf
-  lineinfile: dest=/usr/local/etc/dovecot/conf.d/10-logging.conf regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
+  lineinfile: >
+    dest="/usr/local/etc/dovecot/conf.d/10-logging.conf"
+    regexp="{{ item.regexp }}"
+    line="{{ item.line }}"
+    backup="yes"
   with_items:
     - { regexp: "^auth_verbose",  line: "auth_verbose = {{dovecot_auth_verbose}}"}
     - { regexp: "^auth_debug",  line: "auth_debug = {{dovecot_auth_debug}}"}

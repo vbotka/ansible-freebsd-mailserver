@@ -1,34 +1,50 @@
 ---
 
 - name: Configure hostname in /etc/rc.conf
-  lineinfile: dest="/etc/rc.conf" regexp="{{ item.regexp }}" line="{{ item.line }}" backup=yes
+  lineinfile: >
+    dest="/etc/rc.conf"
+    regexp="{{ item.regexp }}"
+    line="{{ item.line }}"
+    backup="yes"
   with_items:
-    - { regexp: "^hostname",  line: "hostname=\"{{rc_conf_hostname}}\""}
+    - { regexp: "^hostname", line: "hostname=\"{{rc_conf_hostname}}\""}
   notify: set hostname
   tags: config_rc_conf_hostname
 
 - name: Disable sendmail in /etc/rc.conf
-  lineinfile: dest="/etc/rc.conf" regexp="{{ item.regexp }}" line="{{ item.line }}" backup=yes
+  lineinfile: >
+    dest="/etc/rc.conf"
+    regexp="{{ item.regexp }}"
+    line="{{ item.line }}"
+    backup="yes"
   with_items:
-    - { regexp: "^sendmail_enable",  line: "sendmail_enable=\"NONE\""}
-    - { regexp: "^sendmail_submit_enable",  line: "sendmail_submit_enable=\"NO\""}
-    - { regexp: "^sendmail_outbound_enable",  line: "sendmail_outbound_enable=\"NO\""}
-    - { regexp: "^sendmail_msp_queue_enable",  line: "sendmail_msp_queue_enable=\"NO\""}
+    - { regexp: "^sendmail_enable", line: "sendmail_enable=\"NONE\""}
+    - { regexp: "^sendmail_submit_enable", line: "sendmail_submit_enable=\"NO\""}
+    - { regexp: "^sendmail_outbound_enable", line: "sendmail_outbound_enable=\"NO\""}
+    - { regexp: "^sendmail_msp_queue_enable", line: "sendmail_msp_queue_enable=\"NO\""}
   notify: stop sendmail
   tags: config_rc_conf_sendmail
 
 - name: Enable postfix and dovecot in /etc/rc.conf
-  lineinfile: dest="/etc/rc.conf" regexp="{{ item.regexp }}" line="{{ item.line }}" backup=yes
+  lineinfile: >
+    dest="/etc/rc.conf"
+    regexp="{{ item.regexp }}"
+    line="{{ item.line }}"
+    backup="yes"
   with_items:
-    - { regexp: "^postfix_enable",  line: "postfix_enable=\"YES\""}
-    - { regexp: "^dovecot_enable=",  line: "dovecot_enable=\"YES\""}
+    - { regexp: "^postfix_enable", line: "postfix_enable=\"YES\""}
+    - { regexp: "^dovecot_enable=", line: "dovecot_enable=\"YES\""}
   tags: config_rc_conf_postfix
 
 # DO overwrites hostname from rc.conf
 - name: Configure hostname in /etc/rc.digitalocean.d/droplet.conf
-  lineinfile: dest="/etc/rc.digitalocean.d/droplet.conf" regexp="{{ item.regexp }}" line="{{ item.line }}" backup=yes
+  lineinfile: >
+    dest="/etc/rc.digitalocean.d/droplet.conf"
+    regexp="{{ item.regexp }}"
+    line="{{ item.line }}"
+    backup="yes"
   with_items:
-    - { regexp: "^hostname",  line: "hostname=\"{{rc_conf_hostname}}\""}
+    - { regexp: "^hostname", line: "hostname=\"{{rc_conf_hostname}}\""}
   when: digitalocean == "yes"
   tags:
     - config_rc_digitalocean

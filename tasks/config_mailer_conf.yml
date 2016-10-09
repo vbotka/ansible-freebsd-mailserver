@@ -1,7 +1,10 @@
 ---
 
 - name: Delete sendmail from /etc/mail/mailer.conf
-  lineinfile: dest="/etc/mail/mailer.conf" regexp="{{ item.regexp }}" state="absent"
+  lineinfile: >
+    dest="/etc/mail/mailer.conf"
+    regexp="{{ item.regexp }}"
+    state="absent"
   with_items:
     - { regexp: "^#.*" }
     - { regexp: "^hoststat.*" }
@@ -9,7 +12,11 @@
   tags: config_mailer_conf
 
 - name: Configure postfix in /etc/mail/mailer.conf
-  lineinfile: dest="/etc/mail/mailer.conf" regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
+  lineinfile: >
+    dest="/etc/mail/mailer.conf"
+    regexp="{{ item.regexp }}"
+    line="{{ item.line }}"
+    backup="yes"
   with_items:
     - { regexp: "^sendmail",  line: "sendmail /usr/local/sbin/sendmail"}
     - { regexp: "^send-mail",  line: "send-mail /usr/local/sbin/sendmail"}
