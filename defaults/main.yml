@@ -103,10 +103,13 @@ postfix_main_cf_smtpd_recipient_restrictions: "permit_mynetworks permit_sasl_aut
 #
 postfix_main_cf_smtp_use_tls: "yes"
 postfix_main_cf_smtp_tls_CAfile: "/etc/ssl/cert.pem"
-postfix_main_cf_smtp_tls_security_level: "may"
 postfix_main_cf_smtp_tls_note_starttls_offer: "yes"
 postfix_main_cf_smtp_tls_loglevel: "1"
 #
+postfix_main_cf_smtp_sasl_auth_enable: "no"
+postfix_main_cf_smtp_tls_security_level_NO: "may"
+postfix_main_cf_smtp_tls_security_level_YES: "encrypt"
+postfix_main_cf_smtp_sasl_tls_security_options: "noanonymous"
 postfix_main_cf_smtp_sasl_password_maps: "/usr/local/etc/postfix/sasl_passwd"
 postfix_smtp_sasl_passwords: []
 #

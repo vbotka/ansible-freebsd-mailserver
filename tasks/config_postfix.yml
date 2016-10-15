@@ -107,11 +107,27 @@
     line="{{item.line}}"
     backup="yes"
   with_items:
-    - { regexp: "^smtp_use_tls",  line: "smtp_use_tls = {{postfix_main_cf_smtp_use_tls}}"}
-    - { regexp: "^smtp_tls_CAfile",  line: "smtp_tls_CAfile = {{postfix_main_cf_smtp_tls_CAfile}}"}
-    - { regexp: "^smtp_tls_security_level",  line: "smtp_tls_security_level = {{postfix_main_cf_smtp_tls_security_level}}"}
-    - { regexp: "^smtp_tls_note_starttls_offer",  line: "smtp_tls_note_starttls_offer = {{postfix_main_cf_smtp_tls_note_starttls_offer}}"}
-    - { regexp: "^smtp_tls_loglevel",  line: "smtp_tls_loglevel = {{postfix_main_cf_smtp_tls_loglevel}}"}
+    - { regexp: "^smtp_use_tls",
+        line: "smtp_use_tls = {{postfix_main_cf_smtp_use_tls}}"}
+    - { regexp: "^smtp_tls_CAfile",
+        line: "smtp_tls_CAfile = {{postfix_main_cf_smtp_tls_CAfile}}"}
+    - { regexp: "^smtp_tls_note_starttls_offer",
+        line: "smtp_tls_note_starttls_offer = {{postfix_main_cf_smtp_tls_note_starttls_offer}}"}
+    - { regexp: "^smtp_tls_loglevel",
+        line: "smtp_tls_loglevel = {{postfix_main_cf_smtp_tls_loglevel}}"}
+  notify: reload postfix
+  tags:
+    - config_potfix_main_cf
+    - config_potfix_main_cf_smtp
+
+# SMTP
+- name: Configure smtp_tls_security_level in {{postfix_main_cf}}
+  lineinfile: >
+    dest="{{postfix_main_cf}}"
+    regexp="^smtp_tls_security_level"
+    line="smtp_tls_security_level = {{postfix_main_cf_smtp_tls_security_level_NO}}"}
+    backup="yes"
+  when: postfix_main_cf_smtp_sasl_auth_enable == "no"
   notify: reload postfix
   tags:
     - config_potfix_main_cf
