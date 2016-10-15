@@ -88,3 +88,4 @@ Author Information
 References
 ----------
 - [Postfix SMTP relay and access control](http://www.postfix.org/SMTPD_ACCESS_README.html)
+- [Enabling SASL authentication in the Postfix SMTP/LMTP client](http://www.postfix.org/SASL_README.html#client_sasl_enable)
