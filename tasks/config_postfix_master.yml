@@ -19,8 +19,7 @@
         -o smtpd_reject_unlisted_recipient={{postfix_master_cf_smtpd_reject_unlisted_recipient}}
         -o smtpd_relay_restrictions={{postfix_master_cf_smtpd_relay_restrictions}}
   notify: reload postfix
-  tags:
-    - config_potfix_master_cf_submission
+  tags: config_potfix_master_cf_submission
 
 - name: Configure smtps options {{postfix_master_cf}}
   blockinfile:
@@ -35,5 +34,4 @@
         -o smtpd_reject_unlisted_recipient={{postfix_master_cf_smtpd_reject_unlisted_recipient}}
         -o smtpd_relay_restrictions={{postfix_master_cf_smtpd_relay_restrictions}}
   notify: reload postfix
-  tags:
-    - config_potfix_master_cf_smtps
+  tags: config_potfix_master_cf_smtps
