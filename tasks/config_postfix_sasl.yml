@@ -8,11 +8,11 @@
     line="{{item.line}}"
     backup="yes"
   with_items:
-    - { regexp: "^smtp_sasl_auth_enable", line: "smtp_sasl_auth_enable = yes"}
+    - { regexp: "^smtp_sasl_auth_enable", line: "smtp_sasl_auth_enable = yes" }
     - { regexp: "^smtp_tls_security_level",
-        line: "smtp_tls_security_level = {{postfix_main_cf_smtp_tls_security_level_YES}}"}
+        line: "smtp_tls_security_level = {{postfix_main_cf_smtp_tls_security_level_YES}}" }
     - { regexp: "^smtp_sasl_tls_security_options",
-        line: "smtp_sasl_tls_security_options = {{postfix_main_cf_smtp_sasl_tls_security_options}}"}
+        line: "smtp_sasl_tls_security_options = {{postfix_main_cf_smtp_sasl_tls_security_options}}" }
   when: postfix_main_cf_smtp_sasl_auth_enable == "yes"
   notify: reload postfix
   tags: config_potfix_main_cf_smtp_sasl
@@ -24,9 +24,9 @@
     line="{{item.line}}"
     backup="yes"
   with_items:
-    - { regexp: "^smtp_sasl_auth_enable", line: "smtp_sasl_auth_enable = no"}
+    - { regexp: "^smtp_sasl_auth_enable", line: "smtp_sasl_auth_enable = no" }
     - { regexp: "^smtp_tls_security_level",
-        line: "smtp_tls_security_level = {{postfix_main_cf_smtp_tls_security_level_NO}}"}
+        line: "smtp_tls_security_level = {{postfix_main_cf_smtp_tls_security_level_NO}}" }
   when: postfix_main_cf_smtp_sasl_auth_enable == "no"
   notify: reload postfix
   tags: config_potfix_main_cf_smtp_sasl

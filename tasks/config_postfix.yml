@@ -125,7 +125,7 @@
   lineinfile: >
     dest="{{postfix_main_cf}}"
     regexp="^smtp_tls_security_level"
-    line="smtp_tls_security_level = {{postfix_main_cf_smtp_tls_security_level_NO}}"}
+    line="smtp_tls_security_level = {{postfix_main_cf_smtp_tls_security_level_NO}}"
     backup="yes"
   when: postfix_main_cf_smtp_sasl_auth_enable == "no"
   notify: reload postfix
