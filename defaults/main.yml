@@ -52,7 +52,8 @@ freebsd_install_method: "packages"
 #freebsd_install_method: "ports"
 #freebsd_use_packages: "yes"
 freebsd_mailserver_packages:
-  - postfix
+  - postfix-sasl
+  - cyrus-sasl
   - dovecot2
 
 # paths
