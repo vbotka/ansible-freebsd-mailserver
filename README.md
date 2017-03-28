@@ -3,7 +3,7 @@ freebsd-mailserver
 
 [![Build Status](https://travis-ci.org/vbotka/ansible-freebsd-mailserver.svg?branch=master)](https://travis-ci.org/vbotka/ansible-freebsd-mailserver)
 
-[Ansible role](https://galaxy.ansible.com/vbotka/ansible-freebsd-mailserver/). Install and configure postfix and dovecot2 with FreeBSD.
+[Ansible role](https://galaxy.ansible.com/vbotka/freebsd-mailserver/). Install and configure postfix and dovecot2 with FreeBSD.
 
 Tested with FreeBSD 10.3 at [digitalocean.com](https://cloud.digitalocean.com)
 
