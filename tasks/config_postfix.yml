@@ -36,7 +36,7 @@
     regexp="^relayhost"
     line="relayhost = {{postfix_main_cf_relayhost}}"
     backup="yes"
-  when: not("{{postfix_main_cf_relayhost}}" | trim == "")
+  when: not("postfix_main_cf_relayhost" | trim == "")
   notify: reload postfix
   tags: config_potfix_main_cf_relayhost
 

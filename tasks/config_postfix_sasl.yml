@@ -39,7 +39,7 @@
     line="smtp_sasl_password_maps = hash:{{postfix_main_cf_smtp_sasl_password_maps}}"
     backup="yes"
   when:
-    - not("{{postfix_main_cf_smtp_sasl_password_maps}}" | trim == "")
+    - not("postfix_main_cf_smtp_sasl_password_maps" | trim == "")
     - postfix_main_cf_smtp_sasl_auth_enable == "yes"
   notify: reload postfix
   tags: config_potfix_main_cf_smtp_sasl_password_maps
