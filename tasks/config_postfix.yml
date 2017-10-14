@@ -29,14 +29,18 @@
   notify: reload postfix
   tags: config_potfix_main_cf
 
+- debug:
+    msg: "relayhost: {{ postfix_main_cf_relayhost }}"
+  tags: config_potfix_main_cf_relayhost
+
 # relayhost
-- name: Configure relayhost in {{postfix_main_cf}}
+- name: Configure relayhost in {{ postfix_main_cf }}
   lineinfile: >
-    dest="{{postfix_main_cf}}"
+    dest="{{ postfix_main_cf }}"
     regexp="^relayhost"
-    line="relayhost = {{postfix_main_cf_relayhost}}"
+    line="relayhost = {{ postfix_main_cf_relayhost }}"
     backup="yes"
-  when: not("postfix_main_cf_relayhost" | trim == "")
+  when: postfix_main_cf_relayhost != ""
   notify: reload postfix
   tags: config_potfix_main_cf_relayhost
 
