@@ -55,7 +55,7 @@
     - { regexp: "^virtual_alias_domains", line: "virtual_alias_domains = {{postfix_main_cf_virtual_alias_domains}}"}
     - { regexp: "^virtual_alias_maps", line: "virtual_alias_maps = {{postfix_main_cf_virtual_alias_maps}}"}
   notify:
-    - postmap virtual domains
+    - postmap virtual aliases
     - reload postfix
   tags:
     - config_potfix_main_cf
