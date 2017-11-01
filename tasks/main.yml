@@ -3,7 +3,8 @@
 
 - include: packages.yml
   tags:
-    - packages
+    - bsd_packages
+    - bsd_ports
     - freebsd-mailserver-packages
     - freebsd-mailserver
 
