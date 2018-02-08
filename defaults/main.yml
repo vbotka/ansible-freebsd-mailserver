@@ -52,9 +52,9 @@ freebsd_install_method: "packages"
 #freebsd_install_method: "ports"
 #freebsd_use_packages: "yes"
 freebsd_mailserver_packages:
-  - postfix-sasl
-  - cyrus-sasl
-  - dovecot
+  - mail/postfix-sasl
+  - security/cyrus-sasl2
+  - mail/dovecot
 
 # paths
 postfix_main_cf: "/usr/local/etc/postfix/main.cf"
