@@ -8,7 +8,8 @@ digitalocean: "no"
 #
 # TLS certificate and key
 #
-# Default self-signed certificates will be created
+# Create self-signed certificate, or use https://galaxy.ansible.com/vbotka/certificate/
+postfix_create_cert: "yes"
 postfix_main_cf_smtpd_tls_key_file: "/etc/ssl/private/dovecot.pem"
 postfix_main_cf_smtpd_tls_cert_file: "/etc/ssl/certs/dovecot.pem"
 # example for letsencrypt:
