@@ -11,7 +11,9 @@
     line: "{{item.regexp}} = {{item.line}}"
     backup: yes
   with_items: "{{ postfix_main_cf_conf }}"
-  notify: reload postfix
+  notify:
+    - postfix check
+    - reload postfix
   tags: postfix_main_cf
 
 # relayhost
@@ -22,7 +24,9 @@
     line: "relayhost = {{ postfix_main_cf_relayhost }}"
     backup: yes
   when: postfix_main_cf_relayhost != ""
-  notify: reload postfix
+  notify:
+    - postfix check
+    - reload postfix
   tags: postfix_main_cf_relayhost
 
 # virtual domains
@@ -35,6 +39,7 @@
   with_items: "{{ postfix_main_cf_virtual_alias_maps_conf }}"
   notify:
     - postmap virtual aliases
+    - postfix check
     - reload postfix
   tags: postfix_main_cf_virtual_domains
 
@@ -46,7 +51,9 @@
     line: "{{ item.regexp }} = {{ item.line }}"
     backup: yes
   with_items: "{{ postfix_main_cf_smtpd_conf }}"
-  notify: reload postfix
+  notify:
+    - postfix check
+    - reload postfix
   tags: postfix_main_cf_smtpd
 
 # smtp
@@ -57,7 +64,9 @@
     line: "{{ item.regexp }} = {{ item.line }}"
     backup: yes
   with_items: "{{ postfix_main_cf_smtp_conf }}"
-  notify: reload postfix
+  notify:
+    - postfix check
+    - reload postfix
   tags: postfix_main_cf_smtp
 
 # EOF

@@ -1,42 +1,40 @@
 ---
 # defaults for freebsd-mailserver
 
-# CHANGE THIS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-#
-# digitalocean.com droplet
+# CHANGE AT LEAST THIS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+freebsd_mailserver_postfix_enable: False
+freebsd_mailserver_dovecot_enable: False
 digitalocean: False
-#
-# TLS certificate and key
-# Create self-signed certificate, or use https://galaxy.ansible.com/vbotka/certificate/
+
+# Create self-signed TLS certificate (default False),
 postfix_create_cert: False
 postfix_main_cf_smtpd_tls_key_file: "/etc/ssl/private/dovecot.pem"
 postfix_main_cf_smtpd_tls_cert_file: "/etc/ssl/certs/dovecot.pem"
-# example for letsencrypt:
+# or (1) use https://galaxy.ansible.com/vbotka/certificate/
+# or (2) use LetsEncrypt (https://galaxy.ansible.com/vbotka/leutils/)
 #postfix_main_cf_smtpd_tls_key_file: "/usr/local/etc/letsencrypt/live/mail.example.com/privkey.pem"
 #postfix_main_cf_smtpd_tls_cert_file: "/usr/local/etc/letsencrypt/live/mail.example.com/fullchain.pem"
-# other example:
-#postfix_main_cf_smtpd_tls_key_file: "/usr/local/etc/postfix/ssl.key/dovecot.pem"
-#postfix_main_cf_smtpd_tls_cert_file: "/usr/local/etc/postfix/ssl.key/dovecot.pem"
-#
+
 rc_conf_hostname: "srv.example.com"
 postmaster_address: "postmaster@example.com"
 postfix_main_cf_myhostname: "mail.example.com"
 postfix_main_cf_mydomain: "example.com"
 postfix_main_cf_virtual_alias_domains: "example.net, example.org, example.co"
 postfix_main_cf_message_size_limit: "40960000"
-#
+
 aliases: []
 #aliases:
 #  - { alias: "firstname", user: "user1" }
 #  - { alias: "firstname.lastname",  user: "user1" }
 #  - { alias: "flastname", user: "user1" }
-#
+
 virtual_aliases: []
 #virtual_aliases:
 #  - { alias: "firstname@example.net", user: "user1" }
 #  - { alias: "firstname.lastname@example.net", user: "user1" }
 #  - { alias: "flastname@example.net", user: "user1" }
-#
+
 # Spamassassin
 # For spamassassin use -o content_filter=spamfilter. Role
 # freebsd-ansible-maiserver-spamassasin will configure it, but
@@ -45,8 +43,8 @@ virtual_aliases: []
 # report as changed. When not sure, keep the default.
 postfix_master_cf_service_def: "inet  n       -       -       -       -       smtpd"
 #postfix_master_cf_service_def: "inet  n       -       -       -       -       smtpd -o content_filter=spamfilter"
-#
-# CHANGE THIS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+# CHANGE AT LEAST THIS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 freebsd_install_method: "packages"
 #freebsd_install_method: "ports"
@@ -92,13 +90,16 @@ postfix_main_cf_conf:
   - { regexp: "shlib_directory", line: "{{ postfix_main_cf_shlib_directory }}" }
   - { regexp: "alias_maps", line: "{{ postfix_main_cf_alias_maps }}" }
   - { regexp: "alias_database", line: "{{ postfix_main_cf_alias_database }}" }
+
 # relayhost
 postfix_main_cf_relayhost: ""
+
 # virtual domains
 postfix_main_cf_virtual_alias_maps: "hash:/usr/local/etc/postfix/virtual"
 postfix_main_cf_virtual_alias_maps_conf:
   - { regexp: "virtual_alias_domains", line: "{{ postfix_main_cf_virtual_alias_domains }}" }
   - { regexp: "virtual_alias_maps", line: "{{ postfix_main_cf_virtual_alias_maps }}" }
+
 # smtpd
 postfix_main_cf_tls_random_source: "dev:/dev/urandom"
 postfix_main_cf_smtpd_tls_received_header: "yes"
@@ -114,6 +115,7 @@ postfix_main_cf_smtpd_use_tls: "yes"
 postfix_main_cf_smtpd_tls_auth_only: "yes"
 postfix_main_cf_smtpd_tls_loglevel: "1"
 postfix_main_cf_smtpd_tls_CAfile: "/etc/ssl/cert.pem"
+
 #smtpd_tls_CApath = /path/to/certs/
 postfix_main_cf_smtpd_conf:
   - { regexp: "tls_random_source",  line: "{{ postfix_main_cf_tls_random_source }}" }
@@ -132,6 +134,7 @@ postfix_main_cf_smtpd_conf:
   - { regexp: "smtpd_tls_session_cache_timeout",  line: "{{ postfix_main_cf_smtpd_tls_session_cache_timeout }}" }
   - { regexp: "smtpd_relay_restrictions",  line: "{{ postfix_main_cf_smtpd_relay_restrictions }}" }
   - { regexp: "smtpd_recipient_restrictions",  line: "{{ postfix_main_cf_smtpd_recipient_restrictions }}" }
+
 # smtp
 postfix_main_cf_smtp_use_tls: "yes"
 postfix_main_cf_smtp_tls_CAfile: "/etc/ssl/cert.pem"
@@ -142,6 +145,7 @@ postfix_main_cf_smtp_conf:
   - { regexp: "smtp_tls_CAfile", line: "{{ postfix_main_cf_smtp_tls_CAfile }}" }
   - { regexp: "smtp_tls_note_starttls_offer", line: "{{ postfix_main_cf_smtp_tls_note_starttls_offer }}" }
   - { regexp: "smtp_tls_loglevel", line: "{{ postfix_main_cf_smtp_tls_loglevel }}" }
+
 # smtpd sasl
 postfix_main_cf_smtpd_sasl_auth_enable: "yes"
 postfix_main_cf_smtpd_sasl_type: "dovecot"
@@ -185,20 +189,48 @@ postfix_master_cf_smtpd_relay_restrictions: "permit_sasl_authenticated,reject"
 postfix_master_cf_smtpd_reject_unlisted_recipient: "no"
 #postfix_master_cf_content_filter=spamfilter
 
-
-# DOVECOT
-
-# conf.d/10-logging.conf
+# dovecot
 dovecot_auth_verbose: "yes"
 dovecot_auth_debug: "no"
 dovecot_mail_debug: "no"
 dovecot_verbose_ssl: "yes"
+dovecot_ssl_cipher_list: "ALL:!LOW:!EXP:!aNULL:!RC4:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!SRP:!DSS"
+dovecot_ssl_protocols: "TLSv1"
 freebsd_mailserver_dovecot_protocols: "imap pop3 lmtp"
+dovecot_conf:
+  - { regexp: "protocols", line: "{{ freebsd_mailserver_dovecot_protocols }}" }
+  - { regexp: "listen", line: "*, ::" }
+dovecot_ssl_conf:
+  - { regexp: "ssl ", line: "yes" }
+  - { regexp: "ssl_ca", line: "<{{ postfix_main_cf_smtpd_tls_CAfile }}" }
+  - { regexp: "ssl_min_protocol", line: "{{ dovecot_ssl_protocols }}" }
+  - { regexp: "ssl_cipher_list", line: "{{ dovecot_ssl_cipher_list }}" }
+  - { regexp: "ssl_cert", line: "<{{ postfix_main_cf_smtpd_tls_cert_file }}" }
+  - { regexp: "ssl_key", line: "<{{ postfix_main_cf_smtpd_tls_key_file }}" }
+dovecot_mail_conf:
+  - { regexp: "mail_location",  line: "maildir:~/Maildir:LAYOUT=fs" }
+  - { regexp: "mail_privileged_group",  line: "mail" }
+  - { regexp: "maildir_copy_with_hardlinks",  line: "yes" }
+dovecot_auth_conf:
+  - { regexp: "disable_plaintext_auth", line: "yes" }
+  - { regexp: "auth_mechanisms", line: "plain login" }
+dovecot_logging_conf:
+  - { regexp: "auth_verbose", line: "{{ dovecot_auth_verbose }}" }
+  - { regexp: "auth_debug", line: "{{ dovecot_auth_debug }}" }
+  - { regexp: "mail_debug", line: "{{ dovecot_mail_debug }}" }
+  - { regexp: "verbose_ssl", line: "{{ dovecot_verbose_ssl }}" }
+dovecot_lda_conf:
+  - { regexp: "postmaster_address", line: "{{ postmaster_address }}" }
+  - { regexp: "hostname", line: "{{ postfix_main_cf_myhostname }}" }
+  - { regexp: "auth_socket_path", line: "/var/run/dovecot/auth-master" }
+  - { regexp: "log_path", line: "" }
+  - { regexp: "info_log_path", line: "" }
+  - { regexp: "syslog_facility", line: "mail" }
 
-# conf.d/10-ssl.conf
-dovecot_ssl_protocols: "!SSLv2 !SSLv3"
-dovecot_ssl_cipher_list: "ALL:!LOW:!SSLv2:!EXP:!aNULL:!RC4:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!SRP:!DSS"
 # NOTES
 # test command: openssl s_client -connect $SERVERIP:993 -ssl3
 # http://wiki2.dovecot.org/SSL
 # http://dovecot.markmail.org/message/5lyjagmrzcmmuyr4?q=SSLv3+disable
+
+# EOF
+...

@@ -1,59 +1,69 @@
 ---
 # handlers for freebsd-mailserver
 
+- name: postfix check
+  command: "/usr/local/sbin/postfix check"
+
 - name: newaliases
-  block:
-    - command: "/usr/local/sbin/postfix check"
-    - command: "/usr/bin/newaliases"
+  command: "/usr/bin/newaliases"
 
 - name: postmap smtp sasl passwords
-  block:
-    - command: "/usr/local/sbin/postfix check"
-    - command: "/usr/local/sbin/postmap {{postfix_main_cf_smtp_sasl_password_maps}}"
+  command: "/usr/local/sbin/postmap {{postfix_main_cf_smtp_sasl_password_maps}}"
 
 - name: postmap virtual aliases
-  block:
-    - command: "/usr/local/sbin/postfix check"
-    - command: "/usr/local/sbin/postmap {{postfix_virtual}}"
+  command: "/usr/local/sbin/postmap {{postfix_virtual}}"
 
 - name: set hostname
-  block:
-    - command: "/usr/local/sbin/postfix check"
-    - command: "/bin/hostname {{rc_conf_hostname}}"
+  command: "/bin/hostname {{rc_conf_hostname}}"
+
+- name: enable and start postfix
+  service:
+    name: "postfix"
+    state: "started"
+    enabled: yes
+
+- name: disable and stop postfix
+  service:
+    name: "postfix"
+    state: "stopped"
+    enabled: no
 
 - name: reload postfix
-  block:
-    - command: "/usr/local/sbin/postfix check"
-    - service:
-        name: "postfix"
-        state: "reloaded"
+  service:
+    name: "postfix"
+    state: "reloaded"
 
 - name: restart postfix
-  block:
-    - command: "/usr/local/sbin/postfix check"
-    - service:
-        name: "postfix"
-        state: "restarted"
+  service:
+    name: "postfix"
+    state: "restarted"
+
+- name: enable and start dovecot
+  service:
+    name: "dovecot"
+    state: "started"
+    enabled: yes
+
+- name: disable and stop dovecot
+  service:
+    name: "dovecot"
+    state: "stopped"
+    enabled: no
 
 - name: reload dovecot
-  block:
-    - command: "/usr/local/sbin/postfix check"
-    - service:
-        name: "dovecot"
-        state: "reloaded"
+  service:
+    name: "dovecot"
+    state: "reloaded"
 
 - name: restart dovecot
-  block:
-    - command: "/usr/local/sbin/postfix check"
-    - service:
-        name: "dovecot"
-        state: "restarted"
+  service:
+    name: "dovecot"
+    state: "restarted"
 
 - name: stop sendmail
-  block:
-    - command: "/usr/local/sbin/postfix check"
-    - service:
-        name: "sendmail"
-        state: "stopped"
+  service:
+    name: "sendmail"
+    state: "stopped"
 
 # EOF
+...

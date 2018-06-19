@@ -18,7 +18,9 @@
         -o smtpd_reject_unlisted_recipient={{postfix_master_cf_smtpd_reject_unlisted_recipient}}
         -o smtpd_relay_restrictions={{postfix_master_cf_smtpd_relay_restrictions}}
     backup: yes
-  notify: reload postfix
+  notify:
+    - postfix check
+    - reload postfix
   tags: potfix_master_cf_submission
 
 - name: "postfix_master: Configure smtps options {{postfix_master_cf}}"
@@ -33,7 +35,9 @@
         -o smtpd_reject_unlisted_recipient={{postfix_master_cf_smtpd_reject_unlisted_recipient}}
         -o smtpd_relay_restrictions={{postfix_master_cf_smtpd_relay_restrictions}}
     backup: yes
-  notify: reload postfix
+  notify:
+    - postfix check
+    - reload postfix
   tags: potfix_master_cf_smtps
 
 #EOF

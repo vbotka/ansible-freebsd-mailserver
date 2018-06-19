@@ -7,7 +7,7 @@
     line: "{{ item.line }}"
     backup: yes
   with_items:
-    - { regexp: "^hostname", line: "hostname=\"{{rc_conf_hostname}}\""}
+    - { regexp: "^hostname", line: "hostname=\"{{rc_conf_hostname}}\"" }
   notify: set hostname
   tags: postfix_rcconf_hostname
 
@@ -18,23 +18,62 @@
     line: "{{ item.line }}"
     backup: yes
   with_items:
-    - { regexp: "^sendmail_enable", line: "sendmail_enable=\"NONE\""}
-    - { regexp: "^sendmail_submit_enable", line: "sendmail_submit_enable=\"NO\""}
-    - { regexp: "^sendmail_outbound_enable", line: "sendmail_outbound_enable=\"NO\""}
-    - { regexp: "^sendmail_msp_queue_enable", line: "sendmail_msp_queue_enable=\"NO\""}
+    - { regexp: "^sendmail_enable", line: "sendmail_enable=\"NONE\"" }
+    - { regexp: "^sendmail_submit_enable", line: "sendmail_submit_enable=\"NO\"" }
+    - { regexp: "^sendmail_outbound_enable", line: "sendmail_outbound_enable=\"NO\"" }
+    - { regexp: "^sendmail_msp_queue_enable", line: "sendmail_msp_queue_enable=\"NO\"" }
   notify: stop sendmail
   tags: postfix_rcconf_sendmail
 
-- name: "rcconf: Enable postfix and dovecot in /etc/rc.conf"
+- name: "rcconf: Enable and Start Postfix"
   lineinfile:
     dest: "/etc/rc.conf"
-    regexp: "{{ item.regexp }}"
-    line: "{{ item.line }}"
+    regexp: "^{{ item.regexp }}"
+    line: "{{ item.regexp }}={{ item.line }}"
     backup: yes
   with_items:
-    - { regexp: "^postfix_enable", line: "postfix_enable=\"YES\""}
-    - { regexp: "^dovecot_enable", line: "dovecot_enable=\"YES\""}
+    - { regexp: "postfix_enable", line: "\"YES\"" }
+  when: freebsd_mailserver_postfix_enable
+  notify:
+    - postfix check
+    - enable and start postfix
   tags: postfix_rcconf_postfix
+
+- name: "rcconf: Enable and Start Dovecot"
+  lineinfile:
+    dest: "/etc/rc.conf"
+    regexp: "^{{ item.regexp }}"
+    line: "{{ item.regexp }}={{ item.line }}"
+    backup: yes
+  with_items:
+    - { regexp: "dovecot_enable", line: "\"YES\"" }
+  when: freebsd_mailserver_dovecot_enable
+  notify: enable and start dovecot
+  tags: postfix_rcconf_dovecot
+
+- name: "rcconf: Disable and Stop Postfix"
+  lineinfile:
+    dest: "/etc/rc.conf"
+    regexp: "^{{ item.regexp }}"
+    line: "{{ item.regexp }}={{ item.line }}"
+    backup: yes
+  with_items:
+    - { regexp: "postfix_enable", line: "\"NO\"" }
+  when: not freebsd_mailserver_postfix_enable
+  notify: disable and stop postfix
+  tags: postfix_rcconf_postfix
+
+- name: "rcconf: Disable and Stop Dovecot"
+  lineinfile:
+    dest: "/etc/rc.conf"
+    regexp: "^{{ item.regexp }}"
+    line: "{{ item.regexp }}={{ item.line }}"
+    backup: yes
+  with_items:
+    - { regexp: "dovecot_enable", line: "\"NO\"" }
+  when: not freebsd_mailserver_dovecot_enable
+  notify: disable and stop dovecot
+  tags: postfix_rcconf_dovecot
 
 # DO overwrites hostname from rc.conf
 - name: "rcconf: Configure hostname in /etc/rc.digitalocean.d/droplet.conf"
@@ -44,7 +83,7 @@
     line: "{{ item.line }}"
     backup: yes
   with_items:
-    - { regexp: "^hostname", line: "hostname=\"{{rc_conf_hostname}}\""}
+    - { regexp: "^hostname", line: "hostname=\"{{rc_conf_hostname}}\"" }
   when:
     - digitalocean
     - ansible_distribution_major_version < '11'

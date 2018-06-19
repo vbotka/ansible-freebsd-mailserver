@@ -8,7 +8,9 @@
     line: "{{item.line}}"
     backup: yes
   with_items: "{{ postfix_main_cf_smtpd_sasl_conf }}"
-  notify: reload postfix
+  notify:
+    - postfix check
+    - reload postfix
   tags: postfix_main_cf_smtpd_sasl
 
 # smtp sasl
@@ -20,7 +22,9 @@
     backup: yes
   with_items: "{{ postfix_main_cf_smtp_sasl_enable_conf }}"
   when: postfix_main_cf_smtp_sasl_auth_enable
-  notify: reload postfix
+  notify:
+    - postfix check
+    - reload postfix
   tags: postfix_main_cf_smtp_sasl_enable
 
 - name: "postfix_sasl: Disable SASL {{ postfix_main_cf }}"
@@ -31,7 +35,9 @@
     backup: yes
   with_items: "{{ postfix_main_cf_smtp_sasl_disable_conf }}"
   when: not postfix_main_cf_smtp_sasl_auth_enable
-  notify: reload postfix
+  notify:
+    - postfix check
+    - reload postfix
   tags: postfix_main_cf_smtp_sasl_disable
 
 # smtp_sasl_password_maps
@@ -44,7 +50,9 @@
   when:
     - not "postfix_main_cf_smtp_sasl_password_maps" | trim == ""
     - postfix_main_cf_smtp_sasl_auth_enable
-  notify: reload postfix
+  notify:
+    - postfix check
+    - reload postfix
   tags: postfix_main_cf_smtp_sasl_password_maps
 
 # smtp_sasl_passwords
@@ -59,7 +67,10 @@
     backup: yes
     create: yes
   with_items: "{{ postfix_smtp_sasl_passwords }}"
-  notify: postmap smtp sasl passwords
+  notify:
+    - postmap smtp sasl passwords
+    - postfix check
+    - reload postfix
   tags: postfix_smtp_sasl_passwords
 
 # EOF

@@ -11,7 +11,10 @@
     backup: yes
     create: yes
   with_items: "{{ virtual_aliases }}"
-  notify: postmap virtual aliases
+  notify:
+    - postmap virtual aliases
+    - postfix check
+    - reload postfix
   when: virtual_aliases > 0
   tags: postfix_virtual_aliases
 

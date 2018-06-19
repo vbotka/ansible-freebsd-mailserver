@@ -30,6 +30,9 @@
   when: postfix_create_cert
   register: command_result
   changed_when: command_result.stdout | search("dovecot-certificate-changed")
+  notify:
+    - postfix check
+    - reload postfix
 
 # EOF
 ...
