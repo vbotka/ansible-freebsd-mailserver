@@ -1,0 +1,35 @@
+---
+
+# Self-signed certificate creation
+# http://wiki2.dovecot.org/SSL/CertificateCreation
+
+- name: "certificates: Create directory /etc/ssl/certs"
+  file:
+    state: "directory"
+    path: "/etc/ssl/certs"
+    owner: "root"
+    group: "wheel"
+    mode: "0755"
+    
+- name: "certificates: Create directory /etc/ssl/private"
+  file:
+    state: "directory"
+    path: "/etc/ssl/private"
+    owner: "root"
+    group: "wheel"
+    mode: "0700"
+
+- name: "certificates: Chmod 755 /usr/local/share/examples/dovecot/mkcert.sh"
+  file:
+    path: "/usr/local/share/examples/dovecot/mkcert.sh"
+    mode: "0755"
+  when: postfix_create_cert
+
+- name: "certificates: Create Self-signed SSL certificates"
+  shell: sh -c "if [ ! -e /etc/ssl/certs/dovecot.pem ]; then env OPENSSLCONFIG=/usr/local/share/examples/dovecot/dovecot-openssl.cnf /usr/local/share/examples/dovecot/mkcert.sh; printf 'dovecot-certificate-changed'; fi"
+  when: postfix_create_cert
+  register: command_result
+  changed_when: command_result.stdout | search("dovecot-certificate-changed")
+
+# EOF
+...

@@ -5,8 +5,6 @@ freebsd-mailserver
 
 [Ansible role](https://galaxy.ansible.com/vbotka/freebsd-mailserver/). Install and configure postfix and dovecot2 with FreeBSD.
 
-Tested with FreeBSD 10.3 at [digitalocean.com](https://cloud.digitalocean.com)
-
 
 Requirements
 ------------
@@ -17,7 +15,7 @@ No requiremenst.
 Variables
 ---------
 
-TBD (Check the defaults).
+TBD. Check the defaults and examples in vars.
 
 
 Workflow
@@ -26,41 +24,40 @@ Workflow
 1) Change shell to /bin/sh.
 
 ```
-ansible mailserver -e 'ansible_shell_type=csh ansible_shell_executable=/bin/csh' -a 'sudo pw usermod freebsd -s /bin/sh'
+# ansible mailserver -e 'ansible_shell_type=csh ansible_shell_executable=/bin/csh' -a 'sudo pw usermod freebsd -s /bin/sh'
 ```
 
 2) Install role.
 
 ```
-ansible-galaxy install vbotka.ansible-freebsd-mailserver
+# ansible-galaxy install vbotka.freebsd-mailserver
 ```
 
 3) Fit variables.
 
 ```
-~/.ansible/roles/vbotka.ansible-freebsd-mailserver/vars/main.yml
+# editor vbotka.freebsd-mailserver/vars/main.yml
 ```
 
 4) Create playbook and inventory.
 
 ```
-> cat ~/.ansible/playbooks/freebsd-mailserver.yml
----
+# cat freebsd-mailserver.yml
+
 - hosts: mailserver
-  become: yes
-  become_method: sudo
   roles:
-    - role: vbotka.ansible-freebsd-mailserver
+    - vbotka.freebsd-mailserver
 ```
 
 ```
-> cat ~/.ansible/hosts
+# cat hosts
 [mailserver]
-<MAILSERVER-IP-OR-FQDN>
-
+<mailserver-ip-or-fqdn>
 [mailserver:vars]
 ansible_connection=ssh
 ansible_user=freebsd
+ansible_become=yes
+ansible_become_method=sudo
 ansible_python_interpreter=/usr/local/bin/python2
 ansible_perl_interpreter=/usr/local/bin/perl
 ```
@@ -68,7 +65,7 @@ ansible_perl_interpreter=/usr/local/bin/perl
 5) Install and configure the mailserver.
 
 ```
-ansible-playbook ~/.ansible/playbooks/freebsd-mailserver.yml
+# ansible-playbook freebsd-mailserver.yml
 ```
 
 6) Consider to test the mailserver with http://mxtoolbox.com/
@@ -87,5 +84,7 @@ Author Information
 
 References
 ----------
+- [Postfix Documentation](http://www.postfix.org/documentation.html)
 - [Postfix SMTP relay and access control](http://www.postfix.org/SMTPD_ACCESS_README.html)
+- [Postfix SASL Howto](http://www.postfix.org/SASL_README.html)
 - [Enabling SASL authentication in the Postfix SMTP/LMTP client](http://www.postfix.org/SASL_README.html#client_sasl_enable)

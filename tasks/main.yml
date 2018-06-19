@@ -1,64 +1,41 @@
 ---
-# tasks file for freebsd-mailserver
+# tasks for freebsd-mailserver
 
-- include: packages.yml
-  tags:
-    - bsd_packages
-    - bsd_ports
-    - freebsd-mailserver-packages
-    - freebsd-mailserver
+- import_tasks: packages.yml
+  tags: fm-packages
 
-- include: create_files.yml
-  tags:
-    - freebsd-mailserver-create_files
-    - freebsd-mailserver
+- import_tasks: files.yml
+  tags: fm-files
 
-- include: create_certificates.yml
-  tags:
-    - freebsd-mailserver-create_certificates
-    - freebsd-mailserver
+- import_tasks: certificates.yml
+  tags: fm-certificates
 
-- include: config_rc_conf.yml
-  tags:
-    - freebsd-mailserver-config_rc_conf
-    - freebsd-mailserver
+- import_tasks: rcconf.yml
+  tags: fm-rcconf
 
-- include: config_mailer_conf.yml
-  tags:
-    - freebsd-mailserver-config_mailer_conf
-    - freebsd-mailserver
+- import_tasks: mailer_conf.yml
+  tags: fm-mailer_conf
 
-- include: config_periodic_conf.yml
-  tags:
-    - freebsd-mailserver-config_periodic_conf
-    - freebsd-mailserver
+- import_tasks: periodic_conf.yml
+  tags: fm-periodic_conf
 
-- include: config_postfix.yml
-  tags:
-    - freebsd-mailserver-config_postfix
-    - freebsd-mailserver
+- import_tasks: postfix.yml
+  tags: fm-postfix
 
-- include: config_postfix_sasl.yml
-  tags:
-    - freebsd-mailserver-config_postfix_sasl
-    - freebsd-mailserver
+- import_tasks: postfix_sasl.yml
+  tags: fm-postfix_sasl
 
-- include: config_postfix_master.yml
-  tags:
-    - freebsd-mailserver-config_postfix_master
-    - freebsd-mailserver
+- import_tasks: postfix_master.yml
+  tags: fm-postfix_master
 
-- include: config_virtual_aliases.yml
-  tags:
-    - freebsd-mailserver-config_virtual_aliases
-    - freebsd-mailserver
+- import_tasks: virtual_aliases.yml
+  tags: fm-virtual_aliases
 
-- include: config_aliases.yml
-  tags:
-    - freebsd-mailserver-config_aliases
-    - freebsd-mailserver
+- import_tasks: aliases.yml
+  tags: fm-aliases
 
-- include: config_dovecot.yml
-  tags:
-    - freebsd-mailserver-config_dovecot
-    - freebsd-mailserver
+- import_tasks: dovecot.yml
+  tags: fm-dovecot
+
+# EOF
+...

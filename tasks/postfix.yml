@@ -1,0 +1,64 @@
+---
+
+# NOTES
+# - consider postconf -e
+
+# main.cf
+- name: "postfix: Configure {{ postfix_main_cf }}"
+  lineinfile:
+    dest: "{{postfix_main_cf}}"
+    regexp: "^{{item.regexp}}"
+    line: "{{item.regexp}} = {{item.line}}"
+    backup: yes
+  with_items: "{{ postfix_main_cf_conf }}"
+  notify: reload postfix
+  tags: postfix_main_cf
+
+# relayhost
+- name: "postfix: Configure relayhost in {{ postfix_main_cf }}"
+  lineinfile:
+    dest: "{{ postfix_main_cf }}"
+    regexp: "^relayhost"
+    line: "relayhost = {{ postfix_main_cf_relayhost }}"
+    backup: yes
+  when: postfix_main_cf_relayhost != ""
+  notify: reload postfix
+  tags: postfix_main_cf_relayhost
+
+# virtual domains
+- name: "postfix: Configure Virtual Domains {{postfix_main_cf}}"
+  lineinfile:
+    dest: "{{ postfix_main_cf }}"
+    regexp: "^{{ item.regexp }}"
+    line: "{{ item.regexp }} = {{ item.line }}"
+    backup: yes
+  with_items: "{{ postfix_main_cf_virtual_alias_maps_conf }}"
+  notify:
+    - postmap virtual aliases
+    - reload postfix
+  tags: postfix_main_cf_virtual_domains
+
+# smtpd
+- name: "postfix: Configure SMTPD {{postfix_main_cf}}"
+  lineinfile:
+    dest: "{{ postfix_main_cf }}"
+    regexp: "^{{ item.regexp }}"
+    line: "{{ item.regexp }} = {{ item.line }}"
+    backup: yes
+  with_items: "{{ postfix_main_cf_smtpd_conf }}"
+  notify: reload postfix
+  tags: postfix_main_cf_smtpd
+
+# smtp
+- name: "postfix: Configure SMTP {{postfix_main_cf}}"
+  lineinfile:
+    dest: "{{ postfix_main_cf }}"
+    regexp: "^{{ item.regexp }}"
+    line: "{{ item.regexp }} = {{ item.line }}"
+    backup: yes
+  with_items: "{{ postfix_main_cf_smtp_conf }}"
+  notify: reload postfix
+  tags: postfix_main_cf_smtp
+
+# EOF
+...

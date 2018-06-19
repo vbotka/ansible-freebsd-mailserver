@@ -1,11 +1,10 @@
 ---
 
-- name: Configure submission options {{postfix_master_cf}}
+- name: "postfix_master: Configure submission options {{postfix_master_cf}}"
   blockinfile:
     dest: "{{postfix_master_cf}}"
     marker: "# {mark} submission options ANSIBLE MANAGED BLOCK"
     insertafter: "^#submission "
-    backup: "yes"
     block: |
       submission  {{postfix_master_cf_service_def}}
         -o smtpd_tls_security_level={{postfix_master_cf_smtpd_tls_security_level}}
@@ -18,20 +17,24 @@
         -o smtpd_recipient_restrictions={{postfix_master_cf_smtpd_recipient_restrictions}}
         -o smtpd_reject_unlisted_recipient={{postfix_master_cf_smtpd_reject_unlisted_recipient}}
         -o smtpd_relay_restrictions={{postfix_master_cf_smtpd_relay_restrictions}}
+    backup: yes
   notify: reload postfix
-  tags: config_potfix_master_cf_submission
+  tags: potfix_master_cf_submission
 
-- name: Configure smtps options {{postfix_master_cf}}
+- name: "postfix_master: Configure smtps options {{postfix_master_cf}}"
   blockinfile:
     dest: "{{postfix_master_cf}}"
     marker: "# {mark} smtps options ANSIBLE MANAGED BLOCK"
     insertafter: "^#smtps "
-    backup: "yes"
     block: |
       smtps  {{postfix_master_cf_service_def}}
         -o smtpd_tls_wrappermode=yes
         -o smtpd_sasl_auth_enable={{postfix_master_cf_smtpd_sasl_auth_enable}}
         -o smtpd_reject_unlisted_recipient={{postfix_master_cf_smtpd_reject_unlisted_recipient}}
         -o smtpd_relay_restrictions={{postfix_master_cf_smtpd_relay_restrictions}}
+    backup: yes
   notify: reload postfix
-  tags: config_potfix_master_cf_smtps
+  tags: potfix_master_cf_smtps
+
+#EOF
+...

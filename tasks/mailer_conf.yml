@@ -1,0 +1,29 @@
+---
+
+- name: "mailer_conf: Delete sendmail from /etc/mail/mailer.conf"
+  lineinfile:
+    dest: "/etc/mail/mailer.conf"
+    regexp: "{{ item.regexp }}"
+    state: "absent"
+  with_items:
+    - { regexp: "^#.*" }
+    - { regexp: "^hoststat.*" }
+    - { regexp: "^purgestat.*" }
+  tags: postfix_mailer_conf
+
+- name: "mailer_conf: Configure postfix in /etc/mail/mailer.conf"
+  lineinfile:
+    dest: "/etc/mail/mailer.conf"
+    regexp: "^{{ item.regexp }}"
+    line: "{{ item.regexp }} {{ item.line }}"
+    backup: yes
+  with_items:
+    - { regexp: "sendmail",  line: "/usr/local/sbin/sendmail"}
+    - { regexp: "send-mail",  line: "/usr/local/sbin/sendmail"}
+    - { regexp: "mailq",  line: "/usr/local/sbin/sendmail"}
+    - { regexp: "newaliases",  line: "/usr/local/sbin/sendmail"}
+  notify: restart postfix
+  tags: postfix_mailer_conf
+
+# EOF
+...

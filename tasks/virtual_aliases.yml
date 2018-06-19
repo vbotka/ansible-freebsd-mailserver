@@ -1,0 +1,19 @@
+---
+
+- name: "virtual_aliases: Configure virtual aliases"
+  lineinfile:
+    dest: "{{ postfix_virtual }}"
+    regexp: "^{{ item.alias }}"
+    line: "{{ item.alias }}\t {{ item.user }}"
+    owner: "root"
+    group: "wheel"
+    mode: "644"
+    backup: yes
+    create: yes
+  with_items: "{{ virtual_aliases }}"
+  notify: postmap virtual aliases
+  when: virtual_aliases > 0
+  tags: postfix_virtual_aliases
+
+# EOF
+...

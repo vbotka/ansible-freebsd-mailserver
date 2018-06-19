@@ -1,29 +1,37 @@
 ---
 
-- name: Create /usr/local/etc/dovecot/dovecot.conf
-  shell: cd /usr/local/etc/dovecot; \
-         if [ ! -f dovecot.conf ]; then cp -R example-config/* .; printf "changed"; fi
-  register: command_result
-  changed_when: command_result.stdout == "changed"
+# example conf
+- name: "dovecot: Copy example conf to /usr/local/etc/dovecot/"
+  shell: cd /usr/local/etc/dovecot && cp -R example-config/{{ item }} .
+  args:
+    creates: /usr/local/etc/dovecot/{{ item }}
+  with_items:
+    - conf.d
+    - dovecot-dict-auth.conf.ext
+    - dovecot-dict-sql.conf.ext
+    - dovecot-ldap.conf.ext
+    - dovecot-sql.conf.ext
+    - dovecot.conf
+  tags: dovecot_example_conf
 
 # dovecot.conf
-- name: Configure /usr/local/etc/dovecot/dovecot.conf
-  lineinfile: >
-    dest="/usr/local/etc/dovecot/dovecot.conf"
-    regexp="{{ item.regexp }}"
-    line="{{ item.line }}"
-    backup="yes"
+- name: "dovecot: Configure /usr/local/etc/dovecot/dovecot.conf"
+  lineinfile:
+    dest: "/usr/local/etc/dovecot/dovecot.conf"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    backup: yes
   with_items:
-    - { regexp: "^protocols",  line: "protocols = {{freebsd_mailserver_dovecot_protocols}}"}
-    - { regexp: "^listen",  line: "listen = *, ::"}
+    - { regexp: "^protocols",  line: "protocols = {{ freebsd_mailserver_dovecot_protocols }}" }
+    - { regexp: "^listen",  line: "listen = *, ::" }
   notify: reload dovecot
-  tags: config_dovecot
+  tags: dovecot_conf
 
 # conf.d/10-master.conf
-- name: Configure /usr/local/etc/dovecot/conf.d/10-master.conf
+- name: "dovecot: Configure /usr/local/etc/dovecot/conf.d/10-master.conf"
   blockinfile:
     dest: "/usr/local/etc/dovecot/conf.d/10-master.conf"
-    backup: "yes"
+    backup: yes
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
     insertafter: "Postfix smtp-auth"
     block: |
@@ -33,15 +41,15 @@
       group = postfix
       }
   notify: reload dovecot
-  tags: config_dovecot
+  tags: dovecot_conf_master
 
 # conf.d/10-ssl.conf
-- name: Configure /usr/local/etc/dovecot/conf.d/10-ssl.conf
-  lineinfile: >
-    dest="/usr/local/etc/dovecot/conf.d/10-ssl.conf"
-    regexp="{{ item.regexp }}"
-    line="{{ item.line }}"
-    backup="yes"
+- name: "dovecot: Configure /usr/local/etc/dovecot/conf.d/10-ssl.conf"
+  lineinfile:
+    dest: "/usr/local/etc/dovecot/conf.d/10-ssl.conf"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    backup: yes
   with_items:
     - { regexp: "^ssl ", line: "ssl  = yes"}
     - { regexp: "^ssl_ca", line: "ssl_ca = <{{postfix_main_cf_smtpd_tls_CAfile}}"}
@@ -50,58 +58,58 @@
     - { regexp: "^ssl_cert", line: "ssl_cert = <{{postfix_main_cf_smtpd_tls_cert_file}}"}
     - { regexp: "^ssl_key", line: "ssl_key = <{{postfix_main_cf_smtpd_tls_key_file}}"}
   notify: reload dovecot
-  tags: config_dovecot_tls
+  tags: dovecot_conf_ssl
 
 # conf.d/10-mail.conf
-- name: Configure /usr/local/etc/dovecot/conf.d/10-mail.conf
-  lineinfile: >
-    dest="/usr/local/etc/dovecot/conf.d/10-mail.conf"
-    regexp="{{ item.regexp }}"
-    line="{{ item.line }}"
-    backup="yes"
+- name: "dovecot: Configure /usr/local/etc/dovecot/conf.d/10-mail.conf"
+  lineinfile:
+    dest: "/usr/local/etc/dovecot/conf.d/10-mail.conf"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    backup: yes
   with_items:
     - { regexp: "^mail_location",  line: "mail_location = maildir:~/Maildir:LAYOUT=fs"}
     - { regexp: "^mail_privileged_group",  line: "mail_privileged_group = mail"}
     - { regexp: "^maildir_copy_with_hardlinks",  line: "maildir_copy_with_hardlinks = yes"}
   notify: reload dovecot
-  tags: config_dovecot_mail_location
+  tags: dovecot_conf_mail
 
 # conf.d/10-auth.conf
-- name: Configure /usr/local/etc/dovecot/conf.d/10-auth.conf
-  lineinfile: >
-    dest="/usr/local/etc/dovecot/conf.d/10-auth.conf"
-    regexp="{{ item.regexp }}"
-    line="{{ item.line }}"
-    backup="yes"
+- name: "dovecot: Configure /usr/local/etc/dovecot/conf.d/10-auth.conf"
+  lineinfile:
+    dest: "/usr/local/etc/dovecot/conf.d/10-auth.conf"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    backup: yes
   with_items:
     - { regexp: "^disable_plaintext_auth", line: "disable_plaintext_auth = yes" }
     - { regexp: "^auth_mechanisms",  line: "auth_mechanisms = plain login" }
   notify: reload dovecot
-  tags: config_dovecot_auth
+  tags: dovecot_conf_auth
 
 # conf.d/10-logging.conf
-- name: Configure /usr/local/etc/dovecot/conf.d/10-logging.conf
-  lineinfile: >
-    dest="/usr/local/etc/dovecot/conf.d/10-logging.conf"
-    regexp="{{ item.regexp }}"
-    line="{{ item.line }}"
-    backup="yes"
+- name: "dovecot: Configure /usr/local/etc/dovecot/conf.d/10-logging.conf"
+  lineinfile:
+    dest: "/usr/local/etc/dovecot/conf.d/10-logging.conf"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    backup: yes
   with_items:
     - { regexp: "^auth_verbose",  line: "auth_verbose = {{dovecot_auth_verbose}}"}
     - { regexp: "^auth_debug",  line: "auth_debug = {{dovecot_auth_debug}}"}
     - { regexp: "^mail_debug",  line: "mail_debug = {{dovecot_mail_debug}}"}
     - { regexp: "^verbose_ssl",  line: "verbose_ssl = {{dovecot_verbose_ssl}}"}
   notify: reload dovecot
-  tags: config_dovecot_logging
+  tags: dovecot__conf_logging
 
 # conf.d/15-lda.conf
-- name: Configure /usr/local/etc/dovecot/conf.d/15-lda.conf
-  lineinfile: >
-    dest="/usr/local/etc/dovecot/conf.d/15-lda.conf"
-    regexp="{{ item.regexp }}"
-    line="{{ item.line }}"
-    insertafter="protocol lda {"
-    backup="yes"
+- name: "dovecot: Configure /usr/local/etc/dovecot/conf.d/15-lda.conf"
+  lineinfile:
+    dest: "/usr/local/etc/dovecot/conf.d/15-lda.conf"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    insertafter: "protocol lda {"
+    backup: yes
   with_items:
     - { regexp: "^postmaster_address",  line: "postmaster_address = {{postmaster_address}}"}
     - { regexp: "^hostname",  line: "hostname = {{postfix_main_cf_myhostname}}"}
@@ -110,7 +118,7 @@
     - { regexp: "^info_log_path",  line: "info_log_path = "}
     - { regexp: "^syslog_facility",  line: "syslog_facility = mail"}
   notify: reload dovecot
-  tags: config_dovecot_lda
+  tags: dovecot__conf_lda
 
 # conf.d/15-mailboxes.conf
 #- name: Configure /usr/local/etc/dovecot/conf.d/15-mailboxes.conf
@@ -121,3 +129,4 @@
 #  tags: config_dovecot_mailboxes
 
 # EOF
+...

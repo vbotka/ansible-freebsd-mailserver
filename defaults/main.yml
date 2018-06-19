@@ -4,12 +4,11 @@
 # CHANGE THIS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #
 # digitalocean.com droplet
-digitalocean: "no"
+digitalocean: False
 #
 # TLS certificate and key
-#
 # Create self-signed certificate, or use https://galaxy.ansible.com/vbotka/certificate/
-postfix_create_cert: "yes"
+postfix_create_cert: False
 postfix_main_cf_smtpd_tls_key_file: "/etc/ssl/private/dovecot.pem"
 postfix_main_cf_smtpd_tls_cert_file: "/etc/ssl/certs/dovecot.pem"
 # example for letsencrypt:
@@ -21,7 +20,7 @@ postfix_main_cf_smtpd_tls_cert_file: "/etc/ssl/certs/dovecot.pem"
 #
 rc_conf_hostname: "srv.example.com"
 postmaster_address: "postmaster@example.com"
-postfix_main_cf_myhostname: "mail.examle.com"
+postfix_main_cf_myhostname: "mail.example.com"
 postfix_main_cf_mydomain: "example.com"
 postfix_main_cf_virtual_alias_domains: "example.net, example.org, example.co"
 postfix_main_cf_message_size_limit: "40960000"
@@ -51,7 +50,7 @@ postfix_master_cf_service_def: "inet  n       -       -       -       -       sm
 
 freebsd_install_method: "packages"
 #freebsd_install_method: "ports"
-#freebsd_use_packages: "yes"
+freebsd_use_packages: "yes"
 freebsd_mailserver_packages:
   - mail/postfix-sasl
   - security/cyrus-sasl2
@@ -62,14 +61,12 @@ postfix_main_cf: "/usr/local/etc/postfix/main.cf"
 postfix_master_cf: "/usr/local/etc/postfix/master.cf"
 postfix_virtual: "/usr/local/etc/postfix/virtual"
 postfix_alias: "/etc/mail/aliases"
-#
+
 # main.cf
 postfix_main_cf_inet_interfaces: "all"
 postfix_main_cf_mynetworks_style: "host"
 postfix_main_cf_mydestination: "$myhostname, localhost.$mydomain, localhost, $mydomain, mail.$mydomain, www.$mydomain, ftp.$mydomain"
 postfix_main_cf_relay_domains: "$mydestination"
-postfix_main_cf_relayhost: ""
-#
 postfix_main_cf_alias_maps: "hash:/etc/mail/aliases"
 postfix_main_cf_alias_database: "hash:/etc/mail/aliases"
 postfix_main_cf_recipient_delimiter: "+"
@@ -79,49 +76,101 @@ postfix_main_cf_html_directory: "no"
 postfix_main_cf_readme_directory: "no"
 postfix_main_cf_meta_directory: "/usr/local/libexec/postfix"
 postfix_main_cf_shlib_directory: "/usr/local/lib/postfix"
-#
-# VIRTUAL DOMAINS
+postfix_main_cf_conf:
+  - { regexp: "myhostname",  line: "{{ postfix_main_cf_myhostname }}" }
+  - { regexp: "mydomain",  line: "{{ postfix_main_cf_mydomain }}" }
+  - { regexp: "inet_interfaces", line: "{{ postfix_main_cf_inet_interfaces }}" }
+  - { regexp: "mydestination", line: "{{ postfix_main_cf_mydestination }}" }
+  - { regexp: "relay_domains", line: "{{ postfix_main_cf_relay_domains }}" }
+  - { regexp: "recipient_delimiter", line: "{{ postfix_main_cf_recipient_delimiter }}" }
+  - { regexp: "home_mailbox", line: "{{ postfix_main_cf_home_mailbox }}" }
+  - { regexp: "smtpd_banner", line: "{{ postfix_main_cf_smtpd_banner }}" }
+  - { regexp: "html_directory", line: "{{ postfix_main_cf_html_directory }}" }
+  - { regexp: "readme_directory", line: "{{ postfix_main_cf_readme_directory }}" }
+  - { regexp: "message_size_limit", line: "{{ postfix_main_cf_message_size_limit }}" }
+  - { regexp: "meta_directory", line: "{{ postfix_main_cf_meta_directory }}" }
+  - { regexp: "shlib_directory", line: "{{ postfix_main_cf_shlib_directory }}" }
+  - { regexp: "alias_maps", line: "{{ postfix_main_cf_alias_maps }}" }
+  - { regexp: "alias_database", line: "{{ postfix_main_cf_alias_database }}" }
+# relayhost
+postfix_main_cf_relayhost: ""
+# virtual domains
 postfix_main_cf_virtual_alias_maps: "hash:/usr/local/etc/postfix/virtual"
-#
-# TLS
-postfix_main_cf_smtpd_use_tls: "yes"
-postfix_main_cf_smtpd_tls_auth_only: "yes"
-postfix_main_cf_smtpd_tls_loglevel: "1"
-#
-postfix_main_cf_smtpd_tls_CAfile: "/etc/ssl/cert.pem"
-#smtpd_tls_CApath = /path/to/certs/
-#
+postfix_main_cf_virtual_alias_maps_conf:
+  - { regexp: "virtual_alias_domains", line: "{{ postfix_main_cf_virtual_alias_domains }}" }
+  - { regexp: "virtual_alias_maps", line: "{{ postfix_main_cf_virtual_alias_maps }}" }
+# smtpd
 postfix_main_cf_tls_random_source: "dev:/dev/urandom"
 postfix_main_cf_smtpd_tls_received_header: "yes"
 postfix_main_cf_smtpd_tls_security_level: "may"
 postfix_main_cf_smtpd_tls_ciphers: "medium"
 postfix_main_cf_smtpd_tls_exclude_ciphers: "aNULL, DES, 3DES, MD5, DES+MD5, RC4"
 postfix_main_cf_smtpd_tls_protocols: "!SSLv2, !SSLv3"
-#
 postfix_main_cf_smtpd_tls_session_cache_database: "btree:${data_directory}/smtpd_scache"
 postfix_main_cf_smtpd_tls_session_cache_timeout: "3600s"
 postfix_main_cf_smtpd_relay_restrictions: "permit_mynetworks permit_sasl_authenticated reject_unauth_destination"
 postfix_main_cf_smtpd_recipient_restrictions: "permit_mynetworks permit_sasl_authenticated reject_unauth_destination"
-#
+postfix_main_cf_smtpd_use_tls: "yes"
+postfix_main_cf_smtpd_tls_auth_only: "yes"
+postfix_main_cf_smtpd_tls_loglevel: "1"
+postfix_main_cf_smtpd_tls_CAfile: "/etc/ssl/cert.pem"
+#smtpd_tls_CApath = /path/to/certs/
+postfix_main_cf_smtpd_conf:
+  - { regexp: "tls_random_source",  line: "{{ postfix_main_cf_tls_random_source }}" }
+  - { regexp: "smtpd_use_tls",  line: "{{ postfix_main_cf_smtpd_use_tls }}" }
+  - { regexp: "smtpd_tls_key_file",  line: "{{ postfix_main_cf_smtpd_tls_key_file }}" }
+  - { regexp: "smtpd_tls_cert_file",  line: "{{ postfix_main_cf_smtpd_tls_cert_file }}" }
+  - { regexp: "smtpd_tls_auth_only",  line: "{{ postfix_main_cf_smtpd_tls_auth_only }}" }
+  - { regexp: "smtpd_tls_loglevel",  line: "{{ postfix_main_cf_smtpd_tls_loglevel }}" }
+  - { regexp: "smtpd_tls_CAfile",  line: "{{ postfix_main_cf_smtpd_tls_CAfile }}" }
+  - { regexp: "smtpd_tls_received_header",  line: "{{ postfix_main_cf_smtpd_tls_received_header }}" }
+  - { regexp: "smtpd_tls_security_level",  line: "{{ postfix_main_cf_smtpd_tls_security_level }}" }
+  - { regexp: "smtpd_tls_ciphers",  line: "{{ postfix_main_cf_smtpd_tls_ciphers }}" }
+  - { regexp: "smtpd_tls_exclude_ciphers",  line: "{{ postfix_main_cf_smtpd_tls_exclude_ciphers }}" }
+  - { regexp: "smtpd_tls_protocols",  line: "{{ postfix_main_cf_smtpd_tls_protocols }}" }
+  - { regexp: "smtpd_tls_session_cache_database",  line: "{{ postfix_main_cf_smtpd_tls_session_cache_database }}" }
+  - { regexp: "smtpd_tls_session_cache_timeout",  line: "{{ postfix_main_cf_smtpd_tls_session_cache_timeout }}" }
+  - { regexp: "smtpd_relay_restrictions",  line: "{{ postfix_main_cf_smtpd_relay_restrictions }}" }
+  - { regexp: "smtpd_recipient_restrictions",  line: "{{ postfix_main_cf_smtpd_recipient_restrictions }}" }
+# smtp
 postfix_main_cf_smtp_use_tls: "yes"
 postfix_main_cf_smtp_tls_CAfile: "/etc/ssl/cert.pem"
 postfix_main_cf_smtp_tls_note_starttls_offer: "yes"
 postfix_main_cf_smtp_tls_loglevel: "1"
-#
-postfix_main_cf_smtp_sasl_auth_enable: "no"
-postfix_main_cf_smtp_tls_security_level_NO: "may"
-postfix_main_cf_smtp_tls_security_level_YES: "encrypt"
-postfix_main_cf_smtp_sasl_tls_security_options: "noanonymous"
-postfix_main_cf_smtp_sasl_password_maps: "/usr/local/etc/postfix/sasl_passwd"
-postfix_smtp_sasl_passwords: []
-#
-# dovecot in postfix
+postfix_main_cf_smtp_conf:
+  - { regexp: "smtp_use_tls", line: "{{ postfix_main_cf_smtp_use_tls }}" }
+  - { regexp: "smtp_tls_CAfile", line: "{{ postfix_main_cf_smtp_tls_CAfile }}" }
+  - { regexp: "smtp_tls_note_starttls_offer", line: "{{ postfix_main_cf_smtp_tls_note_starttls_offer }}" }
+  - { regexp: "smtp_tls_loglevel", line: "{{ postfix_main_cf_smtp_tls_loglevel }}" }
+# smtpd sasl
+postfix_main_cf_smtpd_sasl_auth_enable: "yes"
 postfix_main_cf_smtpd_sasl_type: "dovecot"
 postfix_main_cf_smtpd_sasl_path: "private/auth"
-postfix_main_cf_smtpd_sasl_auth_enable: "yes"
 postfix_main_cf_broken_sasl_auth_clients: "no"
+postfix_main_cf_smtpd_sasl_conf:
+  - { regexp: "^smtpd_sasl_auth_enable", line: "smtpd_sasl_auth_enable = {{postfix_main_cf_smtpd_sasl_auth_enable}}"}
+  - { regexp: "^smtpd_sasl_type", line: "smtpd_sasl_type = {{postfix_main_cf_smtpd_sasl_type}}"}
+  - { regexp: "^smtpd_sasl_path", line: "smtpd_sasl_path = {{postfix_main_cf_smtpd_sasl_path}}"}
+  - { regexp: "^broken_sasl_auth_clients", line: "broken_sasl_auth_clients = {{postfix_main_cf_broken_sasl_auth_clients}}"}
 #virtual_transport = lmtp:unix:private/dovecot-lmtp
 #mailbox_transport = lmtp:unix:private/dovecot-lmtp
+
+# smtp_sasl
+postfix_main_cf_smtp_sasl_auth_enable: False
+postfix_main_cf_smtp_sasl_tls_security_options: "noanonymous"
+postfix_main_cf_smtp_tls_security_level_NO: "may"
+postfix_main_cf_smtp_tls_security_level_YES: "encrypt"
+postfix_main_cf_smtp_sasl_enable_conf:
+  - { regexp: "smtp_sasl_auth_enable", line: "yes" }
+  - { regexp: "smtp_sasl_tls_security_options", line: "{{ postfix_main_cf_smtp_sasl_tls_security_options }}" }
+  - { regexp: "smtp_tls_security_level", line: "{{ postfix_main_cf_smtp_tls_security_level_YES }}" }
+postfix_main_cf_smtp_sasl_disable_conf:
+  - { regexp: "smtp_sasl_auth_enable", line: "no" }
+  - { regexp: "smtp_sasl_tls_security_options", line: "{{ postfix_main_cf_smtp_sasl_tls_security_options }}" }
+  - { regexp: "smtp_tls_security_level", line: "{{ postfix_main_cf_smtp_tls_security_level_NO }}" }
+
+postfix_main_cf_smtp_sasl_password_maps: "/usr/local/etc/postfix/sasl_passwd"
+postfix_smtp_sasl_passwords: []
 
 # master.cf
 postfix_master_cf_smtpd_tls_security_level: "encrypt"
