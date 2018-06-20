@@ -33,7 +33,7 @@
     backup: yes
   with_items:
     - { regexp: "postfix_enable", line: "\"YES\"" }
-  when: freebsd_mailserver_postfix_enable
+  when: fm_postfix_enable
   notify:
     - postfix check
     - enable and start postfix
@@ -47,7 +47,7 @@
     backup: yes
   with_items:
     - { regexp: "dovecot_enable", line: "\"YES\"" }
-  when: freebsd_mailserver_dovecot_enable
+  when: fm_dovecot_enable
   notify: enable and start dovecot
   tags: postfix_rcconf_dovecot
 
@@ -59,7 +59,7 @@
     backup: yes
   with_items:
     - { regexp: "postfix_enable", line: "\"NO\"" }
-  when: not freebsd_mailserver_postfix_enable
+  when: not fm_postfix_enable
   notify: disable and stop postfix
   tags: postfix_rcconf_postfix
 
@@ -71,7 +71,7 @@
     backup: yes
   with_items:
     - { regexp: "dovecot_enable", line: "\"NO\"" }
-  when: not freebsd_mailserver_dovecot_enable
+  when: not fm_dovecot_enable
   notify: disable and stop dovecot
   tags: postfix_rcconf_dovecot
 

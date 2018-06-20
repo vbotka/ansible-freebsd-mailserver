@@ -3,8 +3,8 @@
 
 # CHANGE AT LEAST THIS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-freebsd_mailserver_postfix_enable: False
-freebsd_mailserver_dovecot_enable: False
+fm_postfix_enable: False
+fm_dovecot_enable: False
 digitalocean: False
 
 # Create self-signed TLS certificate (default False),
