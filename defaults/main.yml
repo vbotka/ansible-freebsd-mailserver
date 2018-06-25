@@ -195,7 +195,7 @@ dovecot_auth_debug: "no"
 dovecot_mail_debug: "no"
 dovecot_verbose_ssl: "yes"
 dovecot_ssl_cipher_list: "ALL:!LOW:!EXP:!aNULL:!RC4:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!SRP:!DSS"
-dovecot_ssl_protocols: "TLSv1"
+dovecot_ssl_min_protocols: "TLSv1"
 freebsd_mailserver_dovecot_protocols: "imap pop3 lmtp"
 dovecot_conf:
   - { regexp: "protocols", line: "{{ freebsd_mailserver_dovecot_protocols }}" }
@@ -203,7 +203,7 @@ dovecot_conf:
 dovecot_ssl_conf:
   - { regexp: "ssl ", line: "yes" }
   - { regexp: "ssl_ca", line: "<{{ postfix_main_cf_smtpd_tls_CAfile }}" }
-  - { regexp: "ssl_min_protocol", line: "{{ dovecot_ssl_protocols }}" }
+  - { regexp: "ssl_min_protocol", line: "{{ dovecot_ssl_min_protocols }}" }
   - { regexp: "ssl_cipher_list", line: "{{ dovecot_ssl_cipher_list }}" }
   - { regexp: "ssl_cert", line: "<{{ postfix_main_cf_smtpd_tls_cert_file }}" }
   - { regexp: "ssl_key", line: "<{{ postfix_main_cf_smtpd_tls_key_file }}" }
