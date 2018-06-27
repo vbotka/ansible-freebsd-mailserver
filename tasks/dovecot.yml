@@ -41,6 +41,13 @@
   notify: reload dovecot
   tags: dovecot_master_conf
 
+# create #ssl_dh
+- name: "dovecot: Create {{ dovecot_ssl_dh }}"
+  command: "openssl dhparam -out {{ dovecot_ssl_dh }} 4096"
+  args:
+    creates: "{{ dovecot_ssl_dh }}"
+  tags: dovecot_ssl_dh
+
 # conf.d/10-ssl.conf
 - name: "dovecot: Configure /usr/local/etc/dovecot/conf.d/10-ssl.conf"
   lineinfile:

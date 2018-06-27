@@ -88,3 +88,5 @@ References
 - [Postfix SMTP relay and access control](http://www.postfix.org/SMTPD_ACCESS_README.html)
 - [Postfix SASL Howto](http://www.postfix.org/SASL_README.html)
 - [Enabling SASL authentication in the Postfix SMTP/LMTP client](http://www.postfix.org/SASL_README.html#client_sasl_enable)
+- [Dovecot Wiki](https://wiki2.dovecot.org/)
+- [Upgrading Dovecot v2.2 to v2.3](https://wiki2.dovecot.org/Upgrading/2.3)
