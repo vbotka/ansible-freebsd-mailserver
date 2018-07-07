@@ -10,7 +10,7 @@
     regexp: "^{{item.regexp}}"
     line: "{{item.regexp}} = {{item.line}}"
     backup: yes
-  with_items: "{{ postfix_main_cf_conf }}"
+  loop: "{{ postfix_main_cf_conf }}"
   notify:
     - postfix check
     - reload postfix
@@ -36,7 +36,7 @@
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }} = {{ item.line }}"
     backup: yes
-  with_items: "{{ postfix_main_cf_virtual_alias_maps_conf }}"
+  loop: "{{ postfix_main_cf_virtual_alias_maps_conf }}"
   notify:
     - postmap virtual aliases
     - postfix check
@@ -50,7 +50,7 @@
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }} = {{ item.line }}"
     backup: yes
-  with_items: "{{ postfix_main_cf_smtpd_conf }}"
+  loop: "{{ postfix_main_cf_smtpd_conf }}"
   notify:
     - postfix check
     - reload postfix
@@ -63,7 +63,7 @@
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }} = {{ item.line }}"
     backup: yes
-  with_items: "{{ postfix_main_cf_smtp_conf }}"
+  loop: "{{ postfix_main_cf_smtp_conf }}"
   notify:
     - postfix check
     - reload postfix

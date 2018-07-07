@@ -6,7 +6,7 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
     backup: yes
-  with_items:
+  loop:
     - { regexp: "^hostname", line: "hostname=\"{{rc_conf_hostname}}\"" }
   notify: set hostname
   tags: postfix_rcconf_hostname
@@ -17,7 +17,7 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
     backup: yes
-  with_items:
+  loop:
     - { regexp: "^sendmail_enable", line: "sendmail_enable=\"NONE\"" }
     - { regexp: "^sendmail_submit_enable", line: "sendmail_submit_enable=\"NO\"" }
     - { regexp: "^sendmail_outbound_enable", line: "sendmail_outbound_enable=\"NO\"" }
@@ -31,7 +31,7 @@
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }}={{ item.line }}"
     backup: yes
-  with_items:
+  loop:
     - { regexp: "postfix_enable", line: "\"YES\"" }
   when: fm_postfix_enable
   notify:
@@ -45,7 +45,7 @@
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }}={{ item.line }}"
     backup: yes
-  with_items:
+  loop:
     - { regexp: "dovecot_enable", line: "\"YES\"" }
   when: fm_dovecot_enable
   notify: enable and start dovecot
@@ -57,7 +57,7 @@
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }}={{ item.line }}"
     backup: yes
-  with_items:
+  loop:
     - { regexp: "postfix_enable", line: "\"NO\"" }
   when: not fm_postfix_enable
   notify: disable and stop postfix
@@ -69,7 +69,7 @@
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }}={{ item.line }}"
     backup: yes
-  with_items:
+  loop:
     - { regexp: "dovecot_enable", line: "\"NO\"" }
   when: not fm_dovecot_enable
   notify: disable and stop dovecot
@@ -82,7 +82,7 @@
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
     backup: yes
-  with_items:
+  loop:
     - { regexp: "^hostname", line: "hostname=\"{{rc_conf_hostname}}\"" }
   when:
     - digitalocean

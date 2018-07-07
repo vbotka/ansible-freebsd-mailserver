@@ -7,7 +7,7 @@
     line: "{{ item.regexp }}={{ item.line }}"
     backup: yes
     create: yes
-  with_items:
+  loop:
     - { regexp: "daily_clean_hoststat_enable",  line: "\"NO\"" }
     - { regexp: "daily_status_mail_rejects_enable",  line: "\"NO\"" }
     - { regexp: "daily_status_include_submit_mailq",  line: "\"NO\"" }

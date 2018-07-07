@@ -10,7 +10,7 @@
     mode: "644"
     backup: yes
     create: yes
-  with_items: "{{ virtual_aliases }}"
+  loop: "{{ virtual_aliases }}"
   notify:
     - postmap virtual aliases
     - postfix check

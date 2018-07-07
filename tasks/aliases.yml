@@ -6,7 +6,7 @@
     regexp: "^{{ item.alias }}{{':'}}"
     line: "{{ item.alias }}{{':'}} {{ item.user }}"
     backup: yes
-  with_items: "{{ aliases }}"
+  loop: "{{ aliases }}"
   when: aliases > 0
   notify:
     - newaliases

@@ -7,7 +7,7 @@
     regexp: "{{item.regexp}}"
     line: "{{item.line}}"
     backup: yes
-  with_items: "{{ postfix_main_cf_smtpd_sasl_conf }}"
+  loop: "{{ postfix_main_cf_smtpd_sasl_conf }}"
   notify:
     - postfix check
     - reload postfix
@@ -20,7 +20,7 @@
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }} = {{ item.line }}"
     backup: yes
-  with_items: "{{ postfix_main_cf_smtp_sasl_enable_conf }}"
+  loop: "{{ postfix_main_cf_smtp_sasl_enable_conf }}"
   when: postfix_main_cf_smtp_sasl_auth_enable
   notify:
     - postfix check
@@ -33,7 +33,7 @@
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }} = {{ item.line }}"
     backup: yes
-  with_items: "{{ postfix_main_cf_smtp_sasl_disable_conf }}"
+  loop: "{{ postfix_main_cf_smtp_sasl_disable_conf }}"
   when: not postfix_main_cf_smtp_sasl_auth_enable
   notify:
     - postfix check
@@ -66,7 +66,7 @@
     mode: "0640"
     backup: yes
     create: yes
-  with_items: "{{ postfix_smtp_sasl_passwords }}"
+  loop: "{{ postfix_smtp_sasl_passwords }}"
   notify:
     - postmap smtp sasl passwords
     - postfix check

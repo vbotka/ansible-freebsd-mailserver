@@ -5,7 +5,7 @@
   shell: cd /usr/local/etc/dovecot && cp -R example-config/{{ item }} .
   args:
     creates: /usr/local/etc/dovecot/{{ item }}
-  with_items:
+  loop:
     - conf.d
     - dovecot-dict-auth.conf.ext
     - dovecot-dict-sql.conf.ext
@@ -21,7 +21,7 @@
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }} = {{ item.line }}"
     backup: yes
-  with_items: "{{ dovecot_conf }}"
+  loop: "{{ dovecot_conf }}"
   notify: reload dovecot
   tags: dovecot_conf
 
@@ -55,7 +55,7 @@
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }} = {{ item.line }}"
     backup: yes
-  with_items: "{{ dovecot_ssl_conf }}"
+  loop: "{{ dovecot_ssl_conf }}"
   notify: reload dovecot
   tags: dovecot_ssl_conf
 
@@ -66,7 +66,7 @@
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }} = {{ item.line }}"
     backup: yes
-  with_items: "{{ dovecot_mail_conf }}"
+  loop: "{{ dovecot_mail_conf }}"
   notify: reload dovecot
   tags: dovecot_mail_conf
 
@@ -77,7 +77,7 @@
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }} = {{ item.line }}"
     backup: yes
-  with_items: "{{ dovecot_auth_conf }}"
+  loop: "{{ dovecot_auth_conf }}"
   notify: reload dovecot
   tags: dovecot_auth_conf
 
@@ -88,7 +88,7 @@
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }} = {{ item.line }}"
     backup: yes
-  with_items: "{{ dovecot_logging_conf }}"
+  loop: "{{ dovecot_logging_conf }}"
   notify: reload dovecot
   tags: dovecot_logging_conf
 
@@ -100,14 +100,14 @@
     line: "{{ item.regexp }} = {{ item.line }}"
     insertafter: "protocol lda {"
     backup: yes
-  with_items: "{{ dovecot_lda_conf }}"
+  loop: "{{ dovecot_lda_conf }}"
   notify: reload dovecot
   tags: dovecot_lda_conf
 
 # conf.d/15-mailboxes.conf
 #- name: Configure /usr/local/etc/dovecot/conf.d/15-mailboxes.conf
 #  lineinfile: dest=/usr/local/etc/dovecot/conf.d/15-mailboxes.conf regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
-#  with_items:
+#  loop:
 #    - { regexp: "^",  line: ""}
 #  notify: reload dovecot
 #  tags: config_dovecot_mailboxes

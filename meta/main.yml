@@ -1,6 +1,6 @@
 galaxy_info:
   author: Vladimir Botka
-  description: Install and configure Postfix and Dovecot.
+  description: FreeBSD. Install and configure Postfix and Dovecot.
   company: https://botka.link
   github_branch: master
   license: BSD
@@ -9,10 +9,9 @@ galaxy_info:
     - name: FreeBSD
       versions:
         - 10.4
-        - 11.1
+        - 11.2
   galaxy_tags:
-    - mailserver
-    - FreeBSD
+    - freebsd
     - postfix
     - dovecot
 dependencies: []

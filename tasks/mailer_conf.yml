@@ -5,7 +5,7 @@
     dest: "/etc/mail/mailer.conf"
     regexp: "{{ item.regexp }}"
     state: "absent"
-  with_items:
+  loop:
     - { regexp: "^#.*" }
     - { regexp: "^hoststat.*" }
     - { regexp: "^purgestat.*" }
@@ -17,7 +17,7 @@
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }} {{ item.line }}"
     backup: yes
-  with_items:
+  loop:
     - { regexp: "sendmail",  line: "/usr/local/sbin/sendmail"}
     - { regexp: "send-mail",  line: "/usr/local/sbin/sendmail"}
     - { regexp: "mailq",  line: "/usr/local/sbin/sendmail"}
