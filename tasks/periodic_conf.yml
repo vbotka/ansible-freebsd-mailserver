@@ -5,7 +5,7 @@
     dest: "/etc/periodic.conf"
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }}={{ item.line }}"
-    backup: yes
+    backup: "{{ fm_backup_conf }}"
     create: yes
   loop:
     - { regexp: "daily_clean_hoststat_enable",  line: "\"NO\"" }

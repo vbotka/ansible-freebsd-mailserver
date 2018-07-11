@@ -15,7 +15,7 @@ No requiremenst.
 Variables
 ---------
 
-TBD. Check the defaults and examples in vars.
+TBD. Review the defaults and examples in vars.
 
 
 Workflow
@@ -58,7 +58,7 @@ ansible_connection=ssh
 ansible_user=freebsd
 ansible_become=yes
 ansible_become_method=sudo
-ansible_python_interpreter=/usr/local/bin/python2
+ansible_python_interpreter=/usr/local/bin/python2.7
 ansible_perl_interpreter=/usr/local/bin/perl
 ```
 
@@ -87,6 +87,6 @@ References
 - [Postfix Documentation](http://www.postfix.org/documentation.html)
 - [Postfix SMTP relay and access control](http://www.postfix.org/SMTPD_ACCESS_README.html)
 - [Postfix SASL Howto](http://www.postfix.org/SASL_README.html)
-- [Enabling SASL authentication in the Postfix SMTP/LMTP client](http://www.postfix.org/SASL_README.html#client_sasl_enable)
+- [SASL Authentication in the Postfix SMTP/LMTP client](http://www.postfix.org/SASL_README.html#client_sasl_enable)
 - [Dovecot Wiki](https://wiki2.dovecot.org/)
 - [Upgrading Dovecot v2.2 to v2.3](https://wiki2.dovecot.org/Upgrading/2.3)

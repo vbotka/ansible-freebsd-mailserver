@@ -2,9 +2,9 @@
 
 - name: "mailer_conf: Delete sendmail from /etc/mail/mailer.conf"
   lineinfile:
+    state: absent
     dest: "/etc/mail/mailer.conf"
     regexp: "{{ item.regexp }}"
-    state: "absent"
   loop:
     - { regexp: "^#.*" }
     - { regexp: "^hoststat.*" }
@@ -16,7 +16,7 @@
     dest: "/etc/mail/mailer.conf"
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }} {{ item.line }}"
-    backup: yes
+    backup: "{{ fm_backup_conf }}"
   loop:
     - { regexp: "sendmail",  line: "/usr/local/sbin/sendmail"}
     - { regexp: "send-mail",  line: "/usr/local/sbin/sendmail"}

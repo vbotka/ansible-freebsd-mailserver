@@ -1,6 +1,10 @@
 ---
 # tasks for freebsd-mailserver
 
+- import_tasks: debug.yml
+  when: fm_debug
+  tags: fm-debug
+
 - import_tasks: packages.yml
   tags: fm-packages
 
@@ -12,6 +16,9 @@
 
 - import_tasks: rcconf.yml
   tags: fm-rcconf
+
+- import_tasks: cloud_provider.yml
+  tags: fm-cloud
 
 - import_tasks: mailer_conf.yml
   tags: fm-mailer_conf

@@ -1,12 +1,12 @@
 ---
 
 # smtpd sasl
-- name: "postfix_sasl: Configure SASL {{postfix_main_cf}}"
+- name: "postfix_sasl: Configure SASL {{ postfix_main_cf }}"
   lineinfile:
-    dest: "{{postfix_main_cf}}"
-    regexp: "{{item.regexp}}"
-    line: "{{item.line}}"
-    backup: yes
+    dest: "{{ postfix_main_cf }}"
+    regexp: "^{{ item.regexp }}"
+    line: "{{ item.regexp }} = {{ item.line }}"
+    backup: "{{ fm_backup_conf }}"
   loop: "{{ postfix_main_cf_smtpd_sasl_conf }}"
   notify:
     - postfix check
@@ -19,7 +19,7 @@
     dest: "{{ postfix_main_cf }}"
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }} = {{ item.line }}"
-    backup: yes
+    backup: "{{ fm_backup_conf }}"
   loop: "{{ postfix_main_cf_smtp_sasl_enable_conf }}"
   when: postfix_main_cf_smtp_sasl_auth_enable
   notify:
@@ -32,7 +32,7 @@
     dest: "{{ postfix_main_cf }}"
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }} = {{ item.line }}"
-    backup: yes
+    backup: "{{ fm_backup_conf }}"
   loop: "{{ postfix_main_cf_smtp_sasl_disable_conf }}"
   when: not postfix_main_cf_smtp_sasl_auth_enable
   notify:
@@ -41,14 +41,14 @@
   tags: postfix_main_cf_smtp_sasl_disable
 
 # smtp_sasl_password_maps
-- name: "postfix_sasl: Configure smtp_sasl_password_maps {{ postfix_main_cf }}"
+- name: "postfix_sasl: Configure smtp_sasl_password_maps in {{ postfix_main_cf }}"
   lineinfile:
     dest: "{{ postfix_main_cf }}"
     regexp: "^smtp_sasl_password_maps"
     line: "smtp_sasl_password_maps = hash:{{ postfix_main_cf_smtp_sasl_password_maps }}"
-    backup: yes
+    backup: "{{ fm_backup_conf }}"
   when:
-    - not "postfix_main_cf_smtp_sasl_password_maps" | trim == ""
+    - not (postfix_main_cf_smtp_sasl_password_maps | trim == "")
     - postfix_main_cf_smtp_sasl_auth_enable
   notify:
     - postfix check
@@ -56,22 +56,19 @@
   tags: postfix_main_cf_smtp_sasl_password_maps
 
 # smtp_sasl_passwords
-- name: "postfix_sasl: Configure smtp_sasl_password_maps {{ postfix_main_cf_smtp_sasl_password_maps }}"
-  lineinfile:
+- name: "postfix_sasl: Create {{ postfix_main_cf_smtp_sasl_password_maps }}"
+  template:
+    src: sasl_passwd.j2
     dest: "{{ postfix_main_cf_smtp_sasl_password_maps }}"
-    regexp: "{{ item.relayhost }}"
-    line: "{{ item.line }}"
     owner: "root"
     group: "wheel"
     mode: "0640"
-    backup: yes
-    create: yes
-  loop: "{{ postfix_smtp_sasl_passwords }}"
+    backup: "{{ fm_backup_conf }}"
   notify:
     - postmap smtp sasl passwords
     - postfix check
     - reload postfix
-  tags: postfix_smtp_sasl_passwords
+  tags: postfix_smtp_sasl_passwd_create
 
 # EOF
 ...

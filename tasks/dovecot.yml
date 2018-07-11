@@ -20,7 +20,7 @@
     dest: "/usr/local/etc/dovecot/dovecot.conf"
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }} = {{ item.line }}"
-    backup: yes
+    backup: "{{ fm_backup_conf }}"
   loop: "{{ dovecot_conf }}"
   notify: reload dovecot
   tags: dovecot_conf
@@ -29,7 +29,7 @@
 - name: "dovecot: Configure /usr/local/etc/dovecot/conf.d/10-master.conf"
   blockinfile:
     dest: "/usr/local/etc/dovecot/conf.d/10-master.conf"
-    backup: yes
+    backup: "{{ fm_backup_conf }}"
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
     insertafter: "Postfix smtp-auth"
     block: |
@@ -54,7 +54,7 @@
     dest: "/usr/local/etc/dovecot/conf.d/10-ssl.conf"
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }} = {{ item.line }}"
-    backup: yes
+    backup: "{{ fm_backup_conf }}"
   loop: "{{ dovecot_ssl_conf }}"
   notify: reload dovecot
   tags: dovecot_ssl_conf
@@ -65,7 +65,7 @@
     dest: "/usr/local/etc/dovecot/conf.d/10-mail.conf"
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }} = {{ item.line }}"
-    backup: yes
+    backup: "{{ fm_backup_conf }}"
   loop: "{{ dovecot_mail_conf }}"
   notify: reload dovecot
   tags: dovecot_mail_conf
@@ -76,7 +76,7 @@
     dest: "/usr/local/etc/dovecot/conf.d/10-auth.conf"
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }} = {{ item.line }}"
-    backup: yes
+    backup: "{{ fm_backup_conf }}"
   loop: "{{ dovecot_auth_conf }}"
   notify: reload dovecot
   tags: dovecot_auth_conf
@@ -87,7 +87,7 @@
     dest: "/usr/local/etc/dovecot/conf.d/10-logging.conf"
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }} = {{ item.line }}"
-    backup: yes
+    backup: "{{ fm_backup_conf }}"
   loop: "{{ dovecot_logging_conf }}"
   notify: reload dovecot
   tags: dovecot_logging_conf
@@ -99,7 +99,7 @@
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }} = {{ item.line }}"
     insertafter: "protocol lda {"
-    backup: yes
+    backup: "{{ fm_backup_conf }}"
   loop: "{{ dovecot_lda_conf }}"
   notify: reload dovecot
   tags: dovecot_lda_conf

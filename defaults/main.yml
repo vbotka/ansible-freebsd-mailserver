@@ -3,9 +3,11 @@
 
 # CHANGE AT LEAST THIS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+fm_debug: False
 fm_postfix_enable: False
 fm_dovecot_enable: False
 digitalocean: False
+fm_backup_conf: yes
 
 # Create self-signed TLS certificate (default False),
 postfix_create_cert: False
@@ -152,10 +154,10 @@ postfix_main_cf_smtpd_sasl_type: "dovecot"
 postfix_main_cf_smtpd_sasl_path: "private/auth"
 postfix_main_cf_broken_sasl_auth_clients: "no"
 postfix_main_cf_smtpd_sasl_conf:
-  - { regexp: "^smtpd_sasl_auth_enable", line: "smtpd_sasl_auth_enable = {{postfix_main_cf_smtpd_sasl_auth_enable}}"}
-  - { regexp: "^smtpd_sasl_type", line: "smtpd_sasl_type = {{postfix_main_cf_smtpd_sasl_type}}"}
-  - { regexp: "^smtpd_sasl_path", line: "smtpd_sasl_path = {{postfix_main_cf_smtpd_sasl_path}}"}
-  - { regexp: "^broken_sasl_auth_clients", line: "broken_sasl_auth_clients = {{postfix_main_cf_broken_sasl_auth_clients}}"}
+  - { regexp: "smtpd_sasl_auth_enable", line: "{{ postfix_main_cf_smtpd_sasl_auth_enable }}" }
+  - { regexp: "smtpd_sasl_type", line: "{{ postfix_main_cf_smtpd_sasl_type }}" }
+  - { regexp: "smtpd_sasl_path", line: "{{ postfix_main_cf_smtpd_sasl_path }}" }
+  - { regexp: "broken_sasl_auth_clients", line: "{{ postfix_main_cf_broken_sasl_auth_clients }}" }
 #virtual_transport = lmtp:unix:private/dovecot-lmtp
 #mailbox_transport = lmtp:unix:private/dovecot-lmtp
 

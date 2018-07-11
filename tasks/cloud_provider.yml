@@ -1,0 +1,18 @@
+---
+
+# DO overwrites hostname from rc.conf
+- name: "rcconf: Configure hostname in /etc/rc.digitalocean.d/droplet.conf"
+  lineinfile:
+    dest: "/etc/rc.digitalocean.d/droplet.conf"
+    regexp: "^{{ item.regexp }}"
+    line: "{{ item.regexp }}={{ item.line }}"
+    backup: "{{ fm_backup_conf }}"
+  loop:
+    - { regexp: "hostname", line: "\"{{ rc_conf_hostname }}\"" }
+  when:
+    - digitalocean
+    - ansible_distribution_major_version is version('11', '<')
+  tags: postfix_rcconf_digitalocean
+
+# EOF
+...

@@ -1,0 +1,5 @@
+# {{ ansible_managed }}
+{% for item in postfix_smtp_sasl_passwords %}
+[{{ item.host }}]{% if item.port is defined %}:{{ item.port }}{% endif %} {{ item.user }}:{{ item.passwd }}
+{% endfor %}
+# EOF

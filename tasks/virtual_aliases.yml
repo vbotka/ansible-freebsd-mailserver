@@ -8,14 +8,13 @@
     owner: "root"
     group: "wheel"
     mode: "644"
-    backup: yes
+    backup: "{{ fm_backup_conf }}"
     create: yes
   loop: "{{ virtual_aliases }}"
   notify:
     - postmap virtual aliases
     - postfix check
     - reload postfix
-  when: virtual_aliases > 0
   tags: postfix_virtual_aliases
 
 # EOF

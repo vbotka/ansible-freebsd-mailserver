@@ -1,13 +1,12 @@
 ---
 
-- name: "aliases: Configure {{postfix_alias}}"
+- name: "aliases: Configure {{ postfix_alias }}"
   lineinfile:
-    dest: "{{postfix_alias}}"
+    dest: "{{ postfix_alias }}"
     regexp: "^{{ item.alias }}{{':'}}"
     line: "{{ item.alias }}{{':'}} {{ item.user }}"
-    backup: yes
+    backup: "{{ fm_backup_conf }}"
   loop: "{{ aliases }}"
-  when: aliases > 0
   notify:
     - newaliases
     - postfix check

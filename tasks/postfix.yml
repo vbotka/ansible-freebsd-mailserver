@@ -9,7 +9,7 @@
     dest: "{{postfix_main_cf}}"
     regexp: "^{{item.regexp}}"
     line: "{{item.regexp}} = {{item.line}}"
-    backup: yes
+    backup: "{{ fm_backup_conf }}"
   loop: "{{ postfix_main_cf_conf }}"
   notify:
     - postfix check
@@ -22,7 +22,7 @@
     dest: "{{ postfix_main_cf }}"
     regexp: "^relayhost"
     line: "relayhost = {{ postfix_main_cf_relayhost }}"
-    backup: yes
+    backup: "{{ fm_backup_conf }}"
   when: postfix_main_cf_relayhost != ""
   notify:
     - postfix check
@@ -35,7 +35,7 @@
     dest: "{{ postfix_main_cf }}"
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }} = {{ item.line }}"
-    backup: yes
+    backup: "{{ fm_backup_conf }}"
   loop: "{{ postfix_main_cf_virtual_alias_maps_conf }}"
   notify:
     - postmap virtual aliases
@@ -49,7 +49,7 @@
     dest: "{{ postfix_main_cf }}"
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }} = {{ item.line }}"
-    backup: yes
+    backup: "{{ fm_backup_conf }}"
   loop: "{{ postfix_main_cf_smtpd_conf }}"
   notify:
     - postfix check
@@ -62,7 +62,7 @@
     dest: "{{ postfix_main_cf }}"
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }} = {{ item.line }}"
-    backup: yes
+    backup: "{{ fm_backup_conf }}"
   loop: "{{ postfix_main_cf_smtp_conf }}"
   notify:
     - postfix check

@@ -1,0 +1,64 @@
+---
+
+- name: "FreeBSD mailserver Debug"
+  vars:
+    msg: |
+         ansible_architecture [ {{ ansible_architecture }} ]
+         ansible_os_family [ {{ ansible_os_family }} ]
+         ansible_distribution [ {{ ansible_distribution }} ]
+         ansible_distribution_major_version [ {{ ansible_distribution_major_version }} ]
+         ansible_distribution_version [ {{ ansible_distribution_version }} ]
+         ansible_distribution_release [ {{ ansible_distribution_release }} ]
+         
+         freebsd_install_method [ {{ freebsd_install_method }} ]
+         freebsd_use_packages [ {{ freebsd_use_packages }} ]
+         freebsd_mailserver_packages
+         {{ freebsd_mailserver_packages | to_nice_yaml }}
+
+         fm_postfix_enable [ {{ fm_postfix_enable }} ]
+         fm_dovecot_enable [ {{ fm_dovecot_enable }} ]
+         postfix_main_cf_smtp_sasl_auth_enable [ {{ postfix_main_cf_smtp_sasl_auth_enable }} ]
+         postfix_create_cert [ {{ postfix_create_cert }} ]
+
+         aliases
+         {{ aliases | to_yaml }}
+         virtual_aliases
+         {{ virtual_aliases | to_yaml }}
+
+         postfix_main_cf_relayhost [ {{ postfix_main_cf_relayhost }} ]
+         postfix_main_cf_conf
+         {{ postfix_main_cf_conf | to_yaml }}
+         postfix_main_cf_virtual_alias_maps_conf
+         {{ postfix_main_cf_virtual_alias_maps_conf | to_yaml }}
+         postfix_main_cf_smtpd_conf
+         {{ postfix_main_cf_smtpd_conf | to_yaml }}
+         postfix_main_cf_smtp_conf
+         {{ postfix_main_cf_smtp_conf | to_yaml }}
+         postfix_main_cf_smtpd_sasl_conf
+         {{ postfix_main_cf_smtpd_sasl_conf | to_yaml }}
+         postfix_main_cf_smtp_sasl_enable_conf
+         {{ postfix_main_cf_smtp_sasl_enable_conf | to_yaml }}
+         postfix_main_cf_smtp_sasl_disable_conf
+         {{ postfix_main_cf_smtp_sasl_disable_conf | to_yaml }}
+         postfix_main_cf_smtp_sasl_password_maps [ {{ postfix_main_cf_smtp_sasl_password_maps }} ]
+         postfix_smtp_sasl_passwords
+         {{ postfix_smtp_sasl_passwords | to_yaml }}
+         
+         dovecot_conf
+         {{ dovecot_conf | to_yaml }}
+         dovecot_ssl_conf
+         {{ dovecot_ssl_conf | to_yaml }}
+         dovecot_mail_conf
+         {{ dovecot_mail_conf | to_yaml }}
+         dovecot_auth_conf
+         {{ dovecot_auth_conf | to_yaml }}
+         dovecot_logging_conf
+         {{ dovecot_logging_conf | to_yaml }}
+         dovecot_lda_conf
+         {{ dovecot_lda_conf | to_yaml }}
+
+  debug:
+    msg: "{{ msg.split('\n') }}"
+
+# EOF
+...
