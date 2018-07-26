@@ -57,6 +57,8 @@
          dovecot_lda_conf
          {{ dovecot_lda_conf | to_yaml }}
 
+         postfix_mailerconf
+         {{ postfix_mailerconf | to_nice_yaml }}
   debug:
     msg: "{{ msg.split('\n') }}"
 

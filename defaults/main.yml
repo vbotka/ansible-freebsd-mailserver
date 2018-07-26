@@ -232,6 +232,13 @@ dovecot_lda_conf:
   - { regexp: "info_log_path", line: "" }
   - { regexp: "syslog_facility", line: "mail" }
 
+# /etc/mail/mailer.conf
+postfix_mailerconf:
+  - "sendmail        /usr/local/sbin/sendmail"
+  - "send-mail       /usr/local/sbin/sendmail"
+  - "mailq           /usr/local/sbin/sendmail"
+  - "newaliases      /usr/local/sbin/sendmail"
+
 # NOTES
 # test command: openssl s_client -connect $SERVERIP:993 -ssl3
 # http://wiki2.dovecot.org/SSL
