@@ -1,4 +1,5 @@
 galaxy_info:
+  role_name: freebsd_mailserver
   author: Vladimir Botka
   description: FreeBSD. Install and configure Postfix and Dovecot.
   company: https://botka.link

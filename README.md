@@ -1,9 +1,9 @@
-freebsd-mailserver
+freebsd_mailserver
 ==================
 
 [![Build Status](https://travis-ci.org/vbotka/ansible-freebsd-mailserver.svg?branch=master)](https://travis-ci.org/vbotka/ansible-freebsd-mailserver)
 
-[Ansible role.](https://galaxy.ansible.com/vbotka/freebsd-mailserver/) FreeBSD. Install and configure Postfix and Dovecot2.
+[Ansible role.](https://galaxy.ansible.com/vbotka/freebsd_mailserver/) FreeBSD. Install and configure Postfix and Dovecot2.
 
 
 Requirements
@@ -30,13 +30,13 @@ Workflow
 2) Install role.
 
 ```
-# ansible-galaxy install vbotka.freebsd-mailserver
+# ansible-galaxy install vbotka.freebsd_mailserver
 ```
 
 3) Fit variables.
 
 ```
-# editor vbotka.freebsd-mailserver/vars/main.yml
+# editor vbotka.freebsd_mailserver/vars/main.yml
 ```
 
 4) Create playbook and inventory.
