@@ -1,18 +1,13 @@
 ---
 
-- name: "periodic: Configure /etc/periodic.conf"
+- name: "periodic_conf: Configure /etc/periodic.conf.local"
   lineinfile:
-    dest: "/etc/periodic.conf"
+    dest: "/etc/periodic.conf.local"
     regexp: "^{{ item.regexp }}"
-    line: "{{ item.regexp }}={{ item.line }}"
+    line: "{{ item.regexp }}{{ item.line }}"
     backup: "{{ fm_backup_conf }}"
     create: yes
-  loop:
-    - { regexp: "daily_clean_hoststat_enable",  line: "\"NO\"" }
-    - { regexp: "daily_status_mail_rejects_enable",  line: "\"NO\"" }
-    - { regexp: "daily_status_include_submit_mailq",  line: "\"NO\"" }
-    - { regexp: "daily_submit_queuerun",  line: "\"NO\""}
-  tags: postfix_periodic_conf
+  loop: "{{ fm_periodic_conf }}"
 
 # EOF
 ...

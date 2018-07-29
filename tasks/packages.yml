@@ -8,7 +8,7 @@
   
 - name: "packages: Install ports"
   portinstall:
-    name: "{{item}}"
+    name: "{{ item }}"
     use_packages: "{{ freebsd_use_packages }}"
   loop: "{{ freebsd_mailserver_packages }}"
   when: freebsd_install_method == "ports"

@@ -239,6 +239,13 @@ postfix_mailerconf:
   - "mailq           /usr/local/sbin/sendmail"
   - "newaliases      /usr/local/sbin/sendmail"
 
+# /etc/periodic.conf.local
+fm_periodic_conf:
+  - { regexp: "daily_clean_hoststat_enable", line: "\"NO\"" }
+  - { regexp: "daily_status_mail_rejects_enable", line: "\"NO\"" }
+  - { regexp: "daily_status_include_submit_mailq", line: "\"NO\"" }
+  - { regexp: "daily_submit_queuerun", line: "\"NO\""}
+
 # NOTES
 # test command: openssl s_client -connect $SERVERIP:993 -ssl3
 # http://wiki2.dovecot.org/SSL

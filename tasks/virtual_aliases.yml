@@ -1,6 +1,6 @@
 ---
 
-- name: "virtual_aliases: Configure virtual aliases"
+- name: "virtual_aliases: Configure virtual aliases {{ postfix_virtual }}"
   lineinfile:
     dest: "{{ postfix_virtual }}"
     regexp: "^{{ item.alias }}"
@@ -15,7 +15,6 @@
     - postmap virtual aliases
     - postfix check
     - reload postfix
-  tags: postfix_virtual_aliases
 
 # EOF
 ...

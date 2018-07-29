@@ -1,14 +1,11 @@
 ---
 
-# NOTES
-# - consider postconf -e
-
 # main.cf
 - name: "postfix: Configure {{ postfix_main_cf }}"
   lineinfile:
-    dest: "{{postfix_main_cf}}"
-    regexp: "^{{item.regexp}}"
-    line: "{{item.regexp}} = {{item.line}}"
+    dest: "{{ postfix_main_cf }}"
+    regexp: "^{{ item.regexp }}"
+    line: "{{ item.regexp }} = {{ item.line }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ postfix_main_cf_conf }}"
   notify:
@@ -30,7 +27,7 @@
   tags: postfix_main_cf_relayhost
 
 # virtual domains
-- name: "postfix: Configure Virtual Domains {{postfix_main_cf}}"
+- name: "postfix: Configure Virtual Domains {{ postfix_main_cf }}"
   lineinfile:
     dest: "{{ postfix_main_cf }}"
     regexp: "^{{ item.regexp }}"
@@ -44,7 +41,7 @@
   tags: postfix_main_cf_virtual_domains
 
 # smtpd
-- name: "postfix: Configure SMTPD {{postfix_main_cf}}"
+- name: "postfix: Configure SMTPD {{ postfix_main_cf }}"
   lineinfile:
     dest: "{{ postfix_main_cf }}"
     regexp: "^{{ item.regexp }}"
@@ -57,7 +54,7 @@
   tags: postfix_main_cf_smtpd
 
 # smtp
-- name: "postfix: Configure SMTP {{postfix_main_cf}}"
+- name: "postfix: Configure SMTP {{ postfix_main_cf }}"
   lineinfile:
     dest: "{{ postfix_main_cf }}"
     regexp: "^{{ item.regexp }}"
