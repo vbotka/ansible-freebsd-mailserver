@@ -20,7 +20,7 @@
     regexp: "^relayhost"
     line: "relayhost = {{ postfix_main_cf_relayhost }}"
     backup: "{{ fm_backup_conf }}"
-  when: postfix_main_cf_relayhost != ""
+  when: postfix_main_cf_relayhost | length > 0
   notify:
     - postfix check
     - reload postfix
