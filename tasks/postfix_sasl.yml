@@ -48,7 +48,7 @@
     line: "smtp_sasl_password_maps = hash:{{ postfix_main_cf_smtp_sasl_password_maps }}"
     backup: "{{ fm_backup_conf }}"
   when:
-    - not (postfix_main_cf_smtp_sasl_password_maps | trim == "")
+    - postfix_main_cf_smtp_sasl_password_maps | length > 0
     - postfix_main_cf_smtp_sasl_auth_enable
   notify:
     - postfix check

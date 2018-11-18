@@ -26,7 +26,12 @@
   when: postfix_create_cert
 
 - name: "certificates: Create Self-signed SSL certificates"
-  shell: sh -c "if [ ! -e /etc/ssl/certs/dovecot.pem ]; then env OPENSSLCONFIG=/usr/local/share/examples/dovecot/dovecot-openssl.cnf /usr/local/share/examples/dovecot/mkcert.sh; printf 'dovecot-certificate-changed'; fi"
+  shell: >
+    sh -c "if [ ! -e /etc/ssl/certs/dovecot.pem ]; then
+    env OPENSSLCONFIG=/usr/local/share/examples/dovecot/dovecot-openssl.cnf
+    /usr/local/share/examples/dovecot/mkcert.sh;
+    printf 'dovecot-certificate-changed';
+    fi"
   when: postfix_create_cert
   register: command_result
   changed_when: command_result.stdout | search("dovecot-certificate-changed")

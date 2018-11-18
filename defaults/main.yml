@@ -65,7 +65,8 @@ postfix_alias: "/etc/mail/aliases"
 # main.cf
 postfix_main_cf_inet_interfaces: "all"
 postfix_main_cf_mynetworks_style: "host"
-postfix_main_cf_mydestination: "$myhostname, localhost.$mydomain, localhost, $mydomain, mail.$mydomain, www.$mydomain, ftp.$mydomain"
+postfix_main_cf_mydestination: >
+  $myhostname, localhost.$mydomain, localhost, $mydomain, mail.$mydomain, www.$mydomain, ftp.$mydomain
 postfix_main_cf_relay_domains: "$mydestination"
 postfix_main_cf_alias_maps: "hash:/etc/mail/aliases"
 postfix_main_cf_alias_database: "hash:/etc/mail/aliases"

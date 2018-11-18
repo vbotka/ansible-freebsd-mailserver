@@ -1,7 +1,10 @@
 ---
 
 - name: "files: Create file {{ postfix_virtual }}"
-  command: "/usr/bin/touch {{ postfix_virtual }} && /usr/sbin/chown root:wheel {{ postfix_virtual }} && chmod 0644 {{ postfix_virtual }}"
+  command: >
+    /usr/bin/touch {{ postfix_virtual }} &&
+    /usr/sbin/chown root:wheel {{ postfix_virtual }} &&
+    chmod 0644 {{ postfix_virtual }}
   args:
     creates: "{{ postfix_virtual }}"
   tags: postfix_virtual_aliases_file

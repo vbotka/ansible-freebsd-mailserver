@@ -8,13 +8,13 @@
   command: "/usr/bin/newaliases"
 
 - name: postmap smtp sasl passwords
-  command: "/usr/local/sbin/postmap {{postfix_main_cf_smtp_sasl_password_maps}}"
+  command: "/usr/local/sbin/postmap {{ postfix_main_cf_smtp_sasl_password_maps }}"
 
 - name: postmap virtual aliases
-  command: "/usr/local/sbin/postmap {{postfix_virtual}}"
+  command: "/usr/local/sbin/postmap {{ postfix_virtual }}"
 
 - name: set hostname
-  command: "/bin/hostname {{rc_conf_hostname}}"
+  command: "/bin/hostname {{ rc_conf_hostname }}"
 
 - name: enable and start postfix
   service:

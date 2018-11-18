@@ -42,7 +42,9 @@
   tags: dovecot_master_conf
 
 # create #ssl_dh
-- name: "dovecot: openssl dhparam -out {{ dovecot_ssl_dh }} {{ dovecot_ssl_dh_bits }} This is going to take a long time."
+- name: >
+    dovecot: openssl dhparam -out {{ dovecot_ssl_dh }} {{ dovecot_ssl_dh_bits }}
+    This is going to take a long time.
   command: "openssl dhparam -out {{ dovecot_ssl_dh }} {{ dovecot_ssl_dh_bits }}"
   args:
     creates: "{{ dovecot_ssl_dh }}"
@@ -106,7 +108,11 @@
 
 # conf.d/15-mailboxes.conf
 #- name: Configure /usr/local/etc/dovecot/conf.d/15-mailboxes.conf
-#  lineinfile: dest=/usr/local/etc/dovecot/conf.d/15-mailboxes.conf regexp="{{ item.regexp }}" line="{{ item.line }}" backup="yes"
+#  lineinfile:
+#    dest: /usr/local/etc/dovecot/conf.d/15-mailboxes.conf
+#    regexp: "{{ item.regexp }}"
+#    line: "{{ item.line }}"
+#    backup: "yes"
 #  loop:
 #    - { regexp: "^",  line: ""}
 #  notify: reload dovecot

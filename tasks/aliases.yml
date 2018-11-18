@@ -3,8 +3,8 @@
 - name: "aliases: Configure {{ postfix_alias }}"
   lineinfile:
     dest: "{{ postfix_alias }}"
-    regexp: "^{{ item.alias }}{{':'}}"
-    line: "{{ item.alias }}{{':'}} {{ item.user }}"
+    regexp: "^{{ item.alias }}{{ ':' }}"
+    line: "{{ item.alias }}{{ ':' }} {{ item.user }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ aliases }}"
   notify:
