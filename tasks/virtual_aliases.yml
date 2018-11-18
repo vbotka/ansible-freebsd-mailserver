@@ -7,7 +7,7 @@
     line: "{{ item.alias }}\t {{ item.user }}"
     owner: "root"
     group: "wheel"
-    mode: "644"
+    mode: "0644"
     backup: "{{ fm_backup_conf }}"
     create: yes
   loop: "{{ virtual_aliases }}"
