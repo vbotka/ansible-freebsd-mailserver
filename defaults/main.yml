@@ -52,6 +52,8 @@ postfix_master_cf_service_def: "inet  n       -       -       -       -       sm
 freebsd_install_method: "packages"
 #freebsd_install_method: "ports"
 freebsd_use_packages: "yes"
+freebsd_install_retries: 10
+freebsd_install_delay: 5
 freebsd_mailserver_packages:
   - mail/postfix-sasl
   - security/cyrus-sasl2
