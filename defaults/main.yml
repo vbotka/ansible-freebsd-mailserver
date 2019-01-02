@@ -4,6 +4,7 @@
 # CHANGE AT LEAST THIS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 fm_debug: False
+fm_auth_debug: False
 fm_postfix_enable: False
 fm_dovecot_enable: False
 digitalocean: False

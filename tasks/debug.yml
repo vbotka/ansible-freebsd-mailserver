@@ -41,8 +41,6 @@
          postfix_main_cf_smtp_sasl_disable_conf
          {{ postfix_main_cf_smtp_sasl_disable_conf | to_yaml }}
          postfix_main_cf_smtp_sasl_password_maps [ {{ postfix_main_cf_smtp_sasl_password_maps }} ]
-         postfix_smtp_sasl_passwords
-         {{ postfix_smtp_sasl_passwords | to_yaml }}
 
          dovecot_conf
          {{ dovecot_conf | to_yaml }}
@@ -61,6 +59,15 @@
          {{ postfix_mailerconf | to_nice_yaml }}
   debug:
     msg: "{{ msg.split('\n') }}"
+
+- name: "FreeBSD mailserver Debug Auth"
+  vars:
+    msg: |
+         postfix_smtp_sasl_passwords
+         {{ postfix_smtp_sasl_passwords | to_yaml }}
+  debug:
+    msg: "{{ msg.split('\n') }}"
+  when: fm_auth_debug
 
 # EOF
 ...
