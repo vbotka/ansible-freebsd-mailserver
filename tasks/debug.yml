@@ -1,6 +1,6 @@
 ---
 
-- name: "FreeBSD mailserver Debug"
+- name: Debug
   vars:
     msg: |
          ansible_architecture [ {{ ansible_architecture }} ]
@@ -25,6 +25,10 @@
          virtual_aliases
          {{ virtual_aliases | to_yaml }}
 
+         postfix_main_cf_mydestination [ {{ postfix_main_cf_mydestination }} ]
+         postfix_main_cf_mydestination_pcre_file [ {{ postfix_main_cf_mydestination_pcre_file }} ]
+         postfix_main_cf_mydestination_pcre
+         {{ postfix_main_cf_mydestination_pcre | to_nice_yaml }}
          postfix_main_cf_relayhost [ {{ postfix_main_cf_relayhost }} ]
          postfix_main_cf_conf
          {{ postfix_main_cf_conf | to_yaml }}

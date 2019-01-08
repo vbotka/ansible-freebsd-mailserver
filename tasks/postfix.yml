@@ -13,6 +13,47 @@
     - reload postfix
   tags: postfix_main_cf
 
+# mydestination pcre file (optional)
+- name: "postfix: Create pcre {{ postfix_main_cf_mydestination_pcre_file }}"
+  template:
+    src: mydestinations.j2
+    dest: "{{ postfix_main_cf_mydestination_pcre_file }}"
+    owner: root
+    group: wheel
+    mode: 0644
+    backup: "{{ fm_backup_conf }}"
+  notify:
+    - postfix check
+    - reload postfix
+  when: postfix_main_cf_mydestination_pcre | length > 0
+  tags: postfix_main_cf_mydestination_pcre
+
+# mydestination pcre (optional)
+- name: "postfix: Configure pcre mydestination in {{ postfix_main_cf }}"
+  lineinfile:
+    dest: "{{ postfix_main_cf }}"
+    regexp: "^mydestination"
+    line: "mydestination = pcre:{{ postfix_main_cf_mydestination_pcre_file }}"
+    backup: "{{ fm_backup_conf }}"
+  notify:
+    - postfix check
+    - reload postfix
+  when: postfix_main_cf_mydestination_pcre | length > 0
+  tags: postfix_main_cf_mydestination_pcre
+
+# mydestination (no pcre)
+- name: "postfix: Configure mydestination in {{ postfix_main_cf }}"
+  lineinfile:
+    dest: "{{ postfix_main_cf }}"
+    regexp: "^mydestination"
+    line: "mydestination = {{ postfix_main_cf_mydestination }}"
+    backup: "{{ fm_backup_conf }}"
+  notify:
+    - postfix check
+    - reload postfix
+  when: postfix_main_cf_mydestination_pcre | length == '0'
+  tags: postfix_main_cf_mydestination
+
 # relayhost
 - name: "postfix: Configure relayhost in {{ postfix_main_cf }}"
   lineinfile:

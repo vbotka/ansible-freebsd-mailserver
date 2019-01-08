@@ -26,6 +26,11 @@
 #postfix_main_cf_virtual_alias_domains: "example.net, example.org, example.co"
 #postfix_main_cf_message_size_limit: "40960000"
 
+#postfix_main_cf_mydestination_pcre:
+#  - "localhost"
+#  - ".*\\.example\\.com"
+#  - ".*\\.ny\\.example\\.org"
+
 #aliases: []
 #aliases:
 #  - { alias: "firstname", user: "user1" }

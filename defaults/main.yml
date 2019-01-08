@@ -84,7 +84,6 @@ postfix_main_cf_conf:
   - { regexp: "myhostname",  line: "{{ postfix_main_cf_myhostname }}" }
   - { regexp: "mydomain",  line: "{{ postfix_main_cf_mydomain }}" }
   - { regexp: "inet_interfaces", line: "{{ postfix_main_cf_inet_interfaces }}" }
-  - { regexp: "mydestination", line: "{{ postfix_main_cf_mydestination }}" }
   - { regexp: "relay_domains", line: "{{ postfix_main_cf_relay_domains }}" }
   - { regexp: "recipient_delimiter", line: "{{ postfix_main_cf_recipient_delimiter }}" }
   - { regexp: "home_mailbox", line: "{{ postfix_main_cf_home_mailbox }}" }
@@ -96,6 +95,11 @@ postfix_main_cf_conf:
   - { regexp: "shlib_directory", line: "{{ postfix_main_cf_shlib_directory }}" }
   - { regexp: "alias_maps", line: "{{ postfix_main_cf_alias_maps }}" }
   - { regexp: "alias_database", line: "{{ postfix_main_cf_alias_database }}" }
+# - { regexp: "mydestination", line: "{{ postfix_main_cf_mydestination }}" }
+
+# mydestination pcre
+postfix_main_cf_mydestination_pcre: []
+postfix_main_cf_mydestination_pcre_file: "/usr/local/etc/postfix/mydestinations"
 
 # relayhost
 postfix_main_cf_relayhost: ""

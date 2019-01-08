@@ -1,0 +1,5 @@
+# {{ ansible_managed }}
+{% for item in postfix_main_cf_mydestination_pcre %}
+/^{{ item }}$/ ACCEPT
+{% endfor %}
+# EOF

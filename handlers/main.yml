@@ -32,11 +32,13 @@
   service:
     name: "postfix"
     state: "reloaded"
+  when: fm_postfix_enable|bool
 
 - name: restart postfix
   service:
     name: "postfix"
     state: "restarted"
+  when: fm_postfix_enable|bool
 
 - name: enable and start dovecot
   service:
@@ -54,11 +56,13 @@
   service:
     name: "dovecot"
     state: "reloaded"
+  when: fm_dovecot_enable
 
 - name: restart dovecot
   service:
     name: "dovecot"
     state: "restarted"
+  when: fm_dovecot_enable
 
 - name: stop sendmail
   service:
