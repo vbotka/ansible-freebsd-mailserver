@@ -71,6 +71,21 @@ ansible_perl_interpreter=/usr/local/bin/perl
 6) Consider to test the mailserver with http://mxtoolbox.com/
 
 
+Check mode
+----------
+
+Create default configuration files of Dovecot to avoid error missing files
+
+```
+# ansible-playbook freebsd-mailserver.yml -t dovecot_example_conf
+```
+
+Then run the check-mode
+
+```
+# ansible-playbook freebsd-mailserver.yml --check
+```
+
 License
 -------
 
