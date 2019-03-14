@@ -1,10 +1,9 @@
 ---
 
 - name: "files: Create file {{ postfix_virtual }}"
-  command: >
-    /usr/bin/touch {{ postfix_virtual }} &&
-    /usr/sbin/chown root:wheel {{ postfix_virtual }} &&
-    chmod 0644 {{ postfix_virtual }}
+  shell: "/usr/bin/touch {{ postfix_virtual }} &&
+          /usr/sbin/chown root:wheel {{ postfix_virtual }} &&
+          chmod 0644 {{ postfix_virtual }}"
   args:
     creates: "{{ postfix_virtual }}"
     warn: False

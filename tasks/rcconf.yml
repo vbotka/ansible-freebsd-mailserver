@@ -3,36 +3,36 @@
 - name: "rcconf: Configure hostname in /etc/rc.conf"
   lineinfile:
     dest: "/etc/rc.conf"
-    regexp: "^{{ item.regexp }}"
-    line: "{{ item.regexp }}={{ item.line }}"
+    regexp: "^\\s*{{ item.regexp }}\\s*="
+    line: "{{ item.regexp }}=\"{{ item.line }}\""
     backup: "{{ fm_backup_conf }}"
   loop:
-    - { regexp: "hostname", line: "\"{{ rc_conf_hostname }}\"" }
+    - {regexp: "hostname", line: "{{ rc_conf_hostname }}"}
   notify: set hostname
   tags: postfix_rcconf_hostname
 
 - name: "rcconf: Disable sendmail in /etc/rc.conf"
   lineinfile:
     dest: "/etc/rc.conf"
-    regexp: "^{{ item.regexp }}"
-    line: "{{ item.regexp }}={{ item.line }}"
+    regexp: "^\\s*{{ item.regexp }}\\s*="
+    line: "{{ item.regexp }}=\"{{ item.line }}\""
     backup: "{{ fm_backup_conf }}"
   loop:
-    - { regexp: "sendmail_enable", line: "\"NONE\"" }
-    - { regexp: "sendmail_submit_enable", line: "\"NO\"" }
-    - { regexp: "sendmail_outbound_enable", line: "\"NO\"" }
-    - { regexp: "sendmail_msp_queue_enable", line: "\"NO\"" }
+    - {regexp: "sendmail_enable", line: "NONE"}
+    - {regexp: "sendmail_submit_enable", line: "NO"}
+    - {regexp: "sendmail_outbound_enable", line: "NO"}
+    - {regexp: "sendmail_msp_queue_enable", line: "NO"}
   notify: stop sendmail
   tags: postfix_rcconf_sendmail
 
 - name: "rcconf: Enable and Start Postfix"
   lineinfile:
     dest: "/etc/rc.conf"
-    regexp: "^{{ item.regexp }}"
-    line: "{{ item.regexp }}={{ item.line }}"
+    regexp: "^\\s*{{ item.regexp }}\\s*="
+    line: "{{ item.regexp }}=\"{{ item.line }}\""
     backup: "{{ fm_backup_conf }}"
   loop:
-    - { regexp: "postfix_enable", line: "\"YES\"" }
+    - { regexp: "postfix_enable", line: "YES" }
   when: fm_postfix_enable
   notify:
     - postfix check
@@ -42,11 +42,11 @@
 - name: "rcconf: Enable and Start Dovecot"
   lineinfile:
     dest: "/etc/rc.conf"
-    regexp: "^{{ item.regexp }}"
-    line: "{{ item.regexp }}={{ item.line }}"
+    regexp: "^\\s*{{ item.regexp }}\\s*="
+    line: "{{ item.regexp }}=\"{{ item.line }}\""
     backup: "{{ fm_backup_conf }}"
   loop:
-    - { regexp: "dovecot_enable", line: "\"YES\"" }
+    - { regexp: "dovecot_enable", line: "YES" }
   when: fm_dovecot_enable
   notify: enable and start dovecot
   tags: postfix_rcconf_dovecot
@@ -54,11 +54,11 @@
 - name: "rcconf: Disable and Stop Postfix"
   lineinfile:
     dest: "/etc/rc.conf"
-    regexp: "^{{ item.regexp }}"
-    line: "{{ item.regexp }}={{ item.line }}"
+    regexp: "^\\s*{{ item.regexp }}\\s*="
+    line: "{{ item.regexp }}=\"{{ item.line }}\""
     backup: "{{ fm_backup_conf }}"
   loop:
-    - { regexp: "postfix_enable", line: "\"NO\"" }
+    - { regexp: "postfix_enable", line: "NO" }
   when: not fm_postfix_enable
   notify: disable and stop postfix
   tags: postfix_rcconf_postfix
@@ -66,11 +66,11 @@
 - name: "rcconf: Disable and Stop Dovecot"
   lineinfile:
     dest: "/etc/rc.conf"
-    regexp: "^{{ item.regexp }}"
-    line: "{{ item.regexp }}={{ item.line }}"
+    regexp: "^\\s*{{ item.regexp }}\\s*="
+    line: "{{ item.regexp }}=\"{{ item.line }}\""
     backup: "{{ fm_backup_conf }}"
   loop:
-    - { regexp: "dovecot_enable", line: "\"NO\"" }
+    - { regexp: "dovecot_enable", line: "NO" }
   when: not fm_dovecot_enable
   notify: disable and stop dovecot
   tags: postfix_rcconf_dovecot
