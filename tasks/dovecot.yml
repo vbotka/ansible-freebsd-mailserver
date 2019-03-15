@@ -41,13 +41,24 @@
   notify: reload dovecot
   tags: dovecot_master_conf
 
-# create #ssl_dh
-- name: >
-    dovecot: openssl dhparam -out {{ dovecot_ssl_dh }} {{ dovecot_ssl_dh_bits }}
-    This is going to take a long time.
+# create dh.pem
+- name: "dovecot: openssl dhparam -out {{ dovecot_ssl_dh }} {{ dovecot_ssl_dh_bits }}
+         This is going to take a long time."
   command: "openssl dhparam -out {{ dovecot_ssl_dh }} {{ dovecot_ssl_dh_bits }}"
   args:
     creates: "{{ dovecot_ssl_dh }}"
+  when: dovecot_ssl_dh_generate
+  tags: dovecot_ssl_dh
+
+# copy dh.pem
+- name: "dovecot: copy {{ dovecot_ssl_dh_path }} to {{ dovecot_ssl_dh }}"
+  copy:
+    src: "{{ dovecot_ssl_dh_path }}"
+    dest: "{{ dovecot_ssl_dh }}"
+    owner: root
+    group: wheel
+    mode: 0644
+  when: not dovecot_ssl_dh_generate
   tags: dovecot_ssl_dh
 
 # conf.d/10-ssl.conf
