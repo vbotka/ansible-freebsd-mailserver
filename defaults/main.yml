@@ -3,11 +3,14 @@
 
 # CHANGE AT LEAST THIS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+# Cloud providers
+digitalocean: False
+
+# FreeBSD mailserver
 fm_debug: False
 fm_auth_debug: False
 fm_postfix_enable: False
 fm_dovecot_enable: False
-digitalocean: False
 fm_backup_conf: yes
 
 # Create self-signed TLS certificate (default False),
