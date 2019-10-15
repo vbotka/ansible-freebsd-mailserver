@@ -5,6 +5,7 @@ freebsd_mailserver
 
 [Ansible role.](https://galaxy.ansible.com/vbotka/freebsd_mailserver/) FreeBSD. Install and configure Postfix and Dovecot2.
 
+Please feel free to [share your feedback and report issues](https://github.com/vbotka/ansible-freebsd-mailserver/issues).
 
 Requirements
 ------------
