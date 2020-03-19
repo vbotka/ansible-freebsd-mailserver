@@ -1,5 +1,4 @@
-freebsd_mailserver
-==================
+## freebsd_mailserver
 
 [![Build Status](https://travis-ci.org/vbotka/ansible-freebsd-mailserver.svg?branch=master)](https://travis-ci.org/vbotka/ansible-freebsd-mailserver)
 
@@ -7,51 +6,48 @@ freebsd_mailserver
 
 Please feel free to [share your feedback and report issues](https://github.com/vbotka/ansible-freebsd-mailserver/issues).
 
-Requirements
-------------
+# Requirements
 
 No requiremenst.
 
 
-Variables
----------
+# Variables
 
-TBD. Review the defaults and examples in vars.
+Review the defaults and examples in vars.
 
 
-Workflow
---------
+# Workflow
 
-1) Change shell to /bin/sh.
+1) Change shell to /bin/sh
 
 ```
-# ansible mailserver -e 'ansible_shell_type=csh ansible_shell_executable=/bin/csh' -a 'sudo pw usermod freebsd -s /bin/sh'
+shell> ansible mailserver -e 'ansible_shell_type=csh ansible_shell_executable=/bin/csh' -a 'sudo pw usermod freebsd -s /bin/sh'
 ```
 
-2) Install role.
+2) Install role
 
 ```
-# ansible-galaxy install vbotka.freebsd_mailserver
+shell> ansible-galaxy install vbotka.freebsd_mailserver
 ```
 
-3) Fit variables.
+3) Fit variables
 
 ```
-# editor vbotka.freebsd_mailserver/vars/main.yml
+shell> editor vbotka.freebsd_mailserver/vars/main.yml
 ```
 
-4) Create playbook and inventory.
+4) Create playbook and inventory
 
 ```
-# cat freebsd-mailserver.yml
+shell> cat freebsd-mailserver.yml
 
 - hosts: mailserver
   roles:
-    - vbotka.freebsd-mailserver
+    - vbotka.freebsd_mailserver
 ```
 
 ```
-# cat hosts
+shell> cat hosts
 [mailserver]
 <mailserver-ip-or-fqdn>
 [mailserver:vars]
@@ -59,47 +55,44 @@ ansible_connection=ssh
 ansible_user=freebsd
 ansible_become=yes
 ansible_become_method=sudo
-ansible_python_interpreter=/usr/local/bin/python3.6
+ansible_python_interpreter=/usr/local/bin/python3.7
 ansible_perl_interpreter=/usr/local/bin/perl
 ```
 
-5) Install and configure the mailserver.
+5) Install and configure the mailserver
 
 ```
-# ansible-playbook freebsd-mailserver.yml
+shell> ansible-playbook freebsd-mailserver.yml
 ```
 
 6) Consider to test the mailserver with http://mxtoolbox.com/
 
 
-Check mode
-----------
+# Check mode
 
 Create default configuration files of Dovecot to avoid error missing files
 
 ```
-# ansible-playbook freebsd-mailserver.yml -t dovecot_example_conf
+shell> ansible-playbook freebsd-mailserver.yml -t dovecot_example_conf
 ```
 
 Then run the check-mode
 
 ```
-# ansible-playbook freebsd-mailserver.yml --check
+shell> ansible-playbook freebsd-mailserver.yml --check
 ```
 
-License
--------
+# License
 
 [![license](https://img.shields.io/badge/license-BSD-red.svg)](https://www.freebsd.org/doc/en/articles/bsdl-gpl/article.html)
 
 
-Author Information
-------------------
+# Author Information
 
 [Vladimir Botka](https://botka.link)
 
-References
-----------
+
+# References
 
 - [FreeBSD handbook: 28.4. Changing the Mail Transfer Agent](https://www.freebsd.org/doc/handbook/mail-changingmta.html)
 - [FreeBSD handbook: 28.9. SMTP Authentication](https://www.freebsd.org/doc/handbook/SMTP-Auth.html)
@@ -109,5 +102,4 @@ References
 - [SASL Authentication in the Postfix SMTP/LMTP client](http://www.postfix.org/SASL_README.html#client_sasl_enable)
 - [postfix-logwatch - A Postfix log parser and analysis utility](https://www.freebsd.org/cgi/man.cgi?query=postfix-logwatch)
 - [Dovecot Wiki](https://wiki2.dovecot.org/)
-
 - [Upgrading Dovecot v2.2 to v2.3](https://wiki2.dovecot.org/Upgrading/2.3)

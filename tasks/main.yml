@@ -2,11 +2,15 @@
 # tasks for freebsd-mailserver
 
 - import_tasks: debug.yml
-  when: fm_debug
+  when: fm_debug|bool
   tags: [fm-debug, always]
 
 - import_tasks: packages.yml
   tags: fm-packages
+
+- import_tasks: sanity.yml
+  when: fm_sanity|bool
+  tags: fm-sanity
 
 - import_tasks: files.yml
   tags: fm-files

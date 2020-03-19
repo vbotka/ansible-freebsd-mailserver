@@ -1,0 +1,28 @@
+---
+
+- name: "sanity: Get meta-data and role_name."
+  block:
+    - name: "sanity: Get meta-data."
+      include_vars:
+        file: meta/main.yml
+      when: galaxy_info is undefined
+    - name: "sanity: Get role_name."
+      set_fact:
+        al_sanity_role_name: "{{ role_name }}"
+  when: fm_sanity_platform|bool or
+        fm_sanity_ansible_version|bool
+
+- name: "sanity: Include vbotka.ansible_lib al_sanity_platform."
+  include_role:
+    name: vbotka.ansible_lib
+    tasks_from: al_sanity_platform
+  when: fm_sanity_platform|bool
+
+- name: "sanity: Include vbotka.ansible_lib al_sanity_ansible_version."
+  include_role:
+    name: vbotka.ansible_lib
+    tasks_from: al_sanity_ansible_version
+  when: fm_sanity_ansible_version|bool
+
+# EOF
+...

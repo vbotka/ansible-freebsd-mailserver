@@ -21,7 +21,7 @@
     line: "{{ item.regexp }} = {{ item.line }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ postfix_main_cf_smtp_sasl_enable_conf }}"
-  when: postfix_main_cf_smtp_sasl_auth_enable
+  when: postfix_main_cf_smtp_sasl_auth_enable|bool
   notify:
     - postfix check
     - reload postfix
@@ -34,7 +34,7 @@
     line: "{{ item.regexp }} = {{ item.line }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ postfix_main_cf_smtp_sasl_disable_conf }}"
-  when: not postfix_main_cf_smtp_sasl_auth_enable
+  when: not postfix_main_cf_smtp_sasl_auth_enable|bool
   notify:
     - postfix check
     - reload postfix
@@ -48,8 +48,8 @@
     line: "smtp_sasl_password_maps = hash:{{ postfix_main_cf_smtp_sasl_password_maps }}"
     backup: "{{ fm_backup_conf }}"
   when:
-    - postfix_main_cf_smtp_sasl_password_maps | length > 0
-    - postfix_main_cf_smtp_sasl_auth_enable
+    - postfix_main_cf_smtp_sasl_password_maps|length > 0
+    - postfix_main_cf_smtp_sasl_auth_enable|bool
   notify:
     - postfix check
     - reload postfix

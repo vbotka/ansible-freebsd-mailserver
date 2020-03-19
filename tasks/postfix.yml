@@ -20,12 +20,12 @@
     dest: "{{ postfix_main_cf_mydestination_pcre_file }}"
     owner: root
     group: wheel
-    mode: 0644
+    mode: "0644"
     backup: "{{ fm_backup_conf }}"
   notify:
     - postfix check
     - reload postfix
-  when: postfix_main_cf_mydestination_pcre | length > 0
+  when: postfix_main_cf_mydestination_pcre|length > 0
   tags: postfix_main_cf_mydestination_pcre
 
 # mydestination pcre (optional)
@@ -38,7 +38,7 @@
   notify:
     - postfix check
     - reload postfix
-  when: postfix_main_cf_mydestination_pcre | length > 0
+  when: postfix_main_cf_mydestination_pcre|length > 0
   tags: postfix_main_cf_mydestination_pcre
 
 # mydestination (no pcre)
@@ -51,7 +51,7 @@
   notify:
     - postfix check
     - reload postfix
-  when: postfix_main_cf_mydestination_pcre | length == '0'
+  when: postfix_main_cf_mydestination_pcre|length == 0
   tags: postfix_main_cf_mydestination
 
 # relayhost
@@ -61,7 +61,7 @@
     regexp: "^relayhost"
     line: "relayhost = {{ postfix_main_cf_relayhost }}"
     backup: "{{ fm_backup_conf }}"
-  when: postfix_main_cf_relayhost | length > 0
+  when: postfix_main_cf_relayhost|length > 0
   notify:
     - postfix check
     - reload postfix

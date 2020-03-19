@@ -20,13 +20,13 @@
   service:
     name: "postfix"
     state: started
-    enabled: yes
+    enabled: true
 
 - name: disable and stop postfix
   service:
     name: "postfix"
     state: stopped
-    enabled: no
+    enabled: false
 
 - name: reload postfix
   service:
@@ -44,25 +44,25 @@
   service:
     name: "dovecot"
     state: started
-    enabled: yes
+    enabled: true
 
 - name: disable and stop dovecot
   service:
     name: "dovecot"
     state: stopped
-    enabled: no
+    enabled: false
 
 - name: reload dovecot
   service:
     name: "dovecot"
     state: reloaded
-  when: fm_dovecot_enable
+  when: fm_dovecot_enable|bool
 
 - name: restart dovecot
   service:
     name: "dovecot"
     state: restarted
-  when: fm_dovecot_enable
+  when: fm_dovecot_enable|bool
 
 - name: stop sendmail
   service:

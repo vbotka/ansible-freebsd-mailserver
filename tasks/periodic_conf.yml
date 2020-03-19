@@ -2,11 +2,11 @@
 
 - name: "periodic_conf: Configure /etc/periodic.conf.local"
   lineinfile:
-    dest: "/etc/periodic.conf.local"
+    dest: /etc/periodic.conf.local
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }}{{ item.line }}"
     backup: "{{ fm_backup_conf }}"
-    create: yes
+    create: true
   loop: "{{ fm_periodic_conf }}"
 
 # EOF

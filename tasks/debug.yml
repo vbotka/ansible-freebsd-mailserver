@@ -1,80 +1,85 @@
 ---
 
-- name: Debug
+- name: "Debug"
   vars:
     msg: |
-         ansible_architecture [ {{ ansible_architecture }} ]
-         ansible_os_family [ {{ ansible_os_family }} ]
-         ansible_distribution [ {{ ansible_distribution }} ]
-         ansible_distribution_major_version [ {{ ansible_distribution_major_version }} ]
-         ansible_distribution_version [ {{ ansible_distribution_version }} ]
-         ansible_distribution_release [ {{ ansible_distribution_release }} ]
+         ansible_architecture [{{ ansible_architecture }}]
+         ansible_os_family [{{ ansible_os_family }}]
+         ansible_distribution [{{ ansible_distribution }}]
+         ansible_distribution_major_version [{{ ansible_distribution_major_version }}]
+         ansible_distribution_version [{{ ansible_distribution_version }}]
+         ansible_distribution_release [{{ ansible_distribution_release }}]
+         ansible_python_version [{{ ansible_python_version }}]
 
-         freebsd_install_method [ {{ freebsd_install_method }} ]
-         freebsd_use_packages [ {{ freebsd_use_packages }} ]
+         fm_sanity [{{ fm_sanity }}]
+         fm_sanity_platform [{{ fm_sanity_platform }}]
+         fm_sanity_ansible_version [{{ fm_sanity_ansible_version }}]
+
+         freebsd_install_method [{{ freebsd_install_method }}]
+         freebsd_use_packages [{{ freebsd_use_packages }}]
          freebsd_mailserver_packages
-         {{ freebsd_mailserver_packages | to_nice_yaml }}
+         {{ freebsd_mailserver_packages|to_nice_yaml }}
 
-         fm_postfix_enable [ {{ fm_postfix_enable }} ]
-         fm_dovecot_enable [ {{ fm_dovecot_enable }} ]
-         postfix_main_cf_smtp_sasl_auth_enable [ {{ postfix_main_cf_smtp_sasl_auth_enable }} ]
-         postfix_create_cert [ {{ postfix_create_cert }} ]
+         fm_postfix_enable [{{ fm_postfix_enable }}]
+         fm_dovecot_enable [{{ fm_dovecot_enable }}]
+         postfix_main_cf_smtp_sasl_auth_enable [{{ postfix_main_cf_smtp_sasl_auth_enable }}]
+         postfix_create_cert [{{ postfix_create_cert }}]
 
          aliases
-         {{ aliases | to_yaml }}
+         {{ aliases|to_yaml }}
          virtual_aliases
-         {{ virtual_aliases | to_yaml }}
+         {{ virtual_aliases|to_yaml }}
 
-         postfix_main_cf_mydestination [ {{ postfix_main_cf_mydestination }} ]
-         postfix_main_cf_mydestination_pcre_file [ {{ postfix_main_cf_mydestination_pcre_file }} ]
+         postfix_main_cf_mydestination [{{ postfix_main_cf_mydestination }}]
+         postfix_main_cf_mydestination_pcre_file [{{ postfix_main_cf_mydestination_pcre_file }}]
          postfix_main_cf_mydestination_pcre
-         {{ postfix_main_cf_mydestination_pcre | to_nice_yaml }}
-         postfix_main_cf_relayhost [ {{ postfix_main_cf_relayhost }} ]
+         {{ postfix_main_cf_mydestination_pcre|to_nice_yaml }}
+         postfix_main_cf_relayhost [{{ postfix_main_cf_relayhost }}]
          postfix_main_cf_conf
-         {{ postfix_main_cf_conf | to_yaml }}
+         {{ postfix_main_cf_conf|to_yaml }}
          postfix_main_cf_virtual_alias_maps_conf
-         {{ postfix_main_cf_virtual_alias_maps_conf | to_yaml }}
+         {{ postfix_main_cf_virtual_alias_maps_conf|to_yaml }}
          postfix_main_cf_smtpd_conf
-         {{ postfix_main_cf_smtpd_conf | to_yaml }}
+         {{ postfix_main_cf_smtpd_conf|to_yaml }}
          postfix_main_cf_smtp_conf
-         {{ postfix_main_cf_smtp_conf | to_yaml }}
+         {{ postfix_main_cf_smtp_conf|to_yaml }}
          postfix_main_cf_smtpd_sasl_conf
-         {{ postfix_main_cf_smtpd_sasl_conf | to_yaml }}
+         {{ postfix_main_cf_smtpd_sasl_conf|to_yaml }}
          postfix_main_cf_smtp_sasl_enable_conf
-         {{ postfix_main_cf_smtp_sasl_enable_conf | to_yaml }}
+         {{ postfix_main_cf_smtp_sasl_enable_conf|to_yaml }}
          postfix_main_cf_smtp_sasl_disable_conf
-         {{ postfix_main_cf_smtp_sasl_disable_conf | to_yaml }}
-         postfix_main_cf_smtp_sasl_password_maps [ {{ postfix_main_cf_smtp_sasl_password_maps }} ]
+         {{ postfix_main_cf_smtp_sasl_disable_conf|to_yaml }}
+         postfix_main_cf_smtp_sasl_password_maps [{{ postfix_main_cf_smtp_sasl_password_maps }}]
 
-         dovecot_ssl_dh_generate [ {{ dovecot_ssl_dh_generate }} ]
-         dovecot_ssl_dh_bits [ {{ dovecot_ssl_dh_bits }} ]
-         dovecot_ssl_dh_path [ {{ dovecot_ssl_dh_path }} ]
+         dovecot_ssl_dh_generate [{{ dovecot_ssl_dh_generate }}]
+         dovecot_ssl_dh_bits [{{ dovecot_ssl_dh_bits }}]
+         dovecot_ssl_dh_path [{{ dovecot_ssl_dh_path }}]
          dovecot_conf
-         {{ dovecot_conf | to_yaml }}
+         {{ dovecot_conf|to_yaml }}
          dovecot_ssl_conf
-         {{ dovecot_ssl_conf | to_yaml }}
+         {{ dovecot_ssl_conf|to_yaml }}
          dovecot_mail_conf
-         {{ dovecot_mail_conf | to_yaml }}
+         {{ dovecot_mail_conf|to_yaml }}
          dovecot_auth_conf
-         {{ dovecot_auth_conf | to_yaml }}
+         {{ dovecot_auth_conf|to_yaml }}
          dovecot_logging_conf
-         {{ dovecot_logging_conf | to_yaml }}
+         {{ dovecot_logging_conf|to_yaml }}
          dovecot_lda_conf
-         {{ dovecot_lda_conf | to_yaml }}
+         {{ dovecot_lda_conf|to_yaml }}
 
          postfix_mailerconf
-         {{ postfix_mailerconf | to_nice_yaml }}
+         {{ postfix_mailerconf|to_nice_yaml }}
   debug:
     msg: "{{ msg.split('\n') }}"
 
-- name: "FreeBSD mailserver Debug Auth"
+- name: "Debug Auth"
   vars:
     msg: |
          postfix_smtp_sasl_passwords
-         {{ postfix_smtp_sasl_passwords | to_yaml }}
+         {{ postfix_smtp_sasl_passwords|to_yaml }}
   debug:
     msg: "{{ msg.split('\n') }}"
-  when: fm_auth_debug
+  when: fm_auth_debug|bool
 
 # EOF
 ...

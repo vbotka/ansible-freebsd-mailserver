@@ -6,7 +6,7 @@
           chmod 0644 {{ postfix_virtual }}"
   args:
     creates: "{{ postfix_virtual }}"
-    warn: False
+    warn: false
   tags: postfix_virtual_aliases_file
 
 # EOF

@@ -47,7 +47,7 @@
   command: "openssl dhparam -out {{ dovecot_ssl_dh }} {{ dovecot_ssl_dh_bits }}"
   args:
     creates: "{{ dovecot_ssl_dh }}"
-  when: dovecot_ssl_dh_generate
+  when: dovecot_ssl_dh_generate|bool
   tags: dovecot_ssl_dh
 
 # copy dh.pem
@@ -58,7 +58,7 @@
     owner: root
     group: wheel
     mode: 0644
-  when: not dovecot_ssl_dh_generate
+  when: not dovecot_ssl_dh_generate|bool
   tags: dovecot_ssl_dh
 
 # conf.d/10-ssl.conf
