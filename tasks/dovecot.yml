@@ -42,23 +42,32 @@
   tags: dovecot_master_conf
 
 # create dh.pem
-- name: "dovecot: openssl dhparam -out {{ dovecot_ssl_dh }} {{ dovecot_ssl_dh_bits }}
+- name: "dovecot: Generate DH by command {{ dovecot_ssl_dh_cmd }}.
          This is going to take a long time."
-  command: "openssl dhparam -out {{ dovecot_ssl_dh }} {{ dovecot_ssl_dh_bits }}"
+  command: "{{ dovecot_ssl_dh_cmd }}"
   args:
     creates: "{{ dovecot_ssl_dh }}"
+  when: dovecot_ssl_dh_cmd_generate|bool
+  tags: dovecot_ssl_dh
+- name: "dovecot: Generate OpenSSL Diffie-Hellman Parameters by openssl_dhparam.
+         This is going to take a long time."
+  openssl_dhparam:
+    path: "{{ dovecot_ssl_dh }}"
+    size: "{{ dovecot_ssl_dh_bits }}"
   when: dovecot_ssl_dh_generate|bool
   tags: dovecot_ssl_dh
 
 # copy dh.pem
-- name: "dovecot: copy {{ dovecot_ssl_dh_path }} to {{ dovecot_ssl_dh }}"
+- name: "dovecot: Copy {{ dovecot_ssl_dh_path }} to {{ dovecot_ssl_dh }}"
   copy:
     src: "{{ dovecot_ssl_dh_path }}"
     dest: "{{ dovecot_ssl_dh }}"
     owner: root
     group: wheel
-    mode: 0644
-  when: not dovecot_ssl_dh_generate|bool
+    mode: "0644"
+  when:
+    - not dovecot_ssl_dh_cmd_generate|bool
+    - not dovecot_ssl_dh_generate|bool
   tags: dovecot_ssl_dh
 
 # conf.d/10-ssl.conf
