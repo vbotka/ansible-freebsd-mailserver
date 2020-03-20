@@ -38,16 +38,14 @@ shell> editor vbotka.freebsd_mailserver/vars/main.yml
 
 3a) Generate OpenSSL Diffie-Hellman parameters
 
-By default the file *dovecot_ssl_dh* is created by the Ansible module
-*openssl_dhparam*
+By default the file *dovecot_ssl_dh* is created by the Ansible module *openssl_dhparam*
 
 ```
 dovecot_ssl_dh_generate: true
 dovecot_ssl_dh_cmd_generate: false
 ```
 
-It is possible to use custom command *dovecot_ssl_dh_cmd* to create
-*dovecot_ssl_dh*
+It is possible to use custom command *dovecot_ssl_dh_cmd* to create *dovecot_ssl_dh*
 
 ```
 dovecot_ssl_dh_generate: false
@@ -55,15 +53,9 @@ dovecot_ssl_dh_cmd_generate: true
 dovecot_ssl_dh_cmd: "openssl dhparam -out {{ dovecot_ssl_dh }} {{dovecot_ssl_dh_bits }}"
 ```
 
-The options *dovecot_ssl_dh_generate* and
-*dovecot_ssl_dh_cmd_generate* are mutually exclusive. If both options
-are *false* the file *dovecot_ssl_dh_path* is used. This file is
-provided by the role for testing only. Never use it in production.
+The options *dovecot_ssl_dh_generate* and *dovecot_ssl_dh_cmd_generate* are mutually exclusive. If both options are *false* the file *dovecot_ssl_dh_path* is used. This file is provided by the role for testing only. Never use it in production.
 
-The generation of the file with Diffie-Hellman parameters may take a
-long time. For example 4096 bit parameters take ~40min with *Intel(R)
-Core(TM) i5-8200Y CPU @ 1.30GHz*. It's a good idea to generate the
-file separately to speedup the configuration.
+The generation of the file with Diffie-Hellman parameters may take a long time. For example 4096 bit parameters take ~40min with *Intel(R) Core(TM) i5-8200Y CPU @ 1.30GHz*. It's a good idea to generate the file separately to speedup the configuration.
 
 ```
 dovecot_ssl_dh_generate: false
