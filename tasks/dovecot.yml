@@ -54,6 +54,9 @@
   openssl_dhparam:
     path: "{{ dovecot_ssl_dh }}"
     size: "{{ dovecot_ssl_dh_bits }}"
+    owner: root
+    group: wheel
+    mode: "0644"
   when: dovecot_ssl_dh_generate|bool
   tags: dovecot_ssl_dh
 
