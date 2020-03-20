@@ -51,7 +51,7 @@ It is possible to use custom command *dovecot_ssl_dh_cmd* to create
 
 ```
 dovecot_ssl_dh_generate: false
-dovecot_ssl_dh_generate_cmd: true
+dovecot_ssl_dh_cmd_generate: true
 dovecot_ssl_dh_cmd: "openssl dhparam -out {{ dovecot_ssl_dh }} {{dovecot_ssl_dh_bits }}"
 ```
 
@@ -67,7 +67,7 @@ file separately to speedup the configuration.
 
 ```
 dovecot_ssl_dh_generate: false
-dovecot_ssl_dh_generate_cmd: false
+dovecot_ssl_dh_cmd_generate: false
 dovecot_ssl_dh_path: <path-to-generated-Diffie-Hellman-file>
 ```
 
@@ -118,15 +118,6 @@ Then run the check-mode
 shell> ansible-playbook freebsd-mailserver.yml --check
 ```
 
-# License
-
-[![license](https://img.shields.io/badge/license-BSD-red.svg)](https://www.freebsd.org/doc/en/articles/bsdl-gpl/article.html)
-
-
-# Author Information
-
-[Vladimir Botka](https://botka.link)
-
 
 # References
 
@@ -139,3 +130,13 @@ shell> ansible-playbook freebsd-mailserver.yml --check
 - [postfix-logwatch - A Postfix log parser and analysis utility](https://www.freebsd.org/cgi/man.cgi?query=postfix-logwatch)
 - [Dovecot Wiki](https://wiki2.dovecot.org/)
 - [Upgrading Dovecot v2.2 to v2.3](https://wiki2.dovecot.org/Upgrading/2.3)
+
+
+# License
+
+[![license](https://img.shields.io/badge/license-BSD-red.svg)](https://www.freebsd.org/doc/en/articles/bsdl-gpl/article.html)
+
+
+# Author Information
+
+[Vladimir Botka](https://botka.link)
