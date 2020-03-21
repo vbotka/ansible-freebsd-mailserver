@@ -1,4 +1,4 @@
-## freebsd_mailserver
+# freebsd_mailserver
 
 [![Build Status](https://travis-ci.org/vbotka/ansible-freebsd-mailserver.svg?branch=master)](https://travis-ci.org/vbotka/ansible-freebsd-mailserver)
 
@@ -6,17 +6,17 @@
 
 Please feel free to [share your feedback and report issues](https://github.com/vbotka/ansible-freebsd-mailserver/issues).
 
-# Requirements
+## Requirements
 
 No requiremenst.
 
 
-# Variables
+## Variables
 
 Review the defaults and examples in vars.
 
 
-# Workflow
+## Workflow
 
 1) Change shell to /bin/sh
 
@@ -96,7 +96,7 @@ shell> ansible-playbook freebsd-mailserver.yml
 6) Consider to test the mailserver with http://mxtoolbox.com/
 
 
-# Check mode
+## Check mode
 
 Create default configuration files of Dovecot to avoid error missing files
 
@@ -111,7 +111,7 @@ shell> ansible-playbook freebsd-mailserver.yml --check
 ```
 
 
-# References
+## References
 
 - [FreeBSD handbook: 28.4. Changing the Mail Transfer Agent](https://www.freebsd.org/doc/handbook/mail-changingmta.html)
 - [FreeBSD handbook: 28.9. SMTP Authentication](https://www.freebsd.org/doc/handbook/SMTP-Auth.html)
@@ -124,11 +124,11 @@ shell> ansible-playbook freebsd-mailserver.yml --check
 - [Upgrading Dovecot v2.2 to v2.3](https://wiki2.dovecot.org/Upgrading/2.3)
 
 
-# License
+## License
 
 [![license](https://img.shields.io/badge/license-BSD-red.svg)](https://www.freebsd.org/doc/en/articles/bsdl-gpl/article.html)
 
 
-# Author Information
+## Author Information
 
 [Vladimir Botka](https://botka.link)
