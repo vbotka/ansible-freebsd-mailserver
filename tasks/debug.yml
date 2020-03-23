@@ -51,6 +51,9 @@
          {{ postfix_main_cf_smtp_sasl_disable_conf|to_yaml }}
          postfix_main_cf_smtp_sasl_password_maps [{{ postfix_main_cf_smtp_sasl_password_maps }}]
 
+         dovecot_conf_path [{{ dovecot_conf_path }}]
+         dovecot_conf_link_path [{{ dovecot_conf_link_path }}]
+         dovecot_conf_link [{{ dovecot_conf_link }}]
          dovecot_ssl_dh_generate [{{ dovecot_ssl_dh_generate }}]
          dovecot_ssl_dh_cmd_generate [{{ dovecot_ssl_dh_cmd_generate }}]
          dovecot_ssl_dh_cmd [{{ dovecot_ssl_dh_cmd }}]

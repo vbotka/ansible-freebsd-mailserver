@@ -208,6 +208,9 @@ postfix_master_cf_smtpd_reject_unlisted_recipient: "no"
 #postfix_master_cf_content_filter=spamfilter
 
 # dovecot
+dovecot_conf_path: /usr/local/etc/dovecot/dovecot.conf
+dovecot_conf_link_path: /var/run/dovecot/dovecot.conf
+dovecot_conf_link: true  # Note 2)
 dovecot_auth_verbose: "yes"
 dovecot_auth_debug: "no"
 dovecot_mail_debug: "no"
@@ -276,9 +279,13 @@ fm_periodic_conf:
   - {regexp: daily_submit_queuerun=, line: "\"NO\""}
 
 # NOTES
-# test command: openssl s_client -connect $SERVERIP:993 -ssl3
+#
+# 1) test command: openssl s_client -connect $SERVERIP:993 -ssl3
 # http://wiki2.dovecot.org/SSL
 # http://dovecot.markmail.org/message/5lyjagmrzcmmuyr4?q=SSLv3+disable
+#
+# 2) Link dovecot_conf_path  to dovecot_conf_link_path
+# https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=225078
 
 # EOF
 ...

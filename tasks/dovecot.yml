@@ -15,15 +15,24 @@
   tags: dovecot_example_conf
 
 # dovecot.conf
-- name: "dovecot: Configure /usr/local/etc/dovecot/dovecot.conf"
+- name: "dovecot: Configure {{ dovecot_conf_path }}"
   lineinfile:
-    dest: "/usr/local/etc/dovecot/dovecot.conf"
+    dest: "{{ dovecot_conf_path }}"
     regexp: "^{{ item.regexp }}"
     line: "{{ item.regexp }} = {{ item.line }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ dovecot_conf }}"
   notify: reload dovecot
   tags: dovecot_conf
+
+# dovecot.conf link
+- name: "dovecot: Link {{ dovecot_conf_path }} to {{ dovecot_conf_link_path }}"
+  file:
+    state: link
+    src: "{{ dovecot_conf_path }}"
+    dest: "{{ dovecot_conf_link_path }}"
+  when: dovecot_conf_link|bool
+  tags: dovecot_conf_link
 
 # conf.d/10-master.conf
 - name: "dovecot: Configure /usr/local/etc/dovecot/conf.d/10-master.conf"
