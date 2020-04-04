@@ -113,6 +113,8 @@ shell> ansible-playbook freebsd-mailserver.yml --check
 
 ## References
 
+- [FreeBSD-Postfix-MySQL-SpamAssassin-Maia-Virtual Setup](http://www.purplehat.org/?page_id=4)
+- [Setting up a mail server with OpenSMTPD, Dovecot and Rspamd](https://poolp.org/posts/2019-09-14/setting-up-a-mail-server-with-opensmtpd-dovecot-and-rspamd/)
 - [FreeBSD handbook: 28.4. Changing the Mail Transfer Agent](https://www.freebsd.org/doc/handbook/mail-changingmta.html)
 - [FreeBSD handbook: 28.9. SMTP Authentication](https://www.freebsd.org/doc/handbook/SMTP-Auth.html)
 - [Postfix Documentation](http://www.postfix.org/documentation.html)

@@ -6,6 +6,7 @@
   tags: [fm-debug, always]
 
 - import_tasks: packages.yml
+  when: fm_install|bool
   tags: fm-packages
 
 - import_tasks: sanity.yml
@@ -38,6 +39,9 @@
 
 - import_tasks: postfix_master.yml
   tags: fm-postfix_master
+
+- import_tasks: postfix_spf.yml
+  tags: fm-postfix_spf
 
 - import_tasks: virtual_aliases.yml
   tags: fm-virtual_aliases

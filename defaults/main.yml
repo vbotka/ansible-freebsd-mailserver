@@ -8,6 +8,7 @@ digitalocean: false
 
 # FreeBSD mailserver
 fm_debug: false
+fm_install: true
 fm_auth_debug: false
 fm_postfix_enable: false
 fm_dovecot_enable: false
@@ -61,6 +62,7 @@ freebsd_mailserver_packages:
   - mail/postfix-sasl
   - security/cyrus-sasl2
   - mail/dovecot
+  - mail/postfix-policyd-spf-perl
 
 # sanity
 fm_sanity: true
@@ -88,6 +90,7 @@ postfix_main_cf_html_directory: "no"
 postfix_main_cf_readme_directory: "no"
 postfix_main_cf_meta_directory: "/usr/local/libexec/postfix"
 postfix_main_cf_shlib_directory: "/usr/local/lib/postfix"
+postfix_main_cf_spf_policy_time_limit: "3600"
 postfix_main_cf_conf:
   - {regexp: myhostname, line: "{{ postfix_main_cf_myhostname }}"}
   - {regexp: mydomain, line: "{{ postfix_main_cf_mydomain }}"}
@@ -103,6 +106,7 @@ postfix_main_cf_conf:
   - {regexp: shlib_directory, line: "{{ postfix_main_cf_shlib_directory }}"}
   - {regexp: alias_maps, line: "{{ postfix_main_cf_alias_maps }}"}
   - {regexp: alias_database, line: "{{ postfix_main_cf_alias_database }}"}
+  - {regexp: spf-policy_time_limit, line: "{{ postfix_main_cf_spf_policy_time_limit }}"}
 # - {regexp: mydestination, line: "{{ postfix_main_cf_mydestination }}"}
 
 # mydestination pcre
@@ -128,7 +132,16 @@ postfix_main_cf_smtpd_tls_protocols: "!SSLv2, !SSLv3"
 postfix_main_cf_smtpd_tls_session_cache_database: "btree:${data_directory}/smtpd_scache"
 postfix_main_cf_smtpd_tls_session_cache_timeout: "3600s"
 postfix_main_cf_smtpd_relay_restrictions: "permit_mynetworks permit_sasl_authenticated reject_unauth_destination"
-postfix_main_cf_smtpd_recipient_restrictions: "permit_mynetworks permit_sasl_authenticated reject_unauth_destination"
+# postfix_main_cf_smtpd_recipient_restrictions: "permit_mynetworks, permit_sasl_authenticated, reject_non_fqdn_hostname,
+#                                                reject_non_fqdn_sender, reject_non_fqdn_recipient, reject_unauth_destination,
+#                                                reject_unauth_pipelining, reject_invalid_hostname, reject_rbl_client bl.spamcop.net,
+#                                                reject_rbl_client sbl-xbl.spamhaus.org, reject_rbl_client zen.spamhaus.org,
+#                                                reject_rbl_client dnsbl.sorbs.net, reject_rbl_client rhsbl.sorbs.net,
+#                                                reject_rbl_client db.wpbl.info, reject_rbl_client cbl.abuseat.org,
+#                                                reject_rbl_client proxies.blackholes.wirehub.net, reject_rbl_client query.bondedsender.org,
+#                                                check_policy_service unix:private/spf-policy, permit"
+postfix_main_cf_smtpd_recipient_restrictions: "permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination,
+                                               check_policy_service unix:private/spf-policy"
 postfix_main_cf_smtpd_use_tls: "yes"
 postfix_main_cf_smtpd_tls_auth_only: "yes"
 postfix_main_cf_smtpd_tls_loglevel: "1"
@@ -263,6 +276,10 @@ dovecot_lda_conf:
   - {regexp: log_path, line: ""}
   - {regexp: info_log_path, line: ""}
   - {regexp: syslog_facility, line: "mail"}
+
+# spf
+fm_spf_path: "/usr/local/libexec/postfix-policyd-spf-perl"
+fm_spf_user: "nobody"
 
 # /etc/mail/mailer.conf
 postfix_mailerconf:

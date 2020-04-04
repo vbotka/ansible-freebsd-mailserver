@@ -15,6 +15,7 @@
          fm_sanity_platform [{{ fm_sanity_platform }}]
          fm_sanity_ansible_version [{{ fm_sanity_ansible_version }}]
 
+         fm_install [{{ fm_install }}]
          freebsd_install_method [{{ freebsd_install_method }}]
          freebsd_use_packages [{{ freebsd_use_packages }}]
          freebsd_mailserver_packages
@@ -30,15 +31,27 @@
          virtual_aliases
          {{ virtual_aliases|to_yaml }}
 
+         postfix_main_cf_inet_interfaces [{{ postfix_main_cf_inet_interfaces }}]
+         postfix_main_cf_mynetworks_style [{{ postfix_main_cf_mynetworks_style }}]
          postfix_main_cf_mydestination [{{ postfix_main_cf_mydestination }}]
+         postfix_main_cf_relay_domains [{{ postfix_main_cf_relay_domains }}]
+         postfix_main_cf_virtual_alias_maps_conf
+         {{ postfix_main_cf_virtual_alias_maps_conf|to_yaml }}
+         postfix_main_cf_alias_database [{{ postfix_main_cf_alias_database }}]
+         postfix_main_cf_recipient_delimiter [{{ postfix_main_cf_recipient_delimiter }}]
+         postfix_main_cf_home_mailbox [{{ postfix_main_cf_home_mailbox }}]
+         postfix_main_cf_smtpd_banner [{{ postfix_main_cf_smtpd_banner }}]
+         postfix_main_cf_html_directory [{{ postfix_main_cf_html_directory }}]
+         postfix_main_cf_readme_directory [{{ postfix_main_cf_readme_directory }}]
+         postfix_main_cf_meta_directory [{{ postfix_main_cf_meta_directory }}]
+         postfix_main_cf_shlib_directory [{{ postfix_main_cf_shlib_directory }}]
+         postfix_main_cf_spf_policy_time_limit [{{ postfix_main_cf_spf_policy_time_limit }}]
          postfix_main_cf_mydestination_pcre_file [{{ postfix_main_cf_mydestination_pcre_file }}]
          postfix_main_cf_mydestination_pcre
          {{ postfix_main_cf_mydestination_pcre|to_nice_yaml }}
          postfix_main_cf_relayhost [{{ postfix_main_cf_relayhost }}]
          postfix_main_cf_conf
          {{ postfix_main_cf_conf|to_yaml }}
-         postfix_main_cf_virtual_alias_maps_conf
-         {{ postfix_main_cf_virtual_alias_maps_conf|to_yaml }}
          postfix_main_cf_smtpd_conf
          {{ postfix_main_cf_smtpd_conf|to_yaml }}
          postfix_main_cf_smtp_conf

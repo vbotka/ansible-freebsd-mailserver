@@ -1,0 +1,28 @@
+---
+
+- name: "postfix_master: Configure spf-policy {{ postfix_master_cf }}"
+  lineinfile:
+    dest: "{{ postfix_master_cf }}"
+    regexp: "^spf-policy\\s*unix "
+    line: "spf-policy unix  -       n       n       -       0       spawn"
+    backup: "{{ fm_sa_backup_conf }}"
+  notify:
+    - postfix check
+    - reload postfix
+
+- name: "postfix_master: Configure spf-policy options {{ postfix_master_cf }}"
+  lineinfile:
+    dest: "{{ postfix_master_cf }}"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    insertafter: "^spf-policy unix "
+    backup: "{{ fm_sa_backup_conf }}"
+  loop:
+    - regexp: "^\\s*user=(.*) argv=(.*)$"
+      line: "   user={{ fm_spf_user }} argv={{ fm_spf_path }}"
+  notify:
+    - postfix check
+    - reload postfix
+
+# EOF
+...
