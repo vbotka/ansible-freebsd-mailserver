@@ -1,0 +1,46 @@
+---
+
+- name: "dkim: Create DKIM keys"
+  command:
+    cmd: "opendkim-genkey -r -s default -d {{ item }} -D {{ fm_dkim_dir_keys }}/{{ item }}"
+    creates: "{{ fm_dkim_dir_keys }}/{{ item }}/default.txt"
+  loop: "{{ fm_dkim_domains }}"
+  loop_control:
+    label: "{{ fm_dkim_dir_keys }}/{{ item }}"
+  notify: reload dkim
+  tags: fm-dkim-create-keys
+
+- name: "dkim: Create {{ fm_dkim_dir }}/TrustedHosts"
+  template:
+    src: TrustedHosts.j2
+    dest: "{{ fm_dkim_dir }}/TrustedHosts"
+  notify: reload dkim
+  tags: fm-dkim-create-TrustedHosts
+
+- name: "dkim: Create {{ fm_dkim_dir }}/SigningTable"
+  template:
+    src: SigningTable.j2
+    dest: "{{ fm_dkim_dir }}/SigningTable"
+  notify: reload dkim
+  tags: fm-dkim-create-SigningTable
+
+- name: "dkim: Create {{ fm_dkim_dir }}/KeyTable"
+  template:
+    src: KeyTable.j2
+    dest: "{{ fm_dkim_dir }}/KeyTable"
+  notify: reload dkim
+  tags: fm-dkim-create-KeyTable
+
+- name: "dkim: Configure {{ fm_dkim_conf_path }}"
+  lineinfile:
+    dest: "{{ fm_dkim_conf_path }}"
+    regexp: "^\\s*{{ item.regexp }}\\s+(.*)$"
+    line: "{{ item.regexp }} {{ item.value }}"
+    backup: "{{ fm_backup_conf }}"
+    create: true
+  loop: "{{ fm_dkim_conf }}"
+  notify: reload dkim
+  tags: fm-dkim-conf
+
+# EOF
+...

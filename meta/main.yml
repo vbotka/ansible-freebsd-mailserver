@@ -17,5 +17,7 @@ galaxy_info:
     - freebsd
     - postfix
     - dovecot
+    - spf
+    - dkim
 dependencies: []
 ...

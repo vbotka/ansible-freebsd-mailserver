@@ -69,5 +69,29 @@
     name: "sendmail"
     state: stopped
 
+- name: enable and start dkim
+  service:
+    name: "milter-opendkim"
+    state: started
+    enabled: true
+
+- name: disable and stop dkim
+  service:
+    name: "milter-opendkim"
+    state: stopped
+    enabled: false
+
+- name: reload dkim
+  service:
+    name: "milter-opendkim"
+    state: reloaded
+  when: fm_dkim_enable|bool
+
+- name: restart dkim
+  service:
+    name: "milter-opendkim"
+    state: restarted
+  when: fm_dkim_enable|bool
+
 # EOF
 ...

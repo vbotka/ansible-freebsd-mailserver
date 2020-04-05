@@ -23,8 +23,16 @@
 
          fm_postfix_enable [{{ fm_postfix_enable }}]
          fm_dovecot_enable [{{ fm_dovecot_enable }}]
+         fm_dkim_enable [{{ fm_dkim_enable }}]
          postfix_main_cf_smtp_sasl_auth_enable [{{ postfix_main_cf_smtp_sasl_auth_enable }}]
          postfix_create_cert [{{ postfix_create_cert }}]
+
+         fm_postfix_rcconf
+         {{ fm_postfix_rcconf|to_yaml }}
+         fm_dovecot_rcconf
+         {{ fm_dovecot_rcconf|to_yaml }}
+         fm_dkim_rcconf
+         {{ fm_dkim_rcconf|to_yaml }}
 
          aliases
          {{ aliases|to_yaml }}
@@ -85,6 +93,14 @@
          {{ dovecot_logging_conf|to_yaml }}
          dovecot_lda_conf
          {{ dovecot_lda_conf|to_yaml }}
+
+         fm_dkim_dir [{{ fm_dkim_dir }}]
+         fm_dkim_conf_path [{{ fm_dkim_conf_path }}]
+         fm_dkim_port [{{ fm_dkim_port }}]
+         fm_dkim_conf
+         {{ fm_dkim_conf|to_yaml }}
+         fm_dkim_domains
+         {{ fm_dkim_domains|to_yaml }}
 
          postfix_mailerconf
          {{ postfix_mailerconf|to_nice_yaml }}

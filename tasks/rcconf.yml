@@ -3,77 +3,134 @@
 - name: "rcconf: Configure hostname in /etc/rc.conf"
   lineinfile:
     dest: "/etc/rc.conf"
-    regexp: "^\\s*{{ item.regexp }}\\s*="
-    line: "{{ item.regexp }}=\"{{ item.line }}\""
+    regexp: "^\\s*{{ item.regexp }}\\s*=(.*)$"
+    line: "{{ item.regexp }}=\"{{ item.value }}\""
     backup: "{{ fm_backup_conf }}"
   loop:
-    - {regexp: "hostname", line: "{{ rc_conf_hostname }}"}
+    - {regexp: "hostname", value: "{{ rc_conf_hostname }}"}
   notify: set hostname
-  tags: postfix_rcconf_hostname
+  tags: fm-rcconf-hostname
 
 - name: "rcconf: Disable sendmail in /etc/rc.conf"
   lineinfile:
     dest: /etc/rc.conf
-    regexp: "^\\s*{{ item.regexp }}\\s*="
-    line: "{{ item.regexp }}=\"{{ item.line }}\""
+    regexp: "^\\s*{{ item.regexp }}\\s*=(.*)$"
+    line: "{{ item.regexp }}=\"{{ item.value }}\""
     backup: "{{ fm_backup_conf }}"
   loop:
-    - {regexp: sendmail_enable, line: "NONE"}
-    - {regexp: sendmail_submit_enable, line: "NO"}
-    - {regexp: sendmail_outbound_enable, line: "NO"}
-    - {regexp: sendmail_msp_queue_enable, line: "NO"}
+    - {regexp: sendmail_enable, value: "NONE"}
+    - {regexp: sendmail_submit_enable, value: "NO"}
+    - {regexp: sendmail_outbound_enable, value: "NO"}
+    - {regexp: sendmail_msp_queue_enable, value: "NO"}
   notify: stop sendmail
-  tags: postfix_rcconf_sendmail
+  tags: fm-rcconf-sendmail
 
 - name: "rcconf: Enable and Start Postfix"
   lineinfile:
     dest: /etc/rc.conf
-    regexp: "^\\s*{{ item.regexp }}\\s*="
-    line: "{{ item.regexp }}=\"{{ item.line }}\""
+    regexp: "^\\s*{{ item.regexp }}\\s*=(.*)$"
+    line: "{{ item.regexp }}=\"{{ item.value }}\""
     backup: "{{ fm_backup_conf }}"
   loop:
-    - {regexp: postfix_enable, line: "YES"}
+    - {regexp: postfix_enable, value: "YES"}
   when: fm_postfix_enable|bool
   notify:
     - postfix check
     - enable and start postfix
-  tags: postfix_rcconf_postfix
+  tags: fm-rcconf-postfix
 
 - name: "rcconf: Enable and Start Dovecot"
   lineinfile:
     dest: /etc/rc.conf
-    regexp: "^\\s*{{ item.regexp }}\\s*="
-    line: "{{ item.regexp }}=\"{{ item.line }}\""
+    regexp: "^\\s*{{ item.regexp }}\\s*=(.*)$"
+    line: "{{ item.regexp }}=\"{{ item.value }}\""
     backup: "{{ fm_backup_conf }}"
   loop:
-    - { regexp: "dovecot_enable", line: "YES" }
+    - { regexp: "dovecot_enable", value: "YES" }
   when: fm_dovecot_enable|bool
   notify: enable and start dovecot
-  tags: postfix_rcconf_dovecot
+  tags: fm-rcconf-dovecot
+
+- name: "rcconf: Enable and Start DKIM"
+  lineinfile:
+    dest: /etc/rc.conf
+    regexp: "^\\s*{{ item.regexp }}\\s*=(.*)$"
+    line: "{{ item.regexp }}=\"{{ item.value }}\""
+    backup: "{{ fm_backup_conf }}"
+  loop:
+    - { regexp: "milteropendkim_enable", value: "YES" }
+  when: fm_dkim_enable|bool
+  notify: enable and start dkim
+  tags: fm-rcconf-dkim
 
 - name: "rcconf: Disable and Stop Postfix"
   lineinfile:
     dest: /etc/rc.conf
-    regexp: "^\\s*{{ item.regexp }}\\s*="
-    line: "{{ item.regexp }}=\"{{ item.line }}\""
+    regexp: "^\\s*{{ item.regexp }}\\s*=(.*)$"
+    line: "{{ item.regexp }}=\"{{ item.value }}\""
     backup: "{{ fm_backup_conf }}"
   loop:
-    - {regexp: "postfix_enable", line: "NO"}
+    - {regexp: "postfix_enable", value: "NO"}
   when: not fm_postfix_enable|bool
   notify: disable and stop postfix
-  tags: postfix_rcconf_postfix
+  tags: fm-rcconf-postfix
 
 - name: "rcconf: Disable and Stop Dovecot"
   lineinfile:
     dest: /etc/rc.conf
-    regexp: "^\\s*{{ item.regexp }}\\s*="
-    line: "{{ item.regexp }}=\"{{ item.line }}\""
+    regexp: "^\\s*{{ item.regexp }}\\s*=(.*)$"
+    line: "{{ item.regexp }}=\"{{ item.value }}\""
     backup: "{{ fm_backup_conf }}"
   loop:
-    - {regexp: "dovecot_enable", line: "NO"}
+    - {regexp: "dovecot_enable", value: "NO"}
   when: not fm_dovecot_enable|bool
   notify: disable and stop dovecot
-  tags: postfix_rcconf_dovecot
+  tags: fm-rcconf-dovecot
+
+- name: "rcconf: Disable and Stop DKIM"
+  lineinfile:
+    dest: /etc/rc.conf
+    regexp: "^\\s*{{ item.regexp }}\\s*=(.*)$"
+    line: "{{ item.regexp }}=\"{{ item.value }}\""
+    backup: "{{ fm_backup_conf }}"
+  loop:
+    - { regexp: "milteropendkim_enable", value: "NO" }
+  when: not fm_dkim_enable|bool
+  notify: disable and stop dkim
+  tags: fm-rcconf-dkim
+
+- name: "rcconf: Configure Postfix"
+  lineinfile:
+    dest: /etc/rc.conf
+    regexp: "^\\s*{{ item.regexp }}\\s*=(.*)$"
+    line: "{{ item.regexp }}=\"{{ item.value }}\""
+    backup: "{{ fm_backup_conf }}"
+  loop: "{{ fm_postfix_rcconf }}"
+  when: fm_postfix_enable|bool
+  notify: reload postfix
+  tags: fm-rcconf-postfix
+
+- name: "rcconf: Configure Dovecot"
+  lineinfile:
+    dest: /etc/rc.conf
+    regexp: "^\\s*{{ item.regexp }}\\s*=(.*)$"
+    line: "{{ item.regexp }}=\"{{ item.value }}\""
+    backup: "{{ fm_backup_conf }}"
+  loop: "{{ fm_dovecot_rcconf }}"
+  when: fm_dovecot_enable|bool
+  notify: reload dovecot
+  tags: fm-rcconf-dovecot
+
+- name: "rcconf: Configure DKIM"
+  lineinfile:
+    dest: /etc/rc.conf
+    regexp: "^\\s*{{ item.regexp }}\\s*=(.*)$"
+    line: "{{ item.regexp }}=\"{{ item.value }}\""
+    backup: "{{ fm_backup_conf }}"
+  loop: "{{ fm_dkim_rcconf }}"
+  when: fm_dkim_enable|bool
+  notify: reload dkim
+  tags: fm-rcconf-dkim
 
 # EOF
 ...

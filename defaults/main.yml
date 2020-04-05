@@ -12,6 +12,7 @@ fm_install: true
 fm_auth_debug: false
 fm_postfix_enable: false
 fm_dovecot_enable: false
+fm_dkim_enable: false
 fm_backup_conf: true
 
 # Create self-signed TLS certificate (default False),
@@ -63,6 +64,7 @@ freebsd_mailserver_packages:
   - security/cyrus-sasl2
   - mail/dovecot
   - mail/postfix-policyd-spf-perl
+  - mail/opendkim
 
 # sanity
 fm_sanity: true
@@ -165,6 +167,9 @@ postfix_main_cf_smtpd_conf:
   - {regexp: smtpd_tls_session_cache_timeout, line: "{{ postfix_main_cf_smtpd_tls_session_cache_timeout }}"}
   - {regexp: smtpd_relay_restrictions, line: "{{ postfix_main_cf_smtpd_relay_restrictions }}"}
   - {regexp: smtpd_recipient_restrictions, line: "{{ postfix_main_cf_smtpd_recipient_restrictions }}"}
+  - {regexp: smtpd_milters, line: "{{ postfix_main_cf_smtpd_milters }}"}
+  - {regexp: non_smtpd_milters, line: "{{ postfix_main_cf_non_smtpd_milters }}"}
+  - {regexp: milter_default_action, line: "{{ postfix_main_cf_milter_default_action }}"}
 
 # smtp
 postfix_main_cf_smtp_use_tls: "yes"
@@ -280,6 +285,42 @@ dovecot_lda_conf:
 # spf
 fm_spf_path: "/usr/local/libexec/postfix-policyd-spf-perl"
 fm_spf_user: "nobody"
+
+# dkim
+fm_dkim_dir: "/usr/local/etc/opendkim"
+fm_dkim_dir_keys: "{{ fm_dkim_dir }}/keys"
+fm_dkim_conf_path: "{{ fm_dkim_dir }}/opendkim.conf"
+fm_dkim_port: "10025"
+fm_dkim_KeyTable: "refile:{{ fm_dkim_dir }}/KeyTable"
+fm_dkim_SigningTable: "refile:{{ fm_dkim_dir }}/SigningTable"
+fm_dkim_InternalHosts: "refile:{{ fm_dkim_dir }}/TrustedHosts"
+fm_dkim_ExternalIgnoreList: "refile:{{ fm_dkim_dir }}/TrustedHosts"
+fm_dkim_Selector: "dkim"
+fm_dkim_Socket: "inet:{{ fm_dkim_port }}@localhost"
+fm_dkim_Syslog: "Yes"
+fm_dkim_Canonicalization: "relaxed/simple"
+fm_dkim_conf:
+  - {regexp: KeyTable, value: "{{ fm_dkim_KeyTable }}"}
+  - {regexp: SigningTable, value: "{{ fm_dkim_SigningTable }}"}
+  - {regexp: InternalHosts, value: "{{ fm_dkim_InternalHosts }}"}
+  - {regexp: ExternalIgnoreList, value: "{{ fm_dkim_ExternalIgnoreList }}"}
+  - {regexp: Selector, value: "{{ fm_dkim_Selector }}"}
+  - {regexp: Socket, value: "{{ fm_dkim_Socket }}"}
+  - {regexp: Syslog, value: "{{ fm_dkim_Syslog }}"}
+  - {regexp: Canonicalization, value: "{{ fm_dkim_Canonicalization }}"}
+fm_dkim_domains: "{{ (postfix_main_cf_virtual_alias_domains.split(',')|map('trim')|list +
+                      [rc_conf_hostname] +
+                      [postfix_main_cf_myhostname] +
+                      [postfix_main_cf_mydomain])|unique }}"
+postfix_main_cf_smtpd_milters: "inet:127.0.0.1:{{ fm_dkim_port }}"
+postfix_main_cf_non_smtpd_milters: "{{ postfix_main_cf_smtpd_milters }}"
+postfix_main_cf_milter_default_action: "accept"
+
+# rc.conf
+fm_postfix_rcconf: []
+fm_dovecot_rcconf: []
+fm_dkim_rcconf:
+  - {regexp: milteropendkim_cfgfile, value: "{{ fm_dkim_conf_path }}"}
 
 # /etc/mail/mailer.conf
 postfix_mailerconf:

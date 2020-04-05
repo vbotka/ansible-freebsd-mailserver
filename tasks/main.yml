@@ -9,12 +9,15 @@
   when: fm_install|bool
   tags: fm-packages
 
+- import_tasks: files.yml
+  tags: fm-files
+
+- import_tasks: dirs.yml
+  tags: fm-dirs
+
 - import_tasks: sanity.yml
   when: fm_sanity|bool
   tags: fm-sanity
-
-- import_tasks: files.yml
-  tags: fm-files
 
 - import_tasks: certificates.yml
   tags: fm-certificates
@@ -40,8 +43,11 @@
 - import_tasks: postfix_master.yml
   tags: fm-postfix_master
 
-- import_tasks: postfix_spf.yml
-  tags: fm-postfix_spf
+- import_tasks: spf.yml
+  tags: fm-spf
+
+- import_tasks: dkim.yml
+  tags: fm-dkim
 
 - import_tasks: virtual_aliases.yml
   tags: fm-virtual_aliases

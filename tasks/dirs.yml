@@ -1,0 +1,28 @@
+---
+
+- name: "dirs: Create DKIM dirs"
+  file:
+    state: directory
+    path: "{{ item }}"
+    owner: root
+    group: wheel
+    mode: "0755"
+  loop:
+    - "{{ fm_dkim_dir }}"
+    - "{{ fm_dkim_dir_keys }}"
+  tags: fm-dirs-dkim
+
+- name: "dirs: Create DKIM domain key dirs"
+  file:
+    state: directory
+    path: "{{ fm_dkim_dir_keys }}/{{ item }}"
+    owner: root
+    group: wheel
+    mode: "0755"
+  loop: "{{ fm_dkim_domains }}"
+  loop_control:
+    label: "{{ fm_dkim_dir_keys }}/{{ item }}"
+  tags: fm-dirs-dkim-domains
+
+# EOF
+...
