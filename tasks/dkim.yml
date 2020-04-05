@@ -10,6 +10,28 @@
   notify: reload dkim
   tags: fm-dkim-create-keys
 
+- name: "dkim: Set ownership and permissions of DKIM private keys"
+  file:
+    path: "{{ fm_dkim_dir_keys }}/{{ item }}/default.private"
+    owner: "{{ fm_dkim_milteropendkim_uid }}"
+    group: "{{ fm_dkim_milteropendkim_gid }}"
+    mode: "{{ fm_dkim_private_key_mode }}"
+  loop: "{{ fm_dkim_domains }}"
+  loop_control:
+    label: "{{ fm_dkim_dir_keys }}/{{ item }}"
+  tags: fm-dkim-keys-private-mod
+
+- name: "dkim: Set ownership and permissions of DKIM public keys"
+  file:
+    path: "{{ fm_dkim_dir_keys }}/{{ item }}/default.txt"
+    owner: "{{ fm_dkim_milteropendkim_uid }}"
+    group: "{{ fm_dkim_milteropendkim_gid }}"
+    mode: "{{ fm_dkim_public_key_mode }}"
+  loop: "{{ fm_dkim_domains }}"
+  loop_control:
+    label: "{{ fm_dkim_dir_keys }}/{{ item }}"
+  tags: fm-dkim-keys-public-mod
+
 - name: "dkim: Create {{ fm_dkim_dir }}/TrustedHosts"
   template:
     src: TrustedHosts.j2

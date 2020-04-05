@@ -94,6 +94,10 @@
          dovecot_lda_conf
          {{ dovecot_lda_conf|to_yaml }}
 
+         fm_dkim_milteropendkim_uid [{{ fm_dkim_milteropendkim_uid }}]
+         fm_dkim_milteropendkim_gid [{{ fm_dkim_milteropendkim_gid }}]
+         fm_dkim_private_key_mode [{{ fm_dkim_private_key_mode }}]
+         fm_dkim_public_key_mode [{{ fm_dkim_public_key_mode }}]
          fm_dkim_dir [{{ fm_dkim_dir }}]
          fm_dkim_conf_path [{{ fm_dkim_conf_path }}]
          fm_dkim_port [{{ fm_dkim_port }}]
