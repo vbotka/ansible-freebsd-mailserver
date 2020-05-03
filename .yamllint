@@ -1,3 +1,4 @@
+---
 extends: default
 
 rules:
@@ -12,4 +13,8 @@ rules:
   line-length:
     max: 160
     level: warning
-  truthy: enable
+  truthy:
+    allowed-values: ['true', 'false', 'True', 'False']
+  indentation:
+    spaces: 2
+    indent-sequences: true
