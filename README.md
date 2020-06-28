@@ -6,9 +6,19 @@
 
 Please feel free to [share your feedback and report issues](https://github.com/vbotka/ansible-freebsd-mailserver/issues).
 
-## Requirements
 
-No requiremenst.
+## Dependencies
+
+- [vbotka.ansible_lib](https://galaxy.ansible.com/vbotka/ansible_lib) Library of Ansible tasks.
+
+The dependencies are not listed in the meta file. Install the roles manually.
+
+
+## Recommended
+
+- [vbotka.freebsd_mailserver_spamassassin](https://galaxy.ansible.com/vbotka/freebsd_mailserver_spamassassin/)
+- [vbotka.freebsd-mailserver_sieve](https://galaxy.ansible.com/vbotka/freebsd_mailserver_sieve/)
+- [vbotka.freebsd_mailserver_roundcube](https://galaxy.ansible.com/vbotka/freebsd_mailserver_roundcube/)
 
 
 ## Variables

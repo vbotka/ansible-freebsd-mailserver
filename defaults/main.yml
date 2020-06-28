@@ -1,19 +1,20 @@
 ---
 # defaults for freebsd_mailserver
 
+fm_install: true
+fm_debug: false
+fm_debug_classified: false
+fm_backup_conf: false
+
 # CHANGE AT LEAST THIS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 # Cloud providers
 digitalocean: false
 
 # FreeBSD mailserver
-fm_debug: false
-fm_install: true
-fm_auth_debug: false
 fm_postfix_enable: false
 fm_dovecot_enable: false
 fm_dkim_enable: false
-fm_backup_conf: true
 
 # Create self-signed TLS certificate (default False),
 postfix_create_cert: false
