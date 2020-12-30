@@ -71,6 +71,8 @@ freebsd_mailserver_packages:
 fm_sanity: true
 fm_sanity_platform: true
 fm_sanity_ansible_version: true
+# sanity: override supported versions
+al_supported_versions_override: ['11.3', '11.4', '12.0', '12.1', '12.2']
 
 # paths
 postfix_main_cf: /usr/local/etc/postfix/main.cf
