@@ -75,6 +75,8 @@
          dovecot_conf_path [{{ dovecot_conf_path }}]
          dovecot_conf_link_path [{{ dovecot_conf_link_path }}]
          dovecot_conf_link [{{ dovecot_conf_link }}]
+         dovecot_ssl_dh_custom [{{ dovecot_ssl_dh_custom }}]
+         dovecot_ssl_dh_custom_path [{{ dovecot_ssl_dh_custom_path }}]
          dovecot_ssl_dh_generate [{{ dovecot_ssl_dh_generate }}]
          dovecot_ssl_dh_cmd_generate [{{ dovecot_ssl_dh_cmd_generate }}]
          dovecot_ssl_dh_cmd [{{ dovecot_ssl_dh_cmd }}]

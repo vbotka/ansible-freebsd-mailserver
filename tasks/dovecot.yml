@@ -60,15 +60,24 @@
   tags: dovecot_master_conf
 
 # create dh.pem
-- name: "dovecot: Generate DH by command {{ dovecot_ssl_dh_cmd }}.
-         This is going to take a long time."
+- name: "dovecot: Copy {{ dovecot_ssl_dh_custom_path }} to {{ dovecot_ssl_dh }}"
+  ansible.builtin.copy:
+    src: "{{ dovecot_ssl_dh_custom_path }}"
+    dest: "{{ dovecot_ssl_dh }}"
+    owner: root
+    group: wheel
+    mode: "0644"
+  when: dovecot_ssl_dh_custom|bool
+  tags: dovecot_ssl_dh
+- name: "dovecot: Generate Diffie-Hellman by command {{ dovecot_ssl_dh_cmd }}.
+         ***This is going to take a long time***."
   command:
     cmd: "{{ dovecot_ssl_dh_cmd }}"
     creates: "{{ dovecot_ssl_dh }}"
   when: dovecot_ssl_dh_cmd_generate|bool
   tags: dovecot_ssl_dh
 - name: "dovecot: Generate OpenSSL Diffie-Hellman Parameters by openssl_dhparam.
-         This is going to take a long time."
+         ***This is going to take a long time***."
   community.crypto.openssl_dhparam:
     path: "{{ dovecot_ssl_dh }}"
     size: "{{ dovecot_ssl_dh_bits }}"
@@ -87,6 +96,7 @@
     group: wheel
     mode: "0644"
   when:
+    - not dovecot_ssl_dh_custom|bool
     - not dovecot_ssl_dh_cmd_generate|bool
     - not dovecot_ssl_dh_generate|bool
   tags: dovecot_ssl_dh
