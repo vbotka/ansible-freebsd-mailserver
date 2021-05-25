@@ -44,7 +44,7 @@
 - name: "postfix_sasl: Configure smtp_sasl_password_maps in {{ postfix_main_cf }}"
   ansible.builtin.lineinfile:
     dest: "{{ postfix_main_cf }}"
-    regexp: '^\s*{{ item.regexp }}\s*=(.*)$'
+    regexp: '^\s*smtp_sasl_password_maps\s*=(.*)$'
     line: "smtp_sasl_password_maps = hash:{{ postfix_main_cf_smtp_sasl_password_maps }}"
     backup: "{{ fm_backup_conf }}"
   when:

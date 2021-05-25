@@ -229,7 +229,8 @@ postfix_master_cf_smtpd_reject_unlisted_recipient: "no"
 
 # dovecot
 dovecot_conf_path: /usr/local/etc/dovecot/dovecot.conf
-dovecot_conf_link_path: /var/run/dovecot/dovecot.conf
+dovecot_conf_link_dir: /var/run/dovecot
+dovecot_conf_link_path: "{{ dovecot_conf_link_dir }}/dovecot.conf"
 dovecot_conf_link: true  # Note 2)
 dovecot_auth_verbose: "yes"
 dovecot_auth_debug: "no"
@@ -317,7 +318,7 @@ fm_dkim_conf:
 fm_dkim_domains: "{{ (postfix_main_cf_virtual_alias_domains.split(',')|map('trim')|list +
                       [rc_conf_hostname] +
                       [postfix_main_cf_myhostname] +
-                      [postfix_main_cf_mydomain])|unique }}"
+                      [postfix_main_cf_mydomain])|select()|list|unique }}"
 postfix_main_cf_smtpd_milters: "inet:127.0.0.1:{{ fm_dkim_port }}"
 postfix_main_cf_non_smtpd_milters: "{{ postfix_main_cf_smtpd_milters }}"
 postfix_main_cf_milter_default_action: "accept"

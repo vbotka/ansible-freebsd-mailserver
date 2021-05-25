@@ -113,6 +113,30 @@ ansible_python_interpreter=/usr/local/bin/python3.7
 ansible_perl_interpreter=/usr/local/bin/perl
 ```
 
+4a) Check the syntax
+
+```
+shell> ansible-playbook freebsd-mailserver.yml --syntax-check
+```
+
+4b) Install packages
+
+```
+shell> ansible-playbook freebsd-mailserver.yml -t fm-packages
+```
+
+4c) Create default configuration for Dovecot
+
+```
+shell> ansible-playbook freebsd-mailserver.yml -t dovecot_example_conf
+```
+
+4d) Dry-run and display changes
+
+```
+shell> ansible-playbook freebsd-mailserver.yml --check --diff
+```
+
 5) Install and configure the mailserver
 
 ```
