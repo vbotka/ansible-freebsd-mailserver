@@ -2,10 +2,10 @@
 
 # main.cf
 - name: "postfix: Configure {{ postfix_main_cf }}"
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ postfix_main_cf }}"
-    regexp: "^{{ item.regexp }}"
-    line: "{{ item.regexp }} = {{ item.line }}"
+    regexp: '^\s*{{ item.regexp }}\s*=(.*)$'
+    line: "{{ item.regexp }} = {{ item.value }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ postfix_main_cf_conf }}"
   notify:
@@ -15,7 +15,7 @@
 
 # mydestination pcre file (optional)
 - name: "postfix: Create pcre {{ postfix_main_cf_mydestination_pcre_file }}"
-  template:
+  ansible.builtin.template:
     src: mydestinations.j2
     dest: "{{ postfix_main_cf_mydestination_pcre_file }}"
     owner: root
@@ -30,9 +30,9 @@
 
 # mydestination pcre (optional)
 - name: "postfix: Configure pcre mydestination in {{ postfix_main_cf }}"
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ postfix_main_cf }}"
-    regexp: "^mydestination"
+    regexp: '^\s*mydestination\s*=(.*)$'
     line: "mydestination = pcre:{{ postfix_main_cf_mydestination_pcre_file }}"
     backup: "{{ fm_backup_conf }}"
   notify:
@@ -43,9 +43,9 @@
 
 # mydestination (no pcre)
 - name: "postfix: Configure mydestination in {{ postfix_main_cf }}"
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ postfix_main_cf }}"
-    regexp: "^mydestination"
+    regexp: '^\s*mydestination\s*=(.*)$'
     line: "mydestination = {{ postfix_main_cf_mydestination }}"
     backup: "{{ fm_backup_conf }}"
   notify:
@@ -56,9 +56,9 @@
 
 # relayhost
 - name: "postfix: Configure relayhost in {{ postfix_main_cf }}"
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ postfix_main_cf }}"
-    regexp: "^relayhost"
+    regexp: '^\s*relayhost\s*=(.*)$'
     line: "relayhost = {{ postfix_main_cf_relayhost }}"
     backup: "{{ fm_backup_conf }}"
   when: postfix_main_cf_relayhost|length > 0
@@ -69,10 +69,10 @@
 
 # virtual domains
 - name: "postfix: Configure Virtual Domains {{ postfix_main_cf }}"
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ postfix_main_cf }}"
-    regexp: "^{{ item.regexp }}"
-    line: "{{ item.regexp }} = {{ item.line }}"
+    regexp: '^\s*{{ item.regexp }}\s*=(.*)$'
+    line: "{{ item.regexp }} = {{ item.value }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ postfix_main_cf_virtual_alias_maps_conf }}"
   notify:
@@ -83,10 +83,10 @@
 
 # smtpd
 - name: "postfix: Configure SMTPD {{ postfix_main_cf }}"
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ postfix_main_cf }}"
-    regexp: "^{{ item.regexp }}"
-    line: "{{ item.regexp }} = {{ item.line }}"
+    regexp: '^\s*{{ item.regexp }}\s*=(.*)$'
+    line: "{{ item.regexp }} = {{ item.value }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ postfix_main_cf_smtpd_conf }}"
   notify:
@@ -96,10 +96,10 @@
 
 # smtp
 - name: "postfix: Configure SMTP {{ postfix_main_cf }}"
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ postfix_main_cf }}"
-    regexp: "^{{ item.regexp }}"
-    line: "{{ item.regexp }} = {{ item.line }}"
+    regexp: '^\s*{{ item.regexp }}\s*=(.*)$'
+    line: "{{ item.regexp }} = {{ item.value }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ postfix_main_cf_smtp_conf }}"
   notify:

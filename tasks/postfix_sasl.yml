@@ -2,10 +2,10 @@
 
 # smtpd sasl
 - name: "postfix_sasl: Configure SASL {{ postfix_main_cf }}"
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ postfix_main_cf }}"
-    regexp: "^{{ item.regexp }}"
-    line: "{{ item.regexp }} = {{ item.line }}"
+    regexp: '^\s*{{ item.regexp }}\s*=(.*)$'
+    line: "{{ item.regexp }} = {{ item.value }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ postfix_main_cf_smtpd_sasl_conf }}"
   notify:
@@ -15,10 +15,10 @@
 
 # smtp sasl
 - name: "postfix_sasl: Enable SASL {{ postfix_main_cf }}"
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ postfix_main_cf }}"
-    regexp: "^{{ item.regexp }}"
-    line: "{{ item.regexp }} = {{ item.line }}"
+    regexp: '^\s*{{ item.regexp }}\s*=(.*)$'
+    line: "{{ item.regexp }} = {{ item.value }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ postfix_main_cf_smtp_sasl_enable_conf }}"
   when: postfix_main_cf_smtp_sasl_auth_enable|bool
@@ -28,10 +28,10 @@
   tags: postfix_main_cf_smtp_sasl_enable
 
 - name: "postfix_sasl: Disable SASL {{ postfix_main_cf }}"
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ postfix_main_cf }}"
-    regexp: "^{{ item.regexp }}"
-    line: "{{ item.regexp }} = {{ item.line }}"
+    regexp: '^\s*{{ item.regexp }}\s*=(.*)$'
+    line: "{{ item.regexp }} = {{ item.value }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ postfix_main_cf_smtp_sasl_disable_conf }}"
   when: not postfix_main_cf_smtp_sasl_auth_enable|bool
@@ -42,9 +42,9 @@
 
 # smtp_sasl_password_maps
 - name: "postfix_sasl: Configure smtp_sasl_password_maps in {{ postfix_main_cf }}"
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ postfix_main_cf }}"
-    regexp: "^smtp_sasl_password_maps"
+    regexp: '^\s*{{ item.regexp }}\s*=(.*)$'
     line: "smtp_sasl_password_maps = hash:{{ postfix_main_cf_smtp_sasl_password_maps }}"
     backup: "{{ fm_backup_conf }}"
   when:
@@ -57,11 +57,11 @@
 
 # smtp_sasl_passwords
 - name: "postfix_sasl: Create {{ postfix_main_cf_smtp_sasl_password_maps }}"
-  template:
+  ansible.builtin.template:
     src: sasl_passwd.j2
     dest: "{{ postfix_main_cf_smtp_sasl_password_maps }}"
-    owner: "root"
-    group: "wheel"
+    owner: root
+    group: wheel
     mode: "0640"
     backup: "{{ fm_backup_conf }}"
   notify:

@@ -11,7 +11,7 @@
   tags: fm-dkim-create-keys
 
 - name: "dkim: Set ownership and permissions of DKIM private keys"
-  file:
+  ansible.builtin.file:
     path: "{{ fm_dkim_dir_keys }}/{{ item }}/default.private"
     owner: "{{ fm_dkim_milteropendkim_uid }}"
     group: "{{ fm_dkim_milteropendkim_gid }}"
@@ -22,7 +22,7 @@
   tags: fm-dkim-keys-private-mod
 
 - name: "dkim: Set ownership and permissions of DKIM public keys"
-  file:
+  ansible.builtin.file:
     path: "{{ fm_dkim_dir_keys }}/{{ item }}/default.txt"
     owner: "{{ fm_dkim_milteropendkim_uid }}"
     group: "{{ fm_dkim_milteropendkim_gid }}"
@@ -33,30 +33,30 @@
   tags: fm-dkim-keys-public-mod
 
 - name: "dkim: Create {{ fm_dkim_dir }}/TrustedHosts"
-  template:
+  ansible.builtin.template:
     src: TrustedHosts.j2
     dest: "{{ fm_dkim_dir }}/TrustedHosts"
   notify: reload dkim
   tags: fm-dkim-create-TrustedHosts
 
 - name: "dkim: Create {{ fm_dkim_dir }}/SigningTable"
-  template:
+  ansible.builtin.template:
     src: SigningTable.j2
     dest: "{{ fm_dkim_dir }}/SigningTable"
   notify: reload dkim
   tags: fm-dkim-create-SigningTable
 
 - name: "dkim: Create {{ fm_dkim_dir }}/KeyTable"
-  template:
+  ansible.builtin.template:
     src: KeyTable.j2
     dest: "{{ fm_dkim_dir }}/KeyTable"
   notify: reload dkim
   tags: fm-dkim-create-KeyTable
 
 - name: "dkim: Configure {{ fm_dkim_conf_path }}"
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ fm_dkim_conf_path }}"
-    regexp: "^\\s*{{ item.regexp }}\\s+(.*)$"
+    regexp: '^\s*{{ item.regexp }}\s+(.*)$'
     line: "{{ item.regexp }} {{ item.value }}"
     backup: "{{ fm_backup_conf }}"
     create: true

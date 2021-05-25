@@ -2,7 +2,7 @@
 
 - name: "Debug"
   vars:
-    msg: |
+    msg: |-
          ansible_architecture [{{ ansible_architecture }}]
          ansible_os_family [{{ ansible_os_family }}]
          ansible_distribution [{{ ansible_distribution }}]
@@ -108,15 +108,15 @@
 
          postfix_mailerconf
          {{ postfix_mailerconf|to_nice_yaml }}
-  debug:
-    msg: "{{ msg.split('\n')[:-1] }}"
+  ansible.builtin.debug:
+    msg: "{{ msg.split('\n') }}"
 
 - name: "Debug classified"
   vars:
     msg: |
          postfix_smtp_sasl_passwords
          {{ postfix_smtp_sasl_passwords|to_yaml }}
-  debug:
+  ansible.builtin.debug:
     msg: "{{ msg.split('\n') }}"
   when: fm_debug_classified|bool
 
