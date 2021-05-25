@@ -1,9 +1,9 @@
 ---
 
 - name: "virtual_aliases: Configure virtual aliases {{ postfix_virtual }}"
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ postfix_virtual }}"
-    regexp: "^{{ item.alias }}"
+    regexp: '^\s*{{ item.alias }}(?!\S).*$'
     line: "{{ item.alias }}\t {{ item.user }}"
     owner: root
     group: wheel

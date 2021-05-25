@@ -1,7 +1,7 @@
 ---
 
 - name: "dirs: Create DKIM dirs"
-  file:
+  ansible.builtin.file:
     state: directory
     path: "{{ item }}"
     owner: root
@@ -13,7 +13,7 @@
   tags: fm-dirs-dkim
 
 - name: "dirs: Create DKIM domain key dirs"
-  file:
+  ansible.builtin.file:
     state: directory
     path: "{{ fm_dkim_dir_keys }}/{{ item }}"
     owner: root

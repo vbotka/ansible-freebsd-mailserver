@@ -1,10 +1,10 @@
 ---
 
 - name: "aliases: Configure {{ postfix_alias }}"
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ postfix_alias }}"
-    regexp: "^{{ item.alias }}{{ ':' }}"
-    line: "{{ item.alias }}{{ ':' }} {{ item.user }}"
+    regexp: '^\s*{{ item.alias }}\s*:.*$'
+    line: '{{ item.alias }}: {{ item.user }}'
     backup: "{{ fm_backup_conf }}"
   loop: "{{ aliases }}"
   notify:

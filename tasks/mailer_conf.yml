@@ -1,7 +1,7 @@
 ---
 
 - name: "mailer_conf: Configure /etc/mail/mailer.conf"
-  template:
+  ansible.builtin.template:
     src: mailer.conf.j2
     dest: /etc/mail/mailer.conf
     owner: root

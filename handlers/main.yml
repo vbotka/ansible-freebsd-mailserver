@@ -2,94 +2,107 @@
 # handlers for freebsd-mailserver
 
 - name: postfix check
-  command: "/usr/local/sbin/postfix check"
+  command:
+    cmd: /usr/local/sbin/postfix check
 
 - name: newaliases
-  command: "/usr/bin/newaliases"
+  command:
+    cmd: /usr/bin/newaliases
 
 - name: postmap smtp sasl passwords
-  command: "/usr/local/sbin/postmap {{ postfix_main_cf_smtp_sasl_password_maps }}"
+  command:
+    cmd: "/usr/local/sbin/postmap {{ postfix_main_cf_smtp_sasl_password_maps }}"
 
 - name: postmap virtual aliases
-  command: "/usr/local/sbin/postmap {{ postfix_virtual }}"
+  command:
+    cmd: "/usr/local/sbin/postmap {{ postfix_virtual }}"
 
 - name: set hostname
-  command: "/bin/hostname {{ rc_conf_hostname }}"
+  command:
+    cmd: "/bin/hostname {{ rc_conf_hostname }}"
+
+# Postfix
 
 - name: enable and start postfix
-  service:
-    name: "postfix"
+  ansible.builtin.service:
+    name: postfix
     state: started
     enabled: true
 
 - name: disable and stop postfix
-  service:
-    name: "postfix"
+  ansible.builtin.service:
+    name: postfix
     state: stopped
     enabled: false
 
 - name: reload postfix
-  service:
-    name: "postfix"
+  ansible.builtin.service:
+    name: postfix
     state: reloaded
   when: fm_postfix_enable|bool
 
 - name: restart postfix
-  service:
-    name: "postfix"
+  ansible.builtin.service:
+    name: postfix
     state: restarted
   when: fm_postfix_enable|bool
 
+# Dovecot
+
 - name: enable and start dovecot
-  service:
-    name: "dovecot"
+  ansible.builtin.service:
+    name: dovecot
     state: started
     enabled: true
 
 - name: disable and stop dovecot
-  service:
-    name: "dovecot"
+  ansible.builtin.service:
+    name: dovecot
     state: stopped
     enabled: false
 
 - name: reload dovecot
-  service:
-    name: "dovecot"
+  ansible.builtin.service:
+    name: dovecot
     state: reloaded
   when: fm_dovecot_enable|bool
 
 - name: restart dovecot
-  service:
-    name: "dovecot"
+  ansible.builtin.service:
+    name: dovecot
     state: restarted
   when: fm_dovecot_enable|bool
 
+# Sendmail
+
 - name: stop sendmail
-  service:
-    name: "sendmail"
+  ansible.builtin.service:
+    name: sendmail
     state: stopped
 
+# Milter
+
 - name: enable and start dkim
-  service:
-    name: "milter-opendkim"
+  ansible.builtin.service:
+    name: milter-opendkim
     state: started
     enabled: true
 
 - name: disable and stop dkim
-  service:
-    name: "milter-opendkim"
+  ansible.builtin.service:
+    name: milter-opendkim
     state: stopped
     enabled: false
 
 - name: reload dkim
-  service:
-    name: "milter-opendkim"
+  ansible.builtin.service:
+    name: milter-opendkim
     state: reloaded
   when: fm_dkim_enable|bool
 
 - name: restart dkim
-  service:
-    name: "milter-opendkim"
+  ansible.builtin.service:
+    name: milter-opendkim
     state: restarted
   when: fm_dkim_enable|bool
 

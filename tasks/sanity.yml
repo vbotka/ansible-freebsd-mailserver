@@ -7,15 +7,19 @@
         file: meta/main.yml
       when: galaxy_info is undefined
     - name: "sanity: Get role_name."
-      set_fact:
+      ansible.builtin.set_fact:
         al_sanity_role_name: "{{ role_name }}"
-  when: fm_sanity_platform|bool or
-        fm_sanity_ansible_version|bool
+  when: fm_sanity_platform|bool or fm_sanity_ansible_version|bool
 
-- name: "sanity: Include vbotka.ansible_lib al_sanity_platform."
-  include_role:
-    name: vbotka.ansible_lib
-    tasks_from: al_sanity_platform
+- name: "sanity: Test supported platform."
+  block:
+    - name: "sanity: Instantiate variable al_supported_versions_override"
+      ansible.builtin.set_fact:
+        al_supported_versions_override: "{{ al_supported_versions_override }}"
+    - name: "sanity: Include vbotka.ansible_lib al_sanity_platform."
+      include_role:
+        name: vbotka.ansible_lib
+        tasks_from: al_sanity_platform
   when: fm_sanity_platform|bool
 
 - name: "sanity: Include vbotka.ansible_lib al_sanity_ansible_version."

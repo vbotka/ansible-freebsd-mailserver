@@ -1,47 +1,48 @@
 ---
 # vars for freebsd-mailserver
 
-# CHANGE THIS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-#freebsd_mailserver_packages:
-#  - mail/postfix-sasl
-#  - security/cyrus-sasl2
-#  - mail/dovecot
-#  - mail/dovecot-pigeonhole # freebsd-mailserver-sieve
-#  - mail/spamassassin       # freebsd-mailserver-spamassassin
-#  - mail/sa-utils           # freebsd-mailserver-spamassassin
+# freebsd_mailserver_packages:
+#   - mail/postfix-sasl
+#   - security/cyrus-sasl2
+#   - mail/dovecot
+#   - mail/dovecot-pigeonhole # freebsd-mailserver-sieve
+#   - mail/spamassassin       # freebsd-mailserver-spamassassin
+#   - mail/sa-utils           # freebsd-mailserver-spamassassin
 
 # TLS certificate and key are present
 # example for letsencrypt:
-#postfix_main_cf_smtpd_tls_key_file: "/usr/local/etc/letsencrypt/live/mail.example.com/privkey.pem"
-#postfix_main_cf_smtpd_tls_cert_file: "/usr/local/etc/letsencrypt/live/mail.example.com/fullchain.pem"
+#
+# postfix_main_cf_smtpd_tls_key_file: /usr/local/etc/letsencrypt/live/mail.example.com/privkey.pem
+# postfix_main_cf_smtpd_tls_cert_file: /usr/local/etc/letsencrypt/live/mail.example.com/fullchain.pem
+#
 # other example:
-#postfix_main_cf_smtpd_tls_key_file: "/usr/local/etc/postfix/ssl.key/dovecot.pem"
-#postfix_main_cf_smtpd_tls_cert_file: "/usr/local/etc/postfix/ssl.key/dovecot.pem"
+#
+# postfix_main_cf_smtpd_tls_key_file: /usr/local/etc/postfix/ssl.key/dovecot.pem
+# postfix_main_cf_smtpd_tls_cert_file: /usr/local/etc/postfix/ssl.key/dovecot.pem
 
-#rc_conf_hostname: "srv.example.com"
-#postmaster_address: "postmaster@example.com"
-#postfix_main_cf_myhostname: "mail.examle.com"
-#postfix_main_cf_mydomain: "example.com"
-#postfix_main_cf_virtual_alias_domains: "example.net, example.org, example.co"
-#postfix_main_cf_message_size_limit: "40960000"
+# rc_conf_hostname: srv.example.com
+# postmaster_address: postmaster@example.com
+# postfix_main_cf_myhostname: mail.examle.com
+# postfix_main_cf_mydomain: example.com
+# postfix_main_cf_virtual_alias_domains: "example.net, example.org, example.co"
+# postfix_main_cf_message_size_limit: "40960000"
 
-#postfix_main_cf_mydestination_pcre:
-#  - "localhost"
-#  - ".*\\.example\\.com"
-#  - ".*\\.ny\\.example\\.org"
+# postfix_main_cf_mydestination_pcre:
+#   - localhost
+#   - ".*\\.example\\.com"
+#   - ".*\\.ny\\.example\\.org"
 
-#aliases: []
-#aliases:
-#  - { alias: "firstname", user: "user1" }
-#  - { alias: "firstname.lastname",  user: "user1" }
-#  - { alias: "flastname", user: "user1" }
+# aliases: []
+# aliases:
+#   - {alias: firstname, user: user1 }
+#   - {alias: firstname.lastname,  user: user1 }
+#   - {alias: flastname, user: user1 }
 
-#virtual_aliases: []
-#virtual_aliases:
-#  - { alias: "firstname@example.net", user: "user1" }
-#  - { alias: "firstname.lastname@example.net", user: "user1" }
-#  - { alias: "flastname@example.net", user: "user1" }
+# virtual_aliases: []
+# virtual_aliases:
+#   - {alias: firstname@example.net, user: "user1"}
+#   - {alias: firstname.lastname@example.net, user: "user1"}
+#   - {alias: flastname@example.net, user: "user1"}
 
 # Spamassassin
 # For spamassassin use -o content_filter=spamfilter. Role
@@ -49,14 +50,14 @@
 # playbook with both freebsd-ansible-maiserver and
 # freebsd-ansible-maiserver-spamassasin would change it repeatidly and
 # report as changed". When not sure, keep the default.
-#postfix_master_cf_service_def: "inet  n       -       -       -       -       smtpd -o content_filter=spamfilter"
-
-# CHANGE THIS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#
+# postfix_master_cf_service_def: "inet  n       -       -       -       -       smtpd -o content_filter=spamfilter"
 
 # Examples
-#postfix_main_cf_relayhost: "[relayhost.example.com]:587"
-#postfix_smtp_sasl_passwords:
-#    - { relayhost: "relayhost.example.com", line: "[relayhost.example.com]:587 smtp_client:password" }
+#
+# postfix_main_cf_relayhost: "[relayhost.example.com]:587"
+# postfix_smtp_sasl_passwords:
+#   - {relayhost: relayhost.example.com, value: "[relayhost.example.com]:587 smtp_client:password"}
 
 # EOF
 ...

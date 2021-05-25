@@ -9,11 +9,18 @@ Feel free to [share your feedback and report issues](https://github.com/vbotka/a
 [Contributions are welcome](https://github.com/firstcontributions/first-contributions).
 
 
-## Dependencies
+## Requirements and dependencies
+
+### Roles
+
+The roles are not listed in the meta file. Install them manually.
 
 - [vbotka.ansible_lib](https://galaxy.ansible.com/vbotka/ansible_lib) Library of Ansible tasks.
 
-The dependencies are not listed in the meta file. Install the roles manually.
+### Collections
+
+- community.crypto
+- community.general
 
 
 ## Recommended
@@ -36,13 +43,16 @@ Review the defaults and examples in vars.
 shell> ansible mailserver -e 'ansible_shell_type=csh ansible_shell_executable=/bin/csh' -a 'sudo pw usermod freebsd -s /bin/sh'
 ```
 
-2) Install role
+2) Install the roles and collections
 
 ```
-shell> ansible-galaxy install vbotka.freebsd_mailserver
+shell> ansible-galaxy role install vbotka.freebsd_mailserver
+shell> ansible-galaxy role install vbotka.ansible_lib
+shell> ansible-galaxy collection install community.crypto
+shell> ansible-galaxy collection install community.general
 ```
 
-3) Fit variables
+3) Fit variables, e.g. in vars/main.yml
 
 ```
 shell> editor vbotka.freebsd_mailserver/vars/main.yml
@@ -65,9 +75,13 @@ dovecot_ssl_dh_cmd_generate: true
 dovecot_ssl_dh_cmd: "openssl dhparam -out {{ dovecot_ssl_dh }} {{dovecot_ssl_dh_bits }}"
 ```
 
-The options *dovecot_ssl_dh_generate* and *dovecot_ssl_dh_cmd_generate* are mutually exclusive. If both options are *false* the file *dovecot_ssl_dh_path* is used. This file is provided by the role for testing only. Never use it in production.
+The options *dovecot_ssl_dh_generate* and *dovecot_ssl_dh_cmd_generate* are mutually exclusive. If
+both options are *false* the file *dovecot_ssl_dh_path* is used. This file is provided by the role
+for testing only. Never use it in production.
 
-The generation of the file with Diffie-Hellman parameters may take a long time. For example 4096 bit parameters take ~40min with *Intel(R) Core(TM) i5-8200Y CPU @ 1.30GHz*. It's a good idea to generate the file separately to speedup the configuration.
+The generation of the file with Diffie-Hellman parameters may take a long time. For example 4096 bit
+parameters take ~40min with *Intel(R) Core(TM) i5-8200Y CPU @ 1.30GHz*. It's a good idea to generate
+the file separately to speedup the configuration.
 
 ```
 dovecot_ssl_dh_generate: false

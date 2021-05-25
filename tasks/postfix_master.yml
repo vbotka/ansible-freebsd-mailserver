@@ -1,7 +1,7 @@
 ---
 
 - name: "postfix_master: Configure submission options {{ postfix_master_cf }}"
-  blockinfile:
+  ansible.builtin.blockinfile:
     dest: "{{ postfix_master_cf }}"
     marker: "# {mark} submission options ANSIBLE MANAGED BLOCK"
     insertafter: "^#submission "
@@ -24,7 +24,7 @@
   tags: potfix_master_cf_submission
 
 - name: "postfix_master: Configure smtps options {{ postfix_master_cf }}"
-  blockinfile:
+  ansible.builtin.blockinfile:
     dest: "{{ postfix_master_cf }}"
     marker: "# {mark} smtps options ANSIBLE MANAGED BLOCK"
     insertafter: "^#smtps "

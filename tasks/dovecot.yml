@@ -2,9 +2,10 @@
 
 # example conf
 - name: "dovecot: Copy example conf to /usr/local/etc/dovecot/"
-  shell: cd /usr/local/etc/dovecot && cp -R example-config/{{ item }} .
-  args:
-    creates: /usr/local/etc/dovecot/{{ item }}
+  shell:
+    cmd: >
+      cd /usr/local/etc/dovecot && cp -R example-config/{{ item }} .
+    creates: "/usr/local/etc/dovecot/{{ item }}"
   loop:
     - conf.d
     - dovecot-dict-auth.conf.ext
@@ -16,10 +17,10 @@
 
 # dovecot.conf
 - name: "dovecot: Configure {{ dovecot_conf_path }}"
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "{{ dovecot_conf_path }}"
-    regexp: "^{{ item.regexp }}"
-    line: "{{ item.regexp }} = {{ item.line }}"
+    regexp: '^\s*{{ item.regexp }}\s*=(.*)$'
+    line: "{{ item.regexp }} = {{ item.value }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ dovecot_conf }}"
   notify: reload dovecot
@@ -27,7 +28,7 @@
 
 # dovecot.conf link
 - name: "dovecot: Link {{ dovecot_conf_path }} to {{ dovecot_conf_link_path }}"
-  file:
+  ansible.builtin.file:
     state: link
     src: "{{ dovecot_conf_path }}"
     dest: "{{ dovecot_conf_link_path }}"
@@ -36,7 +37,7 @@
 
 # conf.d/10-master.conf
 - name: "dovecot: Configure /usr/local/etc/dovecot/conf.d/10-master.conf"
-  blockinfile:
+  ansible.builtin.blockinfile:
     dest: "/usr/local/etc/dovecot/conf.d/10-master.conf"
     backup: "{{ fm_backup_conf }}"
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
@@ -53,14 +54,14 @@
 # create dh.pem
 - name: "dovecot: Generate DH by command {{ dovecot_ssl_dh_cmd }}.
          This is going to take a long time."
-  command: "{{ dovecot_ssl_dh_cmd }}"
-  args:
+  command:
+    cmd: "{{ dovecot_ssl_dh_cmd }}"
     creates: "{{ dovecot_ssl_dh }}"
   when: dovecot_ssl_dh_cmd_generate|bool
   tags: dovecot_ssl_dh
 - name: "dovecot: Generate OpenSSL Diffie-Hellman Parameters by openssl_dhparam.
          This is going to take a long time."
-  openssl_dhparam:
+  community.crypto.openssl_dhparam:
     path: "{{ dovecot_ssl_dh }}"
     size: "{{ dovecot_ssl_dh_bits }}"
     owner: root
@@ -71,7 +72,7 @@
 
 # copy dh.pem
 - name: "dovecot: Copy {{ dovecot_ssl_dh_path }} to {{ dovecot_ssl_dh }}"
-  copy:
+  ansible.builtin.copy:
     src: "{{ dovecot_ssl_dh_path }}"
     dest: "{{ dovecot_ssl_dh }}"
     owner: root
@@ -84,10 +85,10 @@
 
 # conf.d/10-ssl.conf
 - name: "dovecot: Configure /usr/local/etc/dovecot/conf.d/10-ssl.conf"
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "/usr/local/etc/dovecot/conf.d/10-ssl.conf"
-    regexp: "^{{ item.regexp }}"
-    line: "{{ item.regexp }} = {{ item.line }}"
+    regexp: '^\s*{{ item.regexp }}\s*=(.*)$'
+    line: "{{ item.regexp }} = {{ item.value }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ dovecot_ssl_conf }}"
   notify: reload dovecot
@@ -95,10 +96,10 @@
 
 # conf.d/10-mail.conf
 - name: "dovecot: Configure /usr/local/etc/dovecot/conf.d/10-mail.conf"
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "/usr/local/etc/dovecot/conf.d/10-mail.conf"
-    regexp: "^{{ item.regexp }}"
-    line: "{{ item.regexp }} = {{ item.line }}"
+    regexp: '^\s*{{ item.regexp }}\s*=(.*)$'
+    line: "{{ item.regexp }} = {{ item.value }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ dovecot_mail_conf }}"
   notify: reload dovecot
@@ -106,10 +107,10 @@
 
 # conf.d/10-auth.conf
 - name: "dovecot: Configure /usr/local/etc/dovecot/conf.d/10-auth.conf"
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "/usr/local/etc/dovecot/conf.d/10-auth.conf"
-    regexp: "^{{ item.regexp }}"
-    line: "{{ item.regexp }} = {{ item.line }}"
+    regexp: '^\s*{{ item.regexp }}\s*=(.*)$'
+    line: "{{ item.regexp }} = {{ item.value }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ dovecot_auth_conf }}"
   notify: reload dovecot
@@ -117,10 +118,10 @@
 
 # conf.d/10-logging.conf
 - name: "dovecot: Configure /usr/local/etc/dovecot/conf.d/10-logging.conf"
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "/usr/local/etc/dovecot/conf.d/10-logging.conf"
-    regexp: "^{{ item.regexp }}"
-    line: "{{ item.regexp }} = {{ item.line }}"
+    regexp: '^\s*{{ item.regexp }}\s*=(.*)$'
+    line: "{{ item.regexp }} = {{ item.value }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ dovecot_logging_conf }}"
   notify: reload dovecot
@@ -128,10 +129,10 @@
 
 # conf.d/15-lda.conf
 - name: "dovecot: Configure /usr/local/etc/dovecot/conf.d/15-lda.conf"
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "/usr/local/etc/dovecot/conf.d/15-lda.conf"
-    regexp: "^{{ item.regexp }}"
-    line: "{{ item.regexp }} = {{ item.line }}"
+    regexp: '^\s*{{ item.regexp }}\s*=(.*)$'
+    line: "{{ item.regexp }} = {{ item.value }}"
     insertafter: "protocol lda {"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ dovecot_lda_conf }}"
@@ -142,11 +143,11 @@
 #- name: Configure /usr/local/etc/dovecot/conf.d/15-mailboxes.conf
 #  lineinfile:
 #    dest: /usr/local/etc/dovecot/conf.d/15-mailboxes.conf
-#    regexp: "{{ item.regexp }}"
-#    line: "{{ item.line }}"
-#    backup: "yes"
+#    regexp: '^\s*{{ item.regexp }}\s*=(.*)$'
+#    line: "{{ item.regexp }} = {{ item.value }}"
+#    backup: "{{ fm_backup_conf }}"
 #  loop:
-#    - { regexp: "^",  line: ""}
+#    - { regexp: "^",  value: ""}
 #  notify: reload dovecot
 #  tags: config_dovecot_mailboxes
 
