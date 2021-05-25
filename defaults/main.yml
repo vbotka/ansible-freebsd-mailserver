@@ -229,7 +229,8 @@ postfix_master_cf_smtpd_reject_unlisted_recipient: "no"
 
 # dovecot
 dovecot_conf_path: /usr/local/etc/dovecot/dovecot.conf
-dovecot_conf_link_path: /var/run/dovecot/dovecot.conf
+dovecot_conf_link_dir: /var/run/dovecot
+dovecot_conf_link_path: "{{ dovecot_conf_link_dir }}/dovecot.conf"
 dovecot_conf_link: true  # Note 2)
 dovecot_auth_verbose: "yes"
 dovecot_auth_debug: "no"
@@ -238,12 +239,17 @@ dovecot_verbose_ssl: "yes"
 dovecot_ssl_cipher_list: "ALL:!LOW:!EXP:!aNULL:!RC4:!eNULL:!LOW:!3DES:!MD5:!EXP:!PSK:!SRP:!DSS"
 dovecot_ssl_min_protocols: "TLSv1"
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+# Copy custom dh.pem from dovecot_ssl_dh_custom_path
+dovecot_ssl_dh_custom: false        # mutually exclusive
+dovecot_ssl_dh_custom_path: ""
 # Generate dh.pem by openssl command. This is going to take a long time.
 dovecot_ssl_dh_cmd_generate: false  # mutually exclusive
 dovecot_ssl_dh_cmd: "openssl dhparam -out {{ dovecot_ssl_dh }} {{ dovecot_ssl_dh_bits }}"
 # Generate dh.pem by openssl_dhparam module. This is going to take a long time.
 dovecot_ssl_dh_generate: true       # mutually exclusive
-# When both dovecot_ssl_dh_generate: false and dovecot_ssl_dh_generate_cmd: false
+# When (dovecot_ssl_dh_generate=false and
+#       dovecot_ssl_dh_generate_cmd=false and
+#       dovecot_ssl_dh_custom=false)
 # copy file dovecot_ssl_dh_path to dovecot_ssl_dh
 # WARNING: Use the file provided by the role for testing only. Never use it in
 # a public network.
@@ -317,7 +323,7 @@ fm_dkim_conf:
 fm_dkim_domains: "{{ (postfix_main_cf_virtual_alias_domains.split(',')|map('trim')|list +
                       [rc_conf_hostname] +
                       [postfix_main_cf_myhostname] +
-                      [postfix_main_cf_mydomain])|unique }}"
+                      [postfix_main_cf_mydomain])|select()|list|unique }}"
 postfix_main_cf_smtpd_milters: "inet:127.0.0.1:{{ fm_dkim_port }}"
 postfix_main_cf_non_smtpd_milters: "{{ postfix_main_cf_smtpd_milters }}"
 postfix_main_cf_milter_default_action: "accept"

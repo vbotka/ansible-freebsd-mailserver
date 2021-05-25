@@ -1,5 +1,11 @@
 ---
 
+- name: "dkim: Debug"
+  ansible.builtin.debug:
+    var: fm_dkim_domains
+  when: fm_debug|bool
+  tags: fm-dkim-debug
+
 - name: "dkim: Create DKIM keys"
   command:
     cmd: "opendkim-genkey -r -s default -d {{ item }} -D {{ fm_dkim_dir_keys }}/{{ item }}"
@@ -19,6 +25,7 @@
   loop: "{{ fm_dkim_domains }}"
   loop_control:
     label: "{{ fm_dkim_dir_keys }}/{{ item }}"
+  when: not ansible_check_mode
   tags: fm-dkim-keys-private-mod
 
 - name: "dkim: Set ownership and permissions of DKIM public keys"
@@ -30,6 +37,7 @@
   loop: "{{ fm_dkim_domains }}"
   loop_control:
     label: "{{ fm_dkim_dir_keys }}/{{ item }}"
+  when: not ansible_check_mode
   tags: fm-dkim-keys-public-mod
 
 - name: "dkim: Create {{ fm_dkim_dir }}/TrustedHosts"
