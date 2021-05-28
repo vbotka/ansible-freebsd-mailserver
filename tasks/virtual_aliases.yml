@@ -1,5 +1,22 @@
 ---
 
+- name: "virtual_aliases: Create empty {{ postfix_virtual }}"
+  command:
+    cmd: "touch {{ postfix_virtual }}"
+    creates: "{{ postfix_virtual }}"
+  notify:
+    - postmap virtual aliases
+    - postfix check
+    - reload postfix
+
+- name: "virtual_aliases: Create empty {{ postfix_virtual }}.db"
+  command:
+    cmd: "/usr/local/sbin/postmap {{ postfix_virtual }}"
+    creates: "{{ postfix_virtual }}.db"
+  notify:
+    - postfix check
+    - reload postfix
+
 - name: "virtual_aliases: Configure virtual aliases {{ postfix_virtual }}"
   ansible.builtin.lineinfile:
     dest: "{{ postfix_virtual }}"
