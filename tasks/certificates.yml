@@ -26,7 +26,7 @@
   when: postfix_create_cert|bool
 
 - name: "certificates: Create Self-signed SSL certificates"
-  command:
+  ansible.builtin.command:
     cmd: >
       sh -c "env OPENSSLCONFIG=/usr/local/share/examples/dovecot/dovecot-openssl.cnf
       /usr/local/share/examples/dovecot/mkcert.sh;

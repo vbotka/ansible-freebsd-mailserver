@@ -6,7 +6,7 @@ fm_debug: false
 fm_debug_classified: false
 fm_backup_conf: false
 
-# CHANGE AT LEAST THIS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+# > > > CHANGE AT LEAST THIS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 # Cloud providers
 digitalocean: false
@@ -22,8 +22,8 @@ postfix_main_cf_smtpd_tls_key_file: /etc/ssl/private/dovecot.pem
 postfix_main_cf_smtpd_tls_cert_file: /etc/ssl/certs/dovecot.pem
 # or (1) use https://galaxy.ansible.com/vbotka/certificate/
 # or (2) use LetsEncrypt (https://galaxy.ansible.com/vbotka/leutils/)
-#postfix_main_cf_smtpd_tls_key_file: "/usr/local/etc/letsencrypt/live/mail.example.com/privkey.pem"
-#postfix_main_cf_smtpd_tls_cert_file: "/usr/local/etc/letsencrypt/live/mail.example.com/fullchain.pem"
+# postfix_main_cf_smtpd_tls_key_file: "/usr/local/etc/letsencrypt/live/mail.example.com/privkey.pem"
+# postfix_main_cf_smtpd_tls_cert_file: "/usr/local/etc/letsencrypt/live/mail.example.com/fullchain.pem"
 
 rc_conf_hostname: srv.example.com
 postmaster_address: postmaster@example.com
@@ -33,16 +33,16 @@ postfix_main_cf_virtual_alias_domains: "example.net, example.org, example.co"
 postfix_main_cf_message_size_limit: "40960000"
 
 aliases: []
-#aliases:
-#  - {alias: firstname, user: user1}
-#  - {alias: firstname.lastname,  user: user1}
-#  - {alias: flastname, user: user1}
+# aliases:
+#   - {alias: firstname, user: user1}
+#   - {alias: firstname.lastname,  user: user1}
+#   - {alias: flastname, user: user1}
 
 virtual_aliases: []
-#virtual_aliases:
-#  - {alias: firstname@example.net, user: user1}
-#  - {alias: firstname.lastname@example.net, user: user1}
-#  - {alias: flastname@example.net, user: user1}
+# virtual_aliases:
+#   - {alias: firstname@example.net, user: user1}
+#   - {alias: firstname.lastname@example.net, user: user1}
+#   - {alias: flastname@example.net, user: user1}
 
 # Spamassassin
 # For spamassassin use -o content_filter=spamfilter. Role
@@ -53,10 +53,10 @@ virtual_aliases: []
 postfix_master_cf_service_def: "inet  n       -       -       -       -       smtpd"
 #postfix_master_cf_service_def: "inet  n       -       -       -       -       smtpd -o content_filter=spamfilter"
 
-# CHANGE AT LEAST THIS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - CHANGE AT LEAST THIS < < <
 
 freebsd_install_method: packages
-#freebsd_install_method: ports
+# freebsd_install_method: ports
 freebsd_use_packages: true
 freebsd_install_retries: 10
 freebsd_install_delay: 5
@@ -149,9 +149,9 @@ postfix_main_cf_smtpd_recipient_restrictions: "permit_mynetworks, permit_sasl_au
 postfix_main_cf_smtpd_use_tls: "yes"
 postfix_main_cf_smtpd_tls_auth_only: "yes"
 postfix_main_cf_smtpd_tls_loglevel: "1"
-postfix_main_cf_smtpd_tls_CAfile: "/etc/ssl/cert.pem"
+postfix_main_cf_smtpd_tls_cafile: "/etc/ssl/cert.pem"
 
-#smtpd_tls_CApath = /path/to/certs/
+# smtpd_tls_CApath = /path/to/certs/
 postfix_main_cf_smtpd_conf:
   - {regexp: tls_random_source, value: "{{ postfix_main_cf_tls_random_source }}"}
   - {regexp: smtpd_use_tls, value: "{{ postfix_main_cf_smtpd_use_tls }}"}
@@ -159,7 +159,7 @@ postfix_main_cf_smtpd_conf:
   - {regexp: smtpd_tls_cert_file, value: "{{ postfix_main_cf_smtpd_tls_cert_file }}"}
   - {regexp: smtpd_tls_auth_only, value: "{{ postfix_main_cf_smtpd_tls_auth_only }}"}
   - {regexp: smtpd_tls_loglevel, value: "{{ postfix_main_cf_smtpd_tls_loglevel }}"}
-  - {regexp: smtpd_tls_CAfile, value: "{{ postfix_main_cf_smtpd_tls_CAfile }}"}
+  - {regexp: smtpd_tls_CAfile, value: "{{ postfix_main_cf_smtpd_tls_cafile }}"}
   - {regexp: smtpd_tls_received_header, value: "{{ postfix_main_cf_smtpd_tls_received_header }}"}
   - {regexp: smtpd_tls_security_level, value: "{{ postfix_main_cf_smtpd_tls_security_level }}"}
   - {regexp: smtpd_tls_ciphers, value: "{{ postfix_main_cf_smtpd_tls_ciphers }}"}
@@ -175,12 +175,12 @@ postfix_main_cf_smtpd_conf:
 
 # smtp
 postfix_main_cf_smtp_use_tls: "yes"
-postfix_main_cf_smtp_tls_CAfile: "/etc/ssl/cert.pem"
+postfix_main_cf_smtp_tls_cafile: "/etc/ssl/cert.pem"
 postfix_main_cf_smtp_tls_note_starttls_offer: "yes"
 postfix_main_cf_smtp_tls_loglevel: "1"
 postfix_main_cf_smtp_conf:
   - {regexp: smtp_use_tls, value: "{{ postfix_main_cf_smtp_use_tls }}"}
-  - {regexp: smtp_tls_CAfile, value: "{{ postfix_main_cf_smtp_tls_CAfile }}"}
+  - {regexp: smtp_tls_CAfile, value: "{{ postfix_main_cf_smtp_tls_cafile }}"}
   - {regexp: smtp_tls_note_starttls_offer, value: "{{ postfix_main_cf_smtp_tls_note_starttls_offer }}"}
   - {regexp: smtp_tls_loglevel, value: "{{ postfix_main_cf_smtp_tls_loglevel }}"}
 
@@ -194,22 +194,22 @@ postfix_main_cf_smtpd_sasl_conf:
   - {regexp: smtpd_sasl_type, value: "{{ postfix_main_cf_smtpd_sasl_type }}"}
   - {regexp: smtpd_sasl_path, value: "{{ postfix_main_cf_smtpd_sasl_path }}"}
   - {regexp: broken_sasl_auth_clients, value: "{{ postfix_main_cf_broken_sasl_auth_clients }}"}
-#virtual_transport = lmtp:unix:private/dovecot-lmtp
-#mailbox_transport = lmtp:unix:private/dovecot-lmtp
+# virtual_transport = lmtp:unix:private/dovecot-lmtp
+# mailbox_transport = lmtp:unix:private/dovecot-lmtp
 
 # smtp_sasl
 postfix_main_cf_smtp_sasl_auth_enable: false
 postfix_main_cf_smtp_sasl_tls_security_options: "noanonymous"
-postfix_main_cf_smtp_tls_security_level_NO: "may"
-postfix_main_cf_smtp_tls_security_level_YES: "encrypt"
+postfix_main_cf_smtp_tls_security_level_no: "may"
+postfix_main_cf_smtp_tls_security_level_yes: "encrypt"
 postfix_main_cf_smtp_sasl_enable_conf:
   - {regexp: smtp_sasl_auth_enable, value: "yes"}
   - {regexp: smtp_sasl_tls_security_options, value: "{{ postfix_main_cf_smtp_sasl_tls_security_options }}"}
-  - {regexp: smtp_tls_security_level, value: "{{ postfix_main_cf_smtp_tls_security_level_YES }}"}
+  - {regexp: smtp_tls_security_level, value: "{{ postfix_main_cf_smtp_tls_security_level_yes }}"}
 postfix_main_cf_smtp_sasl_disable_conf:
   - {regexp: smtp_sasl_auth_enable, value: "no"}
   - {regexp: smtp_sasl_tls_security_options, value: "{{ postfix_main_cf_smtp_sasl_tls_security_options }}"}
-  - {regexp: smtp_tls_security_level, value: "{{ postfix_main_cf_smtp_tls_security_level_NO }}"}
+  - {regexp: smtp_tls_security_level, value: "{{ postfix_main_cf_smtp_tls_security_level_no }}"}
 
 postfix_main_cf_smtp_sasl_password_maps: "/usr/local/etc/postfix/sasl_passwd"
 postfix_smtp_sasl_passwords: []
@@ -264,7 +264,7 @@ dovecot_conf:
   - {regexp: listen, value: "{{ freebsd_mailserver_dovecot_listen }}"}
 dovecot_ssl_conf:
   - {regexp: "ssl ", value: "yes"}
-  - {regexp: ssl_ca, value: "<{{ postfix_main_cf_smtpd_tls_CAfile }}"}
+  - {regexp: ssl_ca, value: "<{{ postfix_main_cf_smtpd_tls_cafile }}"}
   - {regexp: ssl_min_protocol, value: "{{ dovecot_ssl_min_protocols }}"}
   - {regexp: ssl_cipher_list, value: "{{ dovecot_ssl_cipher_list }}"}
   - {regexp: ssl_dh, value: "<{{ dovecot_ssl_dh }}"}
@@ -303,23 +303,23 @@ fm_dkim_dir: "/usr/local/etc/opendkim"
 fm_dkim_dir_keys: "{{ fm_dkim_dir }}/keys"
 fm_dkim_conf_path: "{{ fm_dkim_dir }}/opendkim.conf"
 fm_dkim_port: "10025"
-fm_dkim_KeyTable: "refile:{{ fm_dkim_dir }}/KeyTable"
-fm_dkim_SigningTable: "refile:{{ fm_dkim_dir }}/SigningTable"
-fm_dkim_InternalHosts: "refile:{{ fm_dkim_dir }}/TrustedHosts"
-fm_dkim_ExternalIgnoreList: "refile:{{ fm_dkim_dir }}/TrustedHosts"
-fm_dkim_Selector: "dkim"
-fm_dkim_Socket: "inet:{{ fm_dkim_port }}@localhost"
-fm_dkim_Syslog: "Yes"
-fm_dkim_Canonicalization: "relaxed/simple"
+fm_dkim_keytable: "refile:{{ fm_dkim_dir }}/KeyTable"
+fm_dkim_signingtable: "refile:{{ fm_dkim_dir }}/SigningTable"
+fm_dkim_internalhosts: "refile:{{ fm_dkim_dir }}/TrustedHosts"
+fm_dkim_externalignorelist: "refile:{{ fm_dkim_dir }}/TrustedHosts"
+fm_dkim_selector: "dkim"
+fm_dkim_socket: "inet:{{ fm_dkim_port }}@localhost"
+fm_dkim_syslog: "Yes"
+fm_dkim_canonicalization: "relaxed/simple"
 fm_dkim_conf:
-  - {regexp: KeyTable, value: "{{ fm_dkim_KeyTable }}"}
-  - {regexp: SigningTable, value: "{{ fm_dkim_SigningTable }}"}
-  - {regexp: InternalHosts, value: "{{ fm_dkim_InternalHosts }}"}
-  - {regexp: ExternalIgnoreList, value: "{{ fm_dkim_ExternalIgnoreList }}"}
-  - {regexp: Selector, value: "{{ fm_dkim_Selector }}"}
-  - {regexp: Socket, value: "{{ fm_dkim_Socket }}"}
-  - {regexp: Syslog, value: "{{ fm_dkim_Syslog }}"}
-  - {regexp: Canonicalization, value: "{{ fm_dkim_Canonicalization }}"}
+  - {regexp: KeyTable, value: "{{ fm_dkim_keytable }}"}
+  - {regexp: SigningTable, value: "{{ fm_dkim_signingtable }}"}
+  - {regexp: InternalHosts, value: "{{ fm_dkim_internalhosts }}"}
+  - {regexp: ExternalIgnoreList, value: "{{ fm_dkim_externalignorelist }}"}
+  - {regexp: Selector, value: "{{ fm_dkim_selector }}"}
+  - {regexp: Socket, value: "{{ fm_dkim_socket }}"}
+  - {regexp: Syslog, value: "{{ fm_dkim_syslog }}"}
+  - {regexp: Canonicalization, value: "{{ fm_dkim_canonicalization }}"}
 fm_dkim_domains: "{{ (postfix_main_cf_virtual_alias_domains.split(',')|map('trim')|list +
                       [rc_conf_hostname] +
                       [postfix_main_cf_myhostname] +

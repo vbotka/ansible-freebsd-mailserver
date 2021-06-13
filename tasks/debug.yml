@@ -73,6 +73,7 @@
          postfix_main_cf_smtp_sasl_password_maps [{{ postfix_main_cf_smtp_sasl_password_maps }}]
 
          dovecot_conf_path [{{ dovecot_conf_path }}]
+         dovecot_conf_link_dir [{{ dovecot_conf_link_dir }}]
          dovecot_conf_link_path [{{ dovecot_conf_link_path }}]
          dovecot_conf_link [{{ dovecot_conf_link }}]
          dovecot_ssl_dh_custom [{{ dovecot_ssl_dh_custom }}]
