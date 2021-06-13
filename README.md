@@ -22,8 +22,7 @@ The roles are not listed in the meta file. Install them manually.
 - community.crypto
 - community.general
 
-
-## Recommended
+### Recommended
 
 - [vbotka.freebsd_mailserver_spamassassin](https://galaxy.ansible.com/vbotka/freebsd_mailserver_spamassassin/)
 - [vbotka.freebsd-mailserver_sieve](https://galaxy.ansible.com/vbotka/freebsd_mailserver_sieve/)
@@ -32,7 +31,7 @@ The roles are not listed in the meta file. Install them manually.
 
 ## Variables
 
-Review the defaults and examples in vars.
+See the defaults and examples in vars.
 
 
 ## Workflow
@@ -88,7 +87,6 @@ dovecot_ssl_dh_generate: false
 dovecot_ssl_dh_cmd_generate: false
 dovecot_ssl_dh_path: <path-to-generated-Diffie-Hellman-file>
 ```
-
 
 4) Create playbook and inventory
 
@@ -167,6 +165,7 @@ shell> ansible-playbook freebsd-mailserver.yml --check
 - [Setting up a mail server with OpenSMTPD, Dovecot and Rspamd](https://poolp.org/posts/2019-09-14/setting-up-a-mail-server-with-opensmtpd-dovecot-and-rspamd/)
 - [FreeBSD handbook: 28.4. Changing the Mail Transfer Agent](https://www.freebsd.org/doc/handbook/mail-changingmta.html)
 - [FreeBSD handbook: 28.9. SMTP Authentication](https://www.freebsd.org/doc/handbook/SMTP-Auth.html)
+- [FreeBSD Email Server tyil.nl](https://www.tyil.nl/tag/email/)
 - [Postfix Documentation](http://www.postfix.org/documentation.html)
 - [Postfix SMTP relay and access control](http://www.postfix.org/SMTPD_ACCESS_README.html)
 - [Postfix SASL Howto](http://www.postfix.org/SASL_README.html)
@@ -174,6 +173,9 @@ shell> ansible-playbook freebsd-mailserver.yml --check
 - [postfix-logwatch - A Postfix log parser and analysis utility](https://www.freebsd.org/cgi/man.cgi?query=postfix-logwatch)
 - [Dovecot Wiki](https://wiki2.dovecot.org/)
 - [Upgrading Dovecot v2.2 to v2.3](https://wiki2.dovecot.org/Upgrading/2.3)
+- [OpenDKIM + SPF FreeBSD Forum](https://forums.freebsd.org/threads/opendkim-spf.27201/)
+- [OpenDKIM Debian Wiki](https://wiki.debian.org/opendkim)
+- [OpenDKIM ArchLinux Wiki](https://wiki.archlinux.org/title/OpenDKIM)
 
 
 ## License

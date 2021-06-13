@@ -7,7 +7,7 @@
   tags: fm-dkim-debug
 
 - name: "dkim: Create DKIM keys"
-  command:
+  ansible.builtin.command:
     cmd: "opendkim-genkey -r -s default -d {{ item }} -D {{ fm_dkim_dir_keys }}/{{ item }}"
     creates: "{{ fm_dkim_dir_keys }}/{{ item }}/default.txt"
   loop: "{{ fm_dkim_domains }}"
@@ -44,6 +44,7 @@
   ansible.builtin.template:
     src: TrustedHosts.j2
     dest: "{{ fm_dkim_dir }}/TrustedHosts"
+    mode: "0644"
   notify: reload dkim
   tags: fm-dkim-create-TrustedHosts
 
@@ -51,6 +52,7 @@
   ansible.builtin.template:
     src: SigningTable.j2
     dest: "{{ fm_dkim_dir }}/SigningTable"
+    mode: "0644"
   notify: reload dkim
   tags: fm-dkim-create-SigningTable
 
@@ -58,6 +60,7 @@
   ansible.builtin.template:
     src: KeyTable.j2
     dest: "{{ fm_dkim_dir }}/KeyTable"
+    mode: "0644"
   notify: reload dkim
   tags: fm-dkim-create-KeyTable
 
@@ -68,6 +71,7 @@
     line: "{{ item.regexp }} {{ item.value }}"
     backup: "{{ fm_backup_conf }}"
     create: true
+    mode: "0644"
   loop: "{{ fm_dkim_conf }}"
   notify: reload dkim
   tags: fm-dkim-conf

@@ -1,61 +1,79 @@
 ---
-# tasks for freebsd-mailserver
+# tasks for freebsd_mailserver
 
-- import_tasks: debug.yml
+- name: Import debug.yml
+  ansible.builtin.import_tasks: debug.yml
   when: fm_debug|bool
   tags: [fm-debug, always]
 
-- import_tasks: packages.yml
+- name: Import packages.yml
+  ansible.builtin.import_tasks: packages.yml
   when: fm_install|bool
   tags: fm-packages
 
-- import_tasks: files.yml
+- name: Import files.yml
+  ansible.builtin.import_tasks: files.yml
   tags: fm-files
 
-- import_tasks: dirs.yml
+- name: Import dirs.yml
+  ansible.builtin.import_tasks: dirs.yml
   tags: fm-dirs
 
-- import_tasks: sanity.yml
+- name: Import sanity.yml
+  ansible.builtin.import_tasks: sanity.yml
   when: fm_sanity|bool
   tags: fm-sanity
 
-- import_tasks: certificates.yml
+- name: Import certificates.yml
+  ansible.builtin.import_tasks: certificates.yml
   tags: fm-certificates
 
-- import_tasks: rcconf.yml
+- name: Import rcconf.yml
+  ansible.builtin.import_tasks: rcconf.yml
   tags: fm-rcconf
 
-- import_tasks: cloud_provider.yml
+- name: Import cloud_provider.yml
+  ansible.builtin.import_tasks: cloud_provider.yml
   tags: fm-cloud
 
-- import_tasks: mailer_conf.yml
+- name: Import mailer_conf.yml
+  ansible.builtin.import_tasks: mailer_conf.yml
   tags: fm-mailer_conf
 
-- import_tasks: periodic_conf.yml
+- name: Import periodic_conf.yml
+  ansible.builtin.import_tasks: periodic_conf.yml
   tags: fm-periodic_conf
 
-- import_tasks: postfix.yml
+- name: Import postfix.yml
+  ansible.builtin.import_tasks: postfix.yml
   tags: fm-postfix
 
-- import_tasks: postfix_sasl.yml
+- name: Import postfix_sasl.yml
+  ansible.builtin.import_tasks: postfix_sasl.yml
   tags: fm-postfix_sasl
 
-- import_tasks: postfix_master.yml
+- name: Import postifix_master.yml
+  ansible.builtin.import_tasks: postfix_master.yml
   tags: fm-postfix_master
 
-- import_tasks: spf.yml
+- name: Import spf.yml
+  ansible.builtin.import_tasks: spf.yml
   tags: fm-spf
 
-- import_tasks: dkim.yml
+- name: Import dkim.yml
+  ansible.builtin.import_tasks: dkim.yml
   tags: fm-dkim
 
-- import_tasks: virtual_aliases.yml
+- name: Import virtual_aliases.yml
+  ansible.builtin.import_tasks: virtual_aliases.yml
   tags: fm-virtual_aliases
 
-- import_tasks: aliases.yml
+- name: Import aliases.yml
+  ansible.builtin.import_tasks: aliases.yml
   tags: fm-aliases
 
-- import_tasks: dovecot.yml
+- name: Import dovecot.yml
+  ansible.builtin.import_tasks: dovecot.yml
   tags: fm-dovecot
 
 # EOF

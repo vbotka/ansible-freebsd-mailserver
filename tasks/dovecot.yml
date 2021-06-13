@@ -2,7 +2,7 @@
 
 # example conf
 - name: "dovecot: Copy example conf to /usr/local/etc/dovecot/"
-  shell:
+  ansible.builtin.shell:
     cmd: >
       cd /usr/local/etc/dovecot && cp -R example-config/{{ item }} .
     creates: "/usr/local/etc/dovecot/{{ item }}"
@@ -31,6 +31,7 @@
   ansible.builtin.file:
     state: directory
     dest: "{{ dovecot_conf_link_dir }}"
+    mode: "0755"
   when: dovecot_conf_link|bool
   tags: dovecot_conf_link
 
@@ -71,7 +72,7 @@
   tags: dovecot_ssl_dh
 - name: "dovecot: Generate Diffie-Hellman by command {{ dovecot_ssl_dh_cmd }}.
          ***This is going to take a long time***."
-  command:
+  ansible.builtin.command:
     cmd: "{{ dovecot_ssl_dh_cmd }}"
     creates: "{{ dovecot_ssl_dh }}"
   when: dovecot_ssl_dh_cmd_generate|bool

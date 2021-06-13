@@ -1,5 +1,5 @@
 ---
-# vars for freebsd-mailserver
+# vars samples for freebsd_mailserver
 
 # freebsd_mailserver_packages:
 #   - mail/postfix-sasl

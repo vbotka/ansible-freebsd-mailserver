@@ -1,24 +1,24 @@
 ---
-# handlers for freebsd-mailserver
+# handlers for freebsd_mailserver
 
 - name: postfix check
-  command:
+  ansible.builtin.command:
     cmd: /usr/local/sbin/postfix check
 
 - name: newaliases
-  command:
+  ansible.builtin.command:
     cmd: /usr/bin/newaliases
 
 - name: postmap smtp sasl passwords
-  command:
+  ansible.builtin.command:
     cmd: "/usr/local/sbin/postmap {{ postfix_main_cf_smtp_sasl_password_maps }}"
 
 - name: postmap virtual aliases
-  command:
+  ansible.builtin.command:
     cmd: "/usr/local/sbin/postmap {{ postfix_virtual }}"
 
 - name: set hostname
-  command:
+  ansible.builtin.command:
     cmd: "/bin/hostname {{ rc_conf_hostname }}"
 
 # Postfix

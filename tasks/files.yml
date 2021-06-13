@@ -1,7 +1,7 @@
 ---
 
 - name: "files: Create file {{ postfix_virtual }}"
-  shell:
+  ansible.builtin.shell:
     cmd: >
       /usr/bin/touch {{ postfix_virtual }} &&
       /usr/sbin/chown root:wheel {{ postfix_virtual }} &&

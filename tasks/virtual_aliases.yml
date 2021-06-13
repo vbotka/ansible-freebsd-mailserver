@@ -1,7 +1,7 @@
 ---
 
 - name: "virtual_aliases: Create empty {{ postfix_virtual }}"
-  command:
+  ansible.builtin.command:
     cmd: "touch {{ postfix_virtual }}"
     creates: "{{ postfix_virtual }}"
   notify:
@@ -10,7 +10,7 @@
     - reload postfix
 
 - name: "virtual_aliases: Create empty {{ postfix_virtual }}.db"
-  command:
+  ansible.builtin.command:
     cmd: "/usr/local/sbin/postmap {{ postfix_virtual }}"
     creates: "{{ postfix_virtual }}.db"
   notify:
@@ -21,7 +21,7 @@
   ansible.builtin.lineinfile:
     dest: "{{ postfix_virtual }}"
     regexp: '^\s*{{ item.alias }}(?!\S).*$'
-    line: "{{ item.alias }}\t {{ item.user }}"
+    line: "{{ item.alias }}\t {{ item.user }}"  # noqa no-tabs
     owner: root
     group: wheel
     mode: "0644"
