@@ -106,7 +106,6 @@
     line: '{{ item.regexp }}="{{ item.value }}"'
     backup: "{{ fm_backup_conf }}"
   loop: "{{ fm_postfix_rcconf }}"
-  when: fm_postfix_enable|bool
   notify: reload postfix
   tags: fm-rcconf-postfix
 
@@ -117,7 +116,6 @@
     line: '{{ item.regexp }}="{{ item.value }}"'
     backup: "{{ fm_backup_conf }}"
   loop: "{{ fm_dovecot_rcconf }}"
-  when: fm_dovecot_enable|bool
   notify: reload dovecot
   tags: fm-rcconf-dovecot
 
@@ -128,7 +126,6 @@
     line: '{{ item.regexp }}="{{ item.value }}"'
     backup: "{{ fm_backup_conf }}"
   loop: "{{ fm_dkim_rcconf }}"
-  when: fm_dkim_enable|bool
   notify: reload dkim
   tags: fm-rcconf-dkim
 

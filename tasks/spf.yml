@@ -3,7 +3,7 @@
 - name: "spf: Configure spf-policy {{ postfix_master_cf }}"
   ansible.builtin.lineinfile:
     dest: "{{ postfix_master_cf }}"
-    regexp: '^spf-policy\s*unix\s+(.*)$'
+    regexp: '^spf-policy\s+unix\s+(.*)$'
     line: "spf-policy unix  -       n       n       -       0       spawn"
     backup: "{{ fm_backup_conf }}"
   notify:
@@ -15,7 +15,7 @@
     dest: "{{ postfix_master_cf }}"
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
-    insertafter: "^spf-policy unix\\s+(.*)$ "
+    insertafter: '^spf-policy unix\s+(.*)$'
     backup: "{{ fm_backup_conf }}"
   loop:
     - regexp: '^\s*user=(.*)\s+argv=(.*)$'
