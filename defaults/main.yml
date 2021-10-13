@@ -72,7 +72,7 @@ fm_sanity: true
 fm_sanity_platform: true
 fm_sanity_ansible_version: true
 # sanity: override supported versions
-al_supported_versions_override: ['11.3', '11.4', '12.0', '12.1', '12.2', '13.0']
+al_supported_versions_override: ['12.2', '13.0']
 
 # paths
 postfix_main_cf: /usr/local/etc/postfix/main.cf
