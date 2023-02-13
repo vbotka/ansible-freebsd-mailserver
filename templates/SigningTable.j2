@@ -1,4 +1,7 @@
 # {{ ansible_managed }}
 {% for domain in fm_dkim_domains %}
-*@{{ domain }} default._domainkey.{{ domain }}
+*@{{ domain.name }} {{ domain.selector }}._domainkey.{{ domain.name }}
+{% if fm_dkim_sign_subdomains %}
+*@*.{{ domain.name }} {{ domain.selector }}._domainkey.{{ domain.name }}
+{% endif %}
 {% endfor %}
