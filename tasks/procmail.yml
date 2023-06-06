@@ -1,0 +1,14 @@
+---
+
+- name: "procmail: Configure {{ fm_procmail_rc_file }}"
+  template:
+    dest: "{{ fm_procmail_rc_file }}"
+    owner: root
+    mode: "0644"
+    src: procmailrc.j2
+  vars:
+    config: "{{ fm_procmail_rc_config }}"
+  when: fm_procmail_enable and fm_procmail_rc_config|default([])|length > 0
+
+# EOF
+...

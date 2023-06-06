@@ -76,5 +76,10 @@
   ansible.builtin.import_tasks: dovecot.yml
   tags: fm-dovecot
 
+- name: Import procmail.yml
+  ansible.builtin.import_tasks: procmail.yml
+  when: fm_procmail_enable|bool
+  tags: fm-procmail
+
 # EOF
 ...

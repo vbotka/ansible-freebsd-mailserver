@@ -15,6 +15,7 @@ digitalocean: false
 fm_postfix_enable: false
 fm_dovecot_enable: false
 fm_dkim_enable: false
+fm_procmail_enable: false
 
 # Create self-signed TLS certificate (default False),
 postfix_create_cert: false
@@ -66,6 +67,7 @@ freebsd_mailserver_packages:
   - mail/dovecot
   - mail/postfix-policyd-spf-perl
   - mail/opendkim
+  - mail/procmail
 
 # sanity
 fm_sanity: true
@@ -349,6 +351,10 @@ fm_periodic_conf:
   - {regexp: daily_status_mail_rejects_enable, value: "NO"}
   - {regexp: daily_status_include_submit_mailq, value: "NO"}
   - {regexp: daily_submit_queuerun, value: "NO"}
+
+# Procmail
+fm_procmail_rc_file: /usr/local/etc/procmailrc
+fm_procmail_rc_config: []
 
 # NOTES
 #
