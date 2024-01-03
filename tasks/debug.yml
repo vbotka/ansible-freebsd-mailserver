@@ -18,6 +18,8 @@
          fm_install [{{ fm_install }}]
          freebsd_install_method [{{ freebsd_install_method }}]
          freebsd_use_packages [{{ freebsd_use_packages }}]
+         freebsd_mailserver_packages_flavor
+         {{ freebsd_mailserver_packages_flavor|to_nice_yaml }}
          freebsd_mailserver_packages
          {{ freebsd_mailserver_packages|to_nice_yaml }}
 

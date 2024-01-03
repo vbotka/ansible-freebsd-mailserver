@@ -1,5 +1,13 @@
 ---
 
+- name: "packages: Install packages flavor"
+  community.general.pkgng:
+    name: "{{ freebsd_mailserver_packages_flavor }}"
+  register: result
+  retries: "{{ freebsd_install_retries }}"
+  until: result is succeeded
+  delay: "{{ freebsd_install_delay }}"
+
 - name: "packages: Install packages"
   community.general.pkgng:
     name: "{{ freebsd_mailserver_packages }}"
@@ -7,7 +15,7 @@
   retries: "{{ freebsd_install_retries }}"
   until: result is succeeded
   delay: "{{ freebsd_install_delay }}"
-  when: freebsd_install_method|lower == "packages"
+  when: freebsd_install_method|lower == 'packages'
 
 - name: "packages: Install ports"
   community.general.portinstall:
@@ -18,7 +26,7 @@
   retries: "{{ freebsd_install_retries }}"
   until: result is succeeded
   delay: "{{ freebsd_install_delay }}"
-  when: freebsd_install_method|lower == "ports"
+  when: freebsd_install_method|lower == 'ports'
 
 # EOF
 ...

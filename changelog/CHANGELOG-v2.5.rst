@@ -27,3 +27,6 @@ Bugfixes
 
 Breaking Changes / Porting Guide
 --------------------------------
+
+* Add variable freebsd_mailserver_packages_flavor (default:
+  [postfix-sasl]).

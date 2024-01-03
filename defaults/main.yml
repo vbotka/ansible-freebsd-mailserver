@@ -60,8 +60,9 @@ freebsd_install_method: packages
 freebsd_use_packages: true
 freebsd_install_retries: 10
 freebsd_install_delay: 5
+freebsd_mailserver_packages_flavor:
+  - postfix-sasl
 freebsd_mailserver_packages:
-  - mail/postfix-sasl
   - security/cyrus-sasl2
   - mail/dovecot
   - mail/postfix-policyd-spf-perl
