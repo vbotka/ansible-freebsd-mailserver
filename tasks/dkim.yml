@@ -8,11 +8,11 @@
 
 - name: "dkim: Create DKIM keys"
   ansible.builtin.command:
-    cmd: "opendkim-genkey -r -s {{ item.selector }} -d {{ item.name }} -D {{ fm_dkim_dir_keys }}/{{ item.name}}"
+    cmd: "opendkim-genkey -r -s {{ item.selector }} -d {{ item.name }} -D {{ fm_dkim_dir_keys }}/{{ item.name }}"
     creates: "{{ fm_dkim_dir_keys }}/{{ item.name }}/default.txt"
   loop: "{{ fm_dkim_domains }}"
   loop_control:
-    label: "{{ fm_dkim_dir_keys }}/{{ item.name }}"
+    label: "{{ item.selector }} {{ item.name }}"
   when: fm_dkim_create_keys|bool
   notify: verify dkim
   tags: fm-dkim-create-keys
@@ -25,7 +25,7 @@
     mode: "{{ fm_dkim_private_key_mode }}"
   loop: "{{ fm_dkim_domains }}"
   loop_control:
-    label: "{{ fm_dkim_dir_keys }}/{{ item }}"
+    label: "{{ item.selector }} {{ item.name }}"
   when: not ansible_check_mode
   tags: fm-dkim-keys-private-mod
 
@@ -37,7 +37,7 @@
     mode: "{{ fm_dkim_public_key_mode }}"
   loop: "{{ fm_dkim_domains }}"
   loop_control:
-    label: "{{ fm_dkim_dir_keys }}/{{ item }}"
+    label: "{{ item.selector }}/{{ item.name }}"
   when: not ansible_check_mode
   tags: fm-dkim-keys-public-mod
 
@@ -70,6 +70,7 @@
 
 - name: "dkim: Set ownership and permissions of DKIM run dir"
   ansible.builtin.file:
+    state: directory
     path: "{{ fm_dkim_run_dir }}"
     owner: "{{ fm_dkim_milteropendkim_uid }}"
     group: "{{ fm_dkim_milteropendkim_gid }}"
