@@ -19,6 +19,8 @@ Release Summary
 Major Changes
 -------------
 
+* Update dkim
+
 Minor Changes
 -------------
 
@@ -36,3 +38,5 @@ Breaking Changes / Porting Guide
 
 * Add variable freebsd_mailserver_packages_flavor (default:
   [postfix-sasl]).
+* New format of fm_dkim_domains. A simple list changed to a list of
+  dictionaries (keys: name, selector).
