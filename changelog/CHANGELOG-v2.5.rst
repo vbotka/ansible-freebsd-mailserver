@@ -19,7 +19,7 @@ Release Summary
 Major Changes
 -------------
 
-* Update dkim
+* Update dkim, dirs
 
 Minor Changes
 -------------
