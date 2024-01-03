@@ -51,6 +51,13 @@ shell> ansible-galaxy role install vbotka.freebsd_mailserver
 shell> ansible-galaxy role install vbotka.ansible_lib
 ```
 
+Optionally, install roles
+
+```bash
+shell> ansible-galaxy role install vbotka.freebsd_mailserver_sieve
+shell> ansible-galaxy role install vbotka.freebsd_mailserver_spamassassin
+```
+
 3) If necessary install collections
 
 ```bash
@@ -129,8 +136,22 @@ shell> ansible-playbook freebsd-mailserver.yml --syntax-check
 
 7) Install packages
 
+* Install packages from the role vbotka.freebsd_mailserver
+
 ```bash
 shell> ansible-playbook freebsd-mailserver.yml -t fm-packages
+
+```
+* If you enable *sieve*
+
+```yaml
+freebsd_mailserver_dovecot_protocols: imap pop3 lmtp sieve
+```
+
+install packages from the role vbotka.freebsd_mailserver_sieve
+
+```bash
+shell> ansible-playbook freebsd-mailserver-sieve.yml -t fm-ds-packages -e fm_ds_install=true
 ```
 
 8) Create default configuration for Dovecot

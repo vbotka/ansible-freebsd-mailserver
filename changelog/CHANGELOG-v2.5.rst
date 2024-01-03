@@ -22,7 +22,9 @@ Major Changes
 Minor Changes
 -------------
 
-* Update README. Clarify defaults dovecot_ssl_dh_*
+* Update README. Clarify defaults dovecot_ssl_dh_*. If protocol
+  *sieve* is used install vbotka.freebsd_mailserver_sieve.
+
 
 Bugfixes
 --------
