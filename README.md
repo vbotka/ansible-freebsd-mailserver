@@ -81,10 +81,11 @@ dovecot_ssl_dh_cmd_generate: true
 dovecot_ssl_dh_cmd: "openssl dhparam -out {{ dovecot_ssl_dh }} {{dovecot_ssl_dh_bits }}"
 ```
 
-The options *dovecot_ssl_dh_generate* and
-*dovecot_ssl_dh_cmd_generate* are mutually exclusive. If both options
-are *false* the file *dovecot_ssl_dh_path* is used. This file is
-provided by the role for testing only. Never use it in production.
+The options *dovecot_ssl_dh_generate* (default: true) and
+*dovecot_ssl_dh_cmd_generate* (default: false) are mutually
+exclusive. If both options are *false* the file *dovecot_ssl_dh_path*
+(default: files/dh.pem) is used. This file is provided by the role for
+testing only. Never use it in production.
 
 The generation of the file with Diffie-Hellman parameters may take a
 long time. For example 4096 bit parameters take ~40min with *Intel(R)
