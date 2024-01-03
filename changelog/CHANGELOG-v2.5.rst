@@ -27,6 +27,8 @@ Minor Changes
 Bugfixes
 --------
 
+* Fix files.yml. No parameter *warn* in ansible.builtin.shell
+
 Breaking Changes / Porting Guide
 --------------------------------
 
