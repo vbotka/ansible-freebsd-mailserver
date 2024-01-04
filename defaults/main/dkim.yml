@@ -31,6 +31,7 @@ fm_dkim_conf:
   - {regexp: Socket, value: "{{ fm_dkim_socket }}"}
   - {regexp: Syslog, value: "{{ fm_dkim_syslog }}"}
   - {regexp: Canonicalization, value: "{{ fm_dkim_canonicalization }}"}
+fm_dkim_domains_localhost: [127.0.0.1, localhost]
 fm_dkim_domains: "{{ dict(fm_dkim_domains_list|product(['default']))|
                      dict2items(key_name='name', value_name='selector') }}"
 fm_dkim_domains_list: "{{ (postfix_main_cf_virtual_alias_domains.split(',')|map('trim')|list +

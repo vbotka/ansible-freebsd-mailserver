@@ -104,6 +104,8 @@
          fm_dkim_port: {{ fm_dkim_port }}
          fm_dkim_conf:
            {{ fm_dkim_conf|to_yaml(indent=2)|indent(2) }}
+         fm_dkim_domains_localhost:
+           {{ fm_dkim_domains_localhost|to_nice_yaml(indent=2)|indent(2) }}
          fm_dkim_domains:
            {{ fm_dkim_domains|to_yaml(indent=2)|indent(2) }}
          postfix_mailerconf:

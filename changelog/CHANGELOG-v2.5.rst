@@ -24,6 +24,8 @@ Minor Changes
 * Remove redundant string quotes in defaults
 * Debug format properly indented
 * Update template KeyTable.j2
+* Update template TrustedHosts.j2; Add variable
+  fm_dkim_domains_localhost (default: [127.0.0.1, localhost])
 
 Bugfixes
 --------
