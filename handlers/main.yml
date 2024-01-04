@@ -106,11 +106,5 @@
     state: restarted
   when: fm_dkim_enable|bool
 
-- name: verify dkim
-  ansible.builtin.command:
-    cmd: "{{ fm_dkim_bin }} -x {{ fm_dkim_conf_path }} -n"
-  when: fm_dkim_enable|bool
-  notify: reload dkim
-
 # EOF
 ...
