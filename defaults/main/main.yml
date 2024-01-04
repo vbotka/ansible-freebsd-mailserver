@@ -22,15 +22,15 @@ postfix_main_cf_smtpd_tls_key_file: /etc/ssl/private/dovecot.pem
 postfix_main_cf_smtpd_tls_cert_file: /etc/ssl/certs/dovecot.pem
 # or (1) use https://galaxy.ansible.com/vbotka/certificate/
 # or (2) use LetsEncrypt (https://galaxy.ansible.com/vbotka/leutils/)
-# postfix_main_cf_smtpd_tls_key_file: "/usr/local/etc/letsencrypt/live/mail.example.com/privkey.pem"
-# postfix_main_cf_smtpd_tls_cert_file: "/usr/local/etc/letsencrypt/live/mail.example.com/fullchain.pem"
+# postfix_main_cf_smtpd_tls_key_file: /usr/local/etc/letsencrypt/live/mail.example.com/privkey.pem
+# postfix_main_cf_smtpd_tls_cert_file: /usr/local/etc/letsencrypt/live/mail.example.com/fullchain.pem
 
 rc_conf_hostname: srv.example.com
 postmaster_address: postmaster@example.com
 postfix_main_cf_myhostname: mail.example.com
 postfix_main_cf_mydomain: example.com
-postfix_main_cf_virtual_alias_domains: "example.net, example.org, example.co"
-postfix_main_cf_message_size_limit: "40960000"
+postfix_main_cf_virtual_alias_domains: 'example.net, example.org, example.co'
+postfix_main_cf_message_size_limit: 40960000
 
 aliases: []
 # aliases:
@@ -50,8 +50,8 @@ virtual_aliases: []
 # playbook with both roles freebsd-ansible-maiserver and
 # freebsd-ansible-maiserver-spamassasin would change it repeatidly and
 # report as changed. When not sure, keep the default.
-postfix_master_cf_service_def: "inet  n       -       -       -       -       smtpd"
-#postfix_master_cf_service_def: "inet  n       -       -       -       -       smtpd -o content_filter=spamfilter"
+postfix_master_cf_service_def: 'inet  n       -       -       -       -       smtpd'
+#postfix_master_cf_service_def: 'inet  n       -       -       -       -       smtpd -o content_filter=spamfilter'
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - CHANGE AT LEAST THIS < < <
 
@@ -85,17 +85,17 @@ fm_dkim_rcconf:
 
 # /etc/mail/mailer.conf
 postfix_mailerconf:
-  - "sendmail        /usr/local/sbin/sendmail"
-  - "send-mail       /usr/local/sbin/sendmail"
-  - "mailq           /usr/local/sbin/sendmail"
-  - "newaliases      /usr/local/sbin/sendmail"
+  - sendmail        /usr/local/sbin/sendmail
+  - send-mail       /usr/local/sbin/sendmail
+  - mailq           /usr/local/sbin/sendmail
+  - newaliases      /usr/local/sbin/sendmail
 
 # /etc/periodic.conf.local
 fm_periodic_conf:
-  - {regexp: daily_clean_hoststat_enable, value: "NO"}
-  - {regexp: daily_status_mail_rejects_enable, value: "NO"}
-  - {regexp: daily_status_include_submit_mailq, value: "NO"}
-  - {regexp: daily_submit_queuerun, value: "NO"}
+  - {regexp: daily_clean_hoststat_enable, value: 'NO'}
+  - {regexp: daily_status_mail_rejects_enable, value: 'NO'}
+  - {regexp: daily_status_include_submit_mailq, value: 'NO'}
+  - {regexp: daily_submit_queuerun, value: 'NO'}
 
 # NOTES
 #
