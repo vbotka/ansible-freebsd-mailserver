@@ -23,6 +23,7 @@ Minor Changes
 * Split defaults/main.yml to files in defaults/main/
 * Remove redundant string quotes in defaults
 * Debug format properly indented
+* Update template KeyTable.j2
 
 Bugfixes
 --------

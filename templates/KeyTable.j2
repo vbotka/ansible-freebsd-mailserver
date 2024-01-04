@@ -1,4 +1,4 @@
 # {{ ansible_managed }}
 {% for domain in fm_dkim_domains %}
-{{ domain.selector }}._domainkey.{{ domain.name }} {{ domain.name }}:{{ domain.selector }}:{{ fm_dkim_dir_keys }}/{{ domain.selector }}.{{ domain.name }}.private
+{{ domain.selector }}._domainkey.{{ domain.name }} {{ domain.name }}:{{ domain.selector }}:{{ fm_dkim_dir_keys }}/{{ domain.name }}/{{ domain.selector }}.private
 {% endfor %}
