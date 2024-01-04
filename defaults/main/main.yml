@@ -1,0 +1,110 @@
+---
+# defaults for freebsd_mailserver
+
+fm_install: true
+fm_debug: false
+fm_debug_classified: false
+fm_backup_conf: false
+
+# > > > CHANGE AT LEAST THIS - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+# Cloud providers
+digitalocean: false
+
+# FreeBSD mailserver
+fm_postfix_enable: false
+fm_dovecot_enable: false
+fm_dkim_enable: false
+
+# Create self-signed TLS certificate (default False),
+postfix_create_cert: false
+postfix_main_cf_smtpd_tls_key_file: /etc/ssl/private/dovecot.pem
+postfix_main_cf_smtpd_tls_cert_file: /etc/ssl/certs/dovecot.pem
+# or (1) use https://galaxy.ansible.com/vbotka/certificate/
+# or (2) use LetsEncrypt (https://galaxy.ansible.com/vbotka/leutils/)
+# postfix_main_cf_smtpd_tls_key_file: "/usr/local/etc/letsencrypt/live/mail.example.com/privkey.pem"
+# postfix_main_cf_smtpd_tls_cert_file: "/usr/local/etc/letsencrypt/live/mail.example.com/fullchain.pem"
+
+rc_conf_hostname: srv.example.com
+postmaster_address: postmaster@example.com
+postfix_main_cf_myhostname: mail.example.com
+postfix_main_cf_mydomain: example.com
+postfix_main_cf_virtual_alias_domains: "example.net, example.org, example.co"
+postfix_main_cf_message_size_limit: "40960000"
+
+aliases: []
+# aliases:
+#   - {alias: firstname, user: user1}
+#   - {alias: firstname.lastname,  user: user1}
+#   - {alias: flastname, user: user1}
+
+virtual_aliases: []
+# virtual_aliases:
+#   - {alias: firstname@example.net, user: user1}
+#   - {alias: firstname.lastname@example.net, user: user1}
+#   - {alias: flastname@example.net, user: user1}
+
+# Spamassassin
+# For spamassassin use -o content_filter=spamfilter. Role
+# freebsd-ansible-maiserver-spamassasin will configure it, but
+# playbook with both roles freebsd-ansible-maiserver and
+# freebsd-ansible-maiserver-spamassasin would change it repeatidly and
+# report as changed. When not sure, keep the default.
+postfix_master_cf_service_def: "inet  n       -       -       -       -       smtpd"
+#postfix_master_cf_service_def: "inet  n       -       -       -       -       smtpd -o content_filter=spamfilter"
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - CHANGE AT LEAST THIS < < <
+
+freebsd_install_method: packages
+# freebsd_install_method: ports
+freebsd_use_packages: true
+freebsd_install_retries: 10
+freebsd_install_delay: 5
+freebsd_mailserver_packages_flavor:
+  - postfix-sasl
+freebsd_mailserver_packages:
+  - security/cyrus-sasl2
+  - mail/dovecot
+  - mail/postfix-policyd-spf-perl
+  - mail/opendkim
+
+# sanity
+fm_sanity: true
+fm_sanity_platform: true
+fm_sanity_ansible_version: true
+# sanity: override supported versions
+al_supported_versions_override: ['12.2', '13.0']
+
+# rc.conf
+fm_postfix_rcconf: []
+fm_dovecot_rcconf: []
+fm_dkim_rcconf:
+  - {regexp: milteropendkim_uid, value: "{{ fm_dkim_milteropendkim_uid }}"}
+  - {regexp: milteropendkim_gid, value: "{{ fm_dkim_milteropendkim_gid }}"}
+  - {regexp: milteropendkim_cfgfile, value: "{{ fm_dkim_conf_path }}"}
+
+# /etc/mail/mailer.conf
+postfix_mailerconf:
+  - "sendmail        /usr/local/sbin/sendmail"
+  - "send-mail       /usr/local/sbin/sendmail"
+  - "mailq           /usr/local/sbin/sendmail"
+  - "newaliases      /usr/local/sbin/sendmail"
+
+# /etc/periodic.conf.local
+fm_periodic_conf:
+  - {regexp: daily_clean_hoststat_enable, value: "NO"}
+  - {regexp: daily_status_mail_rejects_enable, value: "NO"}
+  - {regexp: daily_status_include_submit_mailq, value: "NO"}
+  - {regexp: daily_submit_queuerun, value: "NO"}
+
+# NOTES
+#
+# 1) test command: openssl s_client -connect $SERVERIP:993 -ssl3
+# http://wiki2.dovecot.org/SSL
+# http://dovecot.markmail.org/message/5lyjagmrzcmmuyr4?q=SSLv3+disable
+#
+# 2) Link dovecot_conf_path  to dovecot_conf_link_path
+# https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=225078
+
+# EOF
+...
