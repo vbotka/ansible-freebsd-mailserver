@@ -22,6 +22,7 @@ Minor Changes
   *sieve* is used install vbotka.freebsd_mailserver_sieve.
 * Split defaults/main.yml to files in defaults/main/
 * Remove redundant string quotes in defaults
+* Debug format properly indented
 
 Bugfixes
 --------
