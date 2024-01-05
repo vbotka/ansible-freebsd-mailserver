@@ -80,7 +80,7 @@
     name: sendmail
     state: stopped
 
-# Milter
+# DKIM
 
 - name: enable and start dkim
   ansible.builtin.service:

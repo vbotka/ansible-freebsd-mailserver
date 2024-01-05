@@ -1,7 +1,8 @@
 # {{ ansible_managed }}
-127.0.0.1
-localhost
-{% for domain in fm_dkim_domains %}
+{% for domain in fm_dkim_domains_localhost %}
 {{ domain }}
+{% endfor %}
+{% for domain in fm_dkim_domains %}
+{{ domain.name }}
 {% endfor %}
 {{ ansible_default_ipv4.address }}

@@ -19,6 +19,8 @@ The roles are not listed in the meta file. Install them manually.
 
 ### Collections
 
+The below collections should be part of standard Ansible installation. If necessary install them manually.
+
 - community.crypto
 - community.general
 
@@ -38,59 +40,74 @@ See the defaults and examples in vars.
 
 1) Change shell to /bin/sh
 
-```
+```bash
 shell> ansible mailserver -e 'ansible_shell_type=csh ansible_shell_executable=/bin/csh' -a 'sudo pw usermod freebsd -s /bin/sh'
 ```
 
-2) Install the roles and collections
+2) Install roles
 
-```
+```bash
 shell> ansible-galaxy role install vbotka.freebsd_mailserver
 shell> ansible-galaxy role install vbotka.ansible_lib
+```
+
+Optionally, install roles
+
+```bash
+shell> ansible-galaxy role install vbotka.freebsd_mailserver_sieve
+shell> ansible-galaxy role install vbotka.freebsd_mailserver_spamassassin
+```
+
+3) If necessary install collections
+
+```bash
 shell> ansible-galaxy collection install community.crypto
 shell> ansible-galaxy collection install community.general
 ```
 
-3) Fit variables, e.g. in vars/main.yml
+4) Fit variables, for example in vars/main.yml
 
-```
+```bash
 shell> editor vbotka.freebsd_mailserver/vars/main.yml
 ```
 
-3a) Generate OpenSSL Diffie-Hellman parameters
+4) Generate OpenSSL Diffie-Hellman parameters
 
 By default the file *dovecot_ssl_dh* is created by the Ansible module *openssl_dhparam*
 
-```
+```yaml
 dovecot_ssl_dh_generate: true
 dovecot_ssl_dh_cmd_generate: false
 ```
 
 It is possible to use custom command *dovecot_ssl_dh_cmd* to create *dovecot_ssl_dh*
 
-```
+```yaml
 dovecot_ssl_dh_generate: false
 dovecot_ssl_dh_cmd_generate: true
 dovecot_ssl_dh_cmd: "openssl dhparam -out {{ dovecot_ssl_dh }} {{dovecot_ssl_dh_bits }}"
 ```
 
-The options *dovecot_ssl_dh_generate* and *dovecot_ssl_dh_cmd_generate* are mutually exclusive. If
-both options are *false* the file *dovecot_ssl_dh_path* is used. This file is provided by the role
-for testing only. Never use it in production.
+The options *dovecot_ssl_dh_generate* (default: true) and
+*dovecot_ssl_dh_cmd_generate* (default: false) are mutually
+exclusive. If both options are *false* the file *dovecot_ssl_dh_path*
+(default: files/dh.pem) is used. This file is provided by the role for
+testing only. Never use it in production.
 
-The generation of the file with Diffie-Hellman parameters may take a long time. For example 4096 bit
-parameters take ~40min with *Intel(R) Core(TM) i5-8200Y CPU @ 1.30GHz*. It's a good idea to generate
-the file separately to speedup the configuration.
+The generation of the file with Diffie-Hellman parameters may take a
+long time. For example 4096 bit parameters take ~40min with *Intel(R)
+Core(TM) i5-8200Y CPU @ 1.30GHz*. It's a good idea to generate the
+file separately to speedup the configuration.
 
-```
+```yaml
 dovecot_ssl_dh_generate: false
 dovecot_ssl_dh_cmd_generate: false
 dovecot_ssl_dh_path: <path-to-generated-Diffie-Hellman-file>
 ```
 
-4) Create playbook and inventory
+5) Create playbook and inventory
 
-```
+```yaml
 shell> cat freebsd-mailserver.yml
 
 - hosts: mailserver
@@ -98,7 +115,7 @@ shell> cat freebsd-mailserver.yml
     - vbotka.freebsd_mailserver
 ```
 
-```
+```ini
 shell> cat hosts
 [mailserver]
 <mailserver-ip-or-fqdn>
@@ -111,50 +128,64 @@ ansible_python_interpreter=/usr/local/bin/python3.7
 ansible_perl_interpreter=/usr/local/bin/perl
 ```
 
-4a) Check the syntax
+6) Check the syntax
 
-```
+```bash
 shell> ansible-playbook freebsd-mailserver.yml --syntax-check
 ```
 
-4b) Install packages
+7) Install packages
 
-```
+* Install packages from the role vbotka.freebsd_mailserver
+
+```bash
 shell> ansible-playbook freebsd-mailserver.yml -t fm-packages
-```
-
-4c) Create default configuration for Dovecot
 
 ```
+* If you enable *sieve*
+
+```yaml
+freebsd_mailserver_dovecot_protocols: imap pop3 lmtp sieve
+```
+
+install packages from the role vbotka.freebsd_mailserver_sieve
+
+```bash
+shell> ansible-playbook freebsd-mailserver-sieve.yml -t fm-ds-packages -e fm_ds_install=true
+```
+
+8) Create default configuration for Dovecot
+
+```bash
 shell> ansible-playbook freebsd-mailserver.yml -t dovecot_example_conf
 ```
 
-4d) Dry-run and display changes
+9) Dry-run and display changes
 
-```
+```bash
 shell> ansible-playbook freebsd-mailserver.yml --check --diff
 ```
 
-5) Install and configure the mailserver
+10) Install and configure the mailserver
 
-```
+```bash
 shell> ansible-playbook freebsd-mailserver.yml
 ```
 
-6) Consider to test the mailserver with http://mxtoolbox.com/
+11) Consider to test the mailserver with http://mxtoolbox.com/
 
 
 ## Check mode
 
 Create default configuration files of Dovecot to avoid error missing files
 
-```
+```bash
 shell> ansible-playbook freebsd-mailserver.yml -t dovecot_example_conf
 ```
 
-Then run the check-mode
+Then, run the check-mode
 
-```
+```bash
 shell> ansible-playbook freebsd-mailserver.yml --check
 ```
 
