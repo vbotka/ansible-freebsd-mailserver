@@ -38,7 +38,7 @@ See the defaults and examples in vars.
 
 ## Workflow
 
-1) Change shell to /bin/sh
+1) Change shell to /bin/sh if necessary
 
 ```bash
 shell> ansible mailserver -e 'ansible_shell_type=csh ansible_shell_executable=/bin/csh' -a 'sudo pw usermod freebsd -s /bin/sh'
@@ -192,18 +192,17 @@ shell> ansible-playbook freebsd-mailserver.yml --check
 
 ## References
 
+- [FreeBSD handbook: 31.5. Changing the Mail Transfer Agent](https://www.freebsd.org/doc/handbook/mail-changingmta.html)
+- [FreeBSD handbook: 31.7.4. SMTP Authentication](https://www.freebsd.org/doc/handbook/SMTP-Auth.html)
+- [SMTP Email Server With Postfix](https://subatomicsolutions.org/smtp-email-server-with-postfix)
 - [FreeBSD-Postfix-MySQL-SpamAssassin-Maia-Virtual Setup](http://www.purplehat.org/?page_id=4)
 - [Setting up a mail server with OpenSMTPD, Dovecot and Rspamd](https://poolp.org/posts/2019-09-14/setting-up-a-mail-server-with-opensmtpd-dovecot-and-rspamd/)
-- [FreeBSD handbook: 28.4. Changing the Mail Transfer Agent](https://www.freebsd.org/doc/handbook/mail-changingmta.html)
-- [FreeBSD handbook: 28.9. SMTP Authentication](https://www.freebsd.org/doc/handbook/SMTP-Auth.html)
-- [FreeBSD Email Server tyil.nl](https://www.tyil.nl/tag/email/)
 - [Postfix Documentation](http://www.postfix.org/documentation.html)
 - [Postfix SMTP relay and access control](http://www.postfix.org/SMTPD_ACCESS_README.html)
 - [Postfix SASL Howto](http://www.postfix.org/SASL_README.html)
 - [SASL Authentication in the Postfix SMTP/LMTP client](http://www.postfix.org/SASL_README.html#client_sasl_enable)
 - [postfix-logwatch - A Postfix log parser and analysis utility](https://www.freebsd.org/cgi/man.cgi?query=postfix-logwatch)
-- [Dovecot Wiki](https://wiki2.dovecot.org/)
-- [Upgrading Dovecot v2.2 to v2.3](https://wiki2.dovecot.org/Upgrading/2.3)
+- [Dovecot manual](https://doc.dovecot.org/)
 - [OpenDKIM + SPF FreeBSD Forum](https://forums.freebsd.org/threads/opendkim-spf.27201/)
 - [OpenDKIM Debian Wiki](https://wiki.debian.org/opendkim)
 - [OpenDKIM ArchLinux Wiki](https://wiki.archlinux.org/title/OpenDKIM)
@@ -216,4 +215,4 @@ shell> ansible-playbook freebsd-mailserver.yml --check
 
 ## Author Information
 
-[Vladimir Botka](https://botka.link)
+[Vladimir Botka](https://botka.info)
