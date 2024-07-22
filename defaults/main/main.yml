@@ -1,5 +1,6 @@
 ---
 # defaults for freebsd_mailserver
+fm_role_version: 2.6.0
 
 fm_install: true
 fm_debug: false
@@ -73,7 +74,11 @@ fm_sanity: true
 fm_sanity_platform: true
 fm_sanity_ansible_version: true
 # sanity: override supported versions
-al_supported_versions_override: ['12.2', '13.0']
+al_supported_versions_override: "{{ al_supported_versions_override_rel | flatten }}"
+al_supported_versions_override_rel:
+  - ['12.2', '12.3', '12.4']
+  - ['13.0', '13.1', '13.2', '13.3']
+  - ['14.0', '14.1']
 
 # rc.conf
 fm_postfix_rcconf: []
