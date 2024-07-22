@@ -10,16 +10,18 @@ vbotka.freebsd_mailserver 2.6 Release Notes
 
 Release Summary
 ---------------
-Ansible 2.17 update. Add FreeBSD 14.1
+Ansible 2.17 update.
 
 Major Changes
 -------------
-* Update debug
-* Add var fm_role_version
-* Add var al_supported_versions_override_rel
+* Add supported FreeBSD 14.1
 
 Minor Changes
 -------------
+* Update README, lint config
+* Update debug
+* Add var fm_role_version
+* Add var al_supported_versions_override_rel
 
 Bugfixes
 --------

@@ -1,6 +1,8 @@
 # freebsd_mailserver
 
-[![quality](https://img.shields.io/ansible/quality/27910)](https://galaxy.ansible.com/vbotka/freebsd_mailserver)[![Build Status](https://travis-ci.org/vbotka/ansible-freebsd-mailserver.svg?branch=master)](https://travis-ci.org/vbotka/ansible-freebsd-mailserver)
+[![quality](https://img.shields.io/ansible/quality/27910)](https://galaxy.ansible.com/vbotka/freebsd_mailserver)
+[![Build Status](https://travis-ci.org/vbotka/ansible-freebsd-mailserver.svg?branch=master)](https://travis-ci.org/vbotka/ansible-freebsd-mailserver)
+[![GitHub tag](https://img.shields.io/github/v/tag/vbotka/ansible-freebsd-mailserver)](https://github.com/vbotka/ansible-freebsd-mailserver/tags)
 
 [Ansible role.](https://galaxy.ansible.com/vbotka/freebsd_mailserver/) FreeBSD. Install and configure Postfix and Dovecot2.
 
@@ -15,14 +17,14 @@ Feel free to [share your feedback and report issues](https://github.com/vbotka/a
 
 The roles are not listed in the meta file. Install them manually.
 
-- [vbotka.ansible_lib](https://galaxy.ansible.com/vbotka/ansible_lib) Library of Ansible tasks.
+* [vbotka.ansible_lib](https://galaxy.ansible.com/vbotka/ansible_lib) Library of Ansible tasks.
 
 ### Collections
 
 The below collections should be part of standard Ansible installation. If necessary install them manually.
 
-- community.crypto
-- community.general
+* community.crypto
+* community.general
 
 ### Recommended
 
@@ -122,9 +124,9 @@ shell> cat hosts
 [mailserver:vars]
 ansible_connection=ssh
 ansible_user=freebsd
-ansible_become=yes
+ansible_become=true
 ansible_become_method=sudo
-ansible_python_interpreter=/usr/local/bin/python3.7
+ansible_python_interpreter=/usr/local/bin/python3.9
 ansible_perl_interpreter=/usr/local/bin/perl
 ```
 
@@ -187,6 +189,17 @@ Then, run the check-mode
 
 ```bash
 shell> ansible-playbook freebsd-mailserver.yml --check
+```
+
+
+## Ansible lint
+
+Use the configuration file *.ansible-lint.local* when running
+*ansible-lint*. Some rules might be disabled and some warnings might
+be ignored. See the notes in the configuration file.
+
+```bash
+shell> ansible-lint -c .ansible-lint.local
 ```
 
 
