@@ -1,5 +1,4 @@
 ---
-
 - name: Debug
   vars:
     msg: |-
@@ -20,9 +19,9 @@
       freebsd_install_method: {{ freebsd_install_method }}
       freebsd_use_packages: {{ freebsd_use_packages }}
       freebsd_mailserver_packages_flavor:
-        {{ freebsd_mailserver_packages_flavor|to_nice_yaml(indent=2)|indent(2) }}
+        {{ freebsd_mailserver_packages_flavor | to_nice_yaml(indent=2) | indent(2) }}
       freebsd_mailserver_packages:
-        {{ freebsd_mailserver_packages|to_nice_yaml(indent=2)|indent(2) }}
+        {{ freebsd_mailserver_packages | to_nice_yaml(indent=2) | indent(2) }}
       fm_postfix_enable: {{ fm_postfix_enable }}
       fm_dovecot_enable: {{ fm_dovecot_enable }}
       fm_dkim_enable: {{ fm_dkim_enable }}
@@ -30,21 +29,21 @@
       postfix_create_cert: {{ postfix_create_cert }}
 
       fm_postfix_rcconf:
-        {{ fm_postfix_rcconf|to_yaml(indent=2)|indent(2) }}
+        {{ fm_postfix_rcconf | to_yaml(indent=2) | indent(2) }}
       fm_dovecot_rcconf:
-        {{ fm_dovecot_rcconf|to_yaml(indent=2)|indent(2) }}
+        {{ fm_dovecot_rcconf | to_yaml(indent=2) | indent(2) }}
       fm_dkim_rcconf:
-        {{ fm_dkim_rcconf|to_yaml(indent=2)|indent(2) }}
+        {{ fm_dkim_rcconf | to_yaml(indent=2) | indent(2) }}
       aliases:
-        {{ aliases|to_yaml(indent=2)|indent(2) }}
+        {{ aliases | to_yaml(indent=2) | indent(2) }}
       virtual_aliases:
-        {{ virtual_aliases|to_yaml(indent=2)|indent(2) }}
+        {{ virtual_aliases | to_yaml(indent=2) | indent(2) }}
       postfix_main_cf_inet_interfaces: {{ postfix_main_cf_inet_interfaces }}
       postfix_main_cf_mynetworks_style: {{ postfix_main_cf_mynetworks_style }}
       postfix_main_cf_mydestination: {{ postfix_main_cf_mydestination }}
       postfix_main_cf_relay_domains: {{ postfix_main_cf_relay_domains }}
       postfix_main_cf_virtual_alias_maps_conf:
-        {{ postfix_main_cf_virtual_alias_maps_conf|to_yaml(indent=2)|indent(2) }}
+        {{ postfix_main_cf_virtual_alias_maps_conf | to_yaml(indent=2) | indent(2) }}
       postfix_main_cf_alias_database: {{ postfix_main_cf_alias_database }}
       postfix_main_cf_recipient_delimiter: {{ postfix_main_cf_recipient_delimiter }}
       postfix_main_cf_home_mailbox: {{ postfix_main_cf_home_mailbox }}
@@ -56,20 +55,20 @@
       postfix_main_cf_spf_policy_time_limit: {{ postfix_main_cf_spf_policy_time_limit }}
       postfix_main_cf_mydestination_pcre_file: {{ postfix_main_cf_mydestination_pcre_file }}
       postfix_main_cf_mydestination_pcre:
-        {{ postfix_main_cf_mydestination_pcre|to_nice_yaml(indent=2)|indent(2) }}
+        {{ postfix_main_cf_mydestination_pcre | to_nice_yaml(indent=2) | indent(2) }}
       postfix_main_cf_relayhost: {{ postfix_main_cf_relayhost }}
       postfix_main_cf_conf:
-        {{ postfix_main_cf_conf|to_yaml(indent=2)|indent(2) }}
+        {{ postfix_main_cf_conf | to_yaml(indent=2) | indent(2) }}
       postfix_main_cf_smtpd_conf:
-        {{ postfix_main_cf_smtpd_conf|to_yaml(indent=2)|indent(2) }}
+        {{ postfix_main_cf_smtpd_conf | to_yaml(indent=2) | indent(2) }}
       postfix_main_cf_smtp_conf:
-        {{ postfix_main_cf_smtp_conf|to_yaml(indent=2)|indent(2) }}
+        {{ postfix_main_cf_smtp_conf | to_yaml(indent=2) | indent(2) }}
       postfix_main_cf_smtpd_sasl_conf:
-        {{ postfix_main_cf_smtpd_sasl_conf|to_yaml(indent=2)|indent(2) }}
+        {{ postfix_main_cf_smtpd_sasl_conf | to_yaml(indent=2) | indent(2) }}
       postfix_main_cf_smtp_sasl_enable_conf:
-        {{ postfix_main_cf_smtp_sasl_enable_conf|to_yaml(indent=2)|indent(2) }}
+        {{ postfix_main_cf_smtp_sasl_enable_conf | to_yaml(indent=2) | indent(2) }}
       postfix_main_cf_smtp_sasl_disable_conf:
-        {{ postfix_main_cf_smtp_sasl_disable_conf|to_yaml(indent=2)|indent(2) }}
+        {{ postfix_main_cf_smtp_sasl_disable_conf | to_yaml(indent=2) | indent(2) }}
       postfix_main_cf_smtp_sasl_password_maps: {{ postfix_main_cf_smtp_sasl_password_maps }}
 
       dovecot_conf_path: {{ dovecot_conf_path }}
@@ -85,17 +84,17 @@
       dovecot_ssl_dh_path: {{ dovecot_ssl_dh_path }}
       dovecot_ssl_dh: {{ dovecot_ssl_dh }}
       dovecot_conf:
-        {{ dovecot_conf|to_yaml(indent=2)|indent(2) }}
+        {{ dovecot_conf | to_yaml(indent=2) | indent(2) }}
       dovecot_ssl_conf:
-        {{ dovecot_ssl_conf|to_yaml(indent=2)|indent(2) }}
+        {{ dovecot_ssl_conf | to_yaml(indent=2) | indent(2) }}
       dovecot_mail_conf:
-        {{ dovecot_mail_conf|to_yaml(indent=2)|indent(2) }}
+        {{ dovecot_mail_conf | to_yaml(indent=2) | indent(2) }}
       dovecot_auth_conf:
-        {{ dovecot_auth_conf|to_yaml(indent=2)|indent(2) }}
+        {{ dovecot_auth_conf | to_yaml(indent=2) | indent(2) }}
       dovecot_logging_conf:
-        {{ dovecot_logging_conf|to_yaml(indent=2)|indent(2) }}
+        {{ dovecot_logging_conf | to_yaml(indent=2) | indent(2) }}
       dovecot_lda_conf:
-        {{ dovecot_lda_conf|to_yaml(indent=2)|indent(2) }}
+        {{ dovecot_lda_conf | to_yaml(indent=2) | indent(2) }}
       fm_dkim_milteropendkim_uid: {{ fm_dkim_milteropendkim_uid }}
       fm_dkim_milteropendkim_gid: {{ fm_dkim_milteropendkim_gid }}
       fm_dkim_private_key_mode: {{ fm_dkim_private_key_mode }}
@@ -104,24 +103,23 @@
       fm_dkim_conf_path: {{ fm_dkim_conf_path }}
       fm_dkim_port: {{ fm_dkim_port }}
       fm_dkim_conf:
-        {{ fm_dkim_conf|to_yaml(indent=2)|indent(2) }}
+        {{ fm_dkim_conf | to_yaml(indent=2) | indent(2) }}
       fm_dkim_domains_localhost:
-        {{ fm_dkim_domains_localhost|to_nice_yaml(indent=2)|indent(2) }}
+        {{ fm_dkim_domains_localhost | to_nice_yaml(indent=2) | indent(2) }}
       fm_dkim_domains:
-        {{ fm_dkim_domains|to_yaml(indent=2)|indent(2) }}
+        {{ fm_dkim_domains | to_yaml(indent=2) | indent(2) }}
       postfix_mailerconf:
-        {{ postfix_mailerconf|to_nice_yaml(indent=2)|indent(2) }}
+        {{ postfix_mailerconf | to_nice_yaml(indent=2) | indent(2) }}
   ansible.builtin.debug:
     msg: "{{ '{}'.format(msg) }}"
 
-- name: "Debug classified fm_debug_classified={{ fm_debug_classified }}"
+- name: Debug classified fm_debug_classified={{ fm_debug_classified }}
   vars:
     msg: |
-         postfix_smtp_sasl_passwords:
-           {{ postfix_smtp_sasl_passwords|to_yaml(indent=2)|indent(2) }}
+      postfix_smtp_sasl_passwords:
+        {{ postfix_smtp_sasl_passwords | to_yaml(indent=2) | indent(2) }}
   ansible.builtin.debug:
     msg: "{{ '{}'.format(msg) }}"
   when: fm_debug_classified|bool
 
 # EOF
-...

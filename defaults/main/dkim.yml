@@ -8,19 +8,19 @@ fm_dkim_run_dir: /var/run/opendkim
 fm_dkim_bin: /usr/local/sbin/opendkim
 fm_dkim_milteropendkim_uid: mailnull
 fm_dkim_milteropendkim_gid: mailnull
-fm_dkim_private_key_mode: '0600'
-fm_dkim_public_key_mode: '0600'
+fm_dkim_private_key_mode: "0600"
+fm_dkim_public_key_mode: "0600"
 fm_dkim_dir: /usr/local/etc/opendkim
 fm_dkim_dir_keys: "{{ fm_dkim_dir }}/keys"
 fm_dkim_conf_path: "{{ fm_dkim_dir }}/opendkim.conf"
 fm_dkim_port: 10025
-fm_dkim_keytable: "refile:{{ fm_dkim_dir }}/KeyTable"
-fm_dkim_signingtable: "refile:{{ fm_dkim_dir }}/SigningTable"
-fm_dkim_internalhosts: "refile:{{ fm_dkim_dir }}/TrustedHosts"
-fm_dkim_externalignorelist: "refile:{{ fm_dkim_dir }}/TrustedHosts"
+fm_dkim_keytable: refile:{{ fm_dkim_dir }}/KeyTable
+fm_dkim_signingtable: refile:{{ fm_dkim_dir }}/SigningTable
+fm_dkim_internalhosts: refile:{{ fm_dkim_dir }}/TrustedHosts
+fm_dkim_externalignorelist: refile:{{ fm_dkim_dir }}/TrustedHosts
 fm_dkim_selector: dkim
-fm_dkim_socket: "inet:{{ fm_dkim_port }}@localhost"
-fm_dkim_syslog: 'Yes'
+fm_dkim_socket: inet:{{ fm_dkim_port }}@localhost
+fm_dkim_syslog: "Yes"
 fm_dkim_canonicalization: relaxed/simple
 fm_dkim_conf:
   - {regexp: KeyTable, value: "{{ fm_dkim_keytable }}"}
@@ -32,12 +32,13 @@ fm_dkim_conf:
   - {regexp: Syslog, value: "{{ fm_dkim_syslog }}"}
   - {regexp: Canonicalization, value: "{{ fm_dkim_canonicalization }}"}
 fm_dkim_domains_localhost: [127.0.0.1, localhost]
-fm_dkim_domains: "{{ dict(fm_dkim_domains_list|product(['default']))|
+fm_dkim_domains: "{{ dict(fm_dkim_domains_list | product(['default'])) |
                      dict2items(key_name='name', value_name='selector') }}"
-fm_dkim_domains_list: "{{ (postfix_main_cf_virtual_alias_domains.split(',')|map('trim')|list +
-                          [rc_conf_hostname] +
-                          [postfix_main_cf_myhostname] +
-                          [postfix_main_cf_mydomain])|select()|list|unique }}"
-postfix_main_cf_smtpd_milters: "inet:127.0.0.1:{{ fm_dkim_port }}"
+fm_dkim_domains_list: "{{ (postfix_main_cf_virtual_alias_domains.split(',') |
+                           map('trim') | list +
+                           [rc_conf_hostname] +
+                           [postfix_main_cf_myhostname] +
+                           [postfix_main_cf_mydomain]) | select() | list | unique }}"
+postfix_main_cf_smtpd_milters: inet:127.0.0.1:{{ fm_dkim_port }}
 postfix_main_cf_non_smtpd_milters: "{{ postfix_main_cf_smtpd_milters }}"
 postfix_main_cf_milter_default_action: accept

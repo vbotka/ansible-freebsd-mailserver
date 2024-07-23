@@ -1,6 +1,5 @@
 ---
-
-- name: "files: Create file {{ postfix_virtual }}"
+- name: "Files: Create file {{ postfix_virtual }}"
   ansible.builtin.shell:
     cmd: >
       /usr/bin/touch {{ postfix_virtual }} &&
@@ -10,4 +9,3 @@
   tags: postfix_virtual_aliases_file
 
 # EOF
-...

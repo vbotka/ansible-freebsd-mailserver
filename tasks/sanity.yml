@@ -1,32 +1,30 @@
 ---
+- name: "Sanity: Get meta-data and role_name."
+  when: fm_sanity_platform|bool or fm_sanity_ansible_version|bool
 
-- name: "sanity: Get meta-data and role_name."
   block:
-    - name: "sanity: Get meta-data."
+    - name: "Sanity: Get meta-data."
       ansible.builtin.include_vars:
         file: meta/main.yml
       when: galaxy_info is undefined
-    - name: "sanity: Get role_name."
+    - name: "Sanity: Get role_name."
       ansible.builtin.set_fact:
         al_sanity_role_name: "{{ role_name }}"
-  when: fm_sanity_platform|bool or fm_sanity_ansible_version|bool
+- name: "Sanity: Test supported platform."
+  when: fm_sanity_platform|bool
 
-- name: "sanity: Test supported platform."
   block:
-    - name: "sanity: Instantiate variable al_supported_versions_override"
+    - name: "Sanity: Instantiate variable al_supported_versions_override"
       ansible.builtin.set_fact:
         al_supported_versions_override: "{{ al_supported_versions_override }}"
-    - name: "sanity: Include vbotka.ansible_lib al_sanity_platform."
+    - name: "Sanity: Include vbotka.ansible_lib al_sanity_platform."
       ansible.builtin.include_role:
         name: vbotka.ansible_lib
         tasks_from: al_sanity_platform
-  when: fm_sanity_platform|bool
-
-- name: "sanity: Include vbotka.ansible_lib al_sanity_ansible_version."
+- name: "Sanity: Include vbotka.ansible_lib al_sanity_ansible_version."
   ansible.builtin.include_role:
     name: vbotka.ansible_lib
     tasks_from: al_sanity_ansible_version
   when: fm_sanity_ansible_version|bool
 
 # EOF
-...

@@ -1,10 +1,9 @@
 ---
-
 # smtpd sasl
-- name: "postfix_sasl: Configure SASL {{ postfix_main_cf }}"
+- name: "Postfix_sasl: Configure SASL {{ postfix_main_cf }}"
   ansible.builtin.lineinfile:
     dest: "{{ postfix_main_cf }}"
-    regexp: '^\s*{{ item.regexp }}\s*=(.*)$'
+    regexp: ^\s*{{ item.regexp }}\s*=(.*)$
     line: "{{ item.regexp }} = {{ item.value }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ postfix_main_cf_smtpd_sasl_conf }}"
@@ -14,10 +13,10 @@
   tags: postfix_main_cf_smtpd_sasl
 
 # smtp sasl
-- name: "postfix_sasl: Enable SASL {{ postfix_main_cf }}"
+- name: "Postfix_sasl: Enable SASL {{ postfix_main_cf }}"
   ansible.builtin.lineinfile:
     dest: "{{ postfix_main_cf }}"
-    regexp: '^\s*{{ item.regexp }}\s*=(.*)$'
+    regexp: ^\s*{{ item.regexp }}\s*=(.*)$
     line: "{{ item.regexp }} = {{ item.value }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ postfix_main_cf_smtp_sasl_enable_conf }}"
@@ -27,10 +26,10 @@
     - reload postfix
   tags: postfix_main_cf_smtp_sasl_enable
 
-- name: "postfix_sasl: Disable SASL {{ postfix_main_cf }}"
+- name: "Postfix_sasl: Disable SASL {{ postfix_main_cf }}"
   ansible.builtin.lineinfile:
     dest: "{{ postfix_main_cf }}"
-    regexp: '^\s*{{ item.regexp }}\s*=(.*)$'
+    regexp: ^\s*{{ item.regexp }}\s*=(.*)$
     line: "{{ item.regexp }} = {{ item.value }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ postfix_main_cf_smtp_sasl_disable_conf }}"
@@ -41,11 +40,11 @@
   tags: postfix_main_cf_smtp_sasl_disable
 
 # smtp_sasl_password_maps
-- name: "postfix_sasl: Configure smtp_sasl_password_maps in {{ postfix_main_cf }}"
+- name: "Postfix_sasl: Configure smtp_sasl_password_maps in {{ postfix_main_cf }}"
   ansible.builtin.lineinfile:
     dest: "{{ postfix_main_cf }}"
-    regexp: '^\s*smtp_sasl_password_maps\s*=(.*)$'
-    line: "smtp_sasl_password_maps = hash:{{ postfix_main_cf_smtp_sasl_password_maps }}"
+    regexp: ^\s*smtp_sasl_password_maps\s*=(.*)$
+    line: smtp_sasl_password_maps = hash:{{ postfix_main_cf_smtp_sasl_password_maps }}
     backup: "{{ fm_backup_conf }}"
   when:
     - postfix_main_cf_smtp_sasl_password_maps|length > 0
@@ -56,7 +55,7 @@
   tags: postfix_main_cf_smtp_sasl_password_maps
 
 # smtp_sasl_passwords
-- name: "postfix_sasl: Create {{ postfix_main_cf_smtp_sasl_password_maps }}"
+- name: "Postfix_sasl: Create {{ postfix_main_cf_smtp_sasl_password_maps }}"
   ansible.builtin.template:
     src: sasl_passwd.j2
     dest: "{{ postfix_main_cf_smtp_sasl_password_maps }}"
@@ -71,4 +70,3 @@
   tags: postfix_smtp_sasl_passwd_create
 
 # EOF
-...

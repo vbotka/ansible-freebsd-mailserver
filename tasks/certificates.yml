@@ -1,9 +1,8 @@
 ---
-
 # Self-signed certificate creation
 # http://wiki2.dovecot.org/SSL/CertificateCreation
 
-- name: "certificates: Create directory /etc/ssl/certs"
+- name: "Certificates: Create directory /etc/ssl/certs"
   ansible.builtin.file:
     state: directory
     path: /etc/ssl/certs
@@ -11,7 +10,7 @@
     group: wheel
     mode: "0755"
 
-- name: "certificates: Create directory /etc/ssl/private"
+- name: "Certificates: Create directory /etc/ssl/private"
   ansible.builtin.file:
     state: directory
     path: /etc/ssl/private
@@ -19,13 +18,13 @@
     group: wheel
     mode: "0700"
 
-- name: "certificates: Chmod 755 /usr/local/share/examples/dovecot/mkcert.sh"
+- name: "Certificates: Chmod 755 /usr/local/share/examples/dovecot/mkcert.sh"
   ansible.builtin.file:
     path: /usr/local/share/examples/dovecot/mkcert.sh
     mode: "0755"
   when: postfix_create_cert|bool
 
-- name: "certificates: Create Self-signed SSL certificates"
+- name: "Certificates: Create Self-signed SSL certificates"
   ansible.builtin.command:
     cmd: >
       sh -c "env OPENSSLCONFIG=/usr/local/share/examples/dovecot/dovecot-openssl.cnf
@@ -39,10 +38,9 @@
     - postfix check
     - reload postfix
 
-- name: "certificates: Debug result"
+- name: "Certificates: Debug result"
   ansible.builtin.debug:
     var: result
   when: fm_debug|bool
 
 # EOF
-...

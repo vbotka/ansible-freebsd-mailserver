@@ -67,13 +67,9 @@ shell> ansible-galaxy collection install community.crypto
 shell> ansible-galaxy collection install community.general
 ```
 
-4) Fit variables, for example in vars/main.yml
+4) Fit variables to your needs.
 
-```bash
-shell> editor vbotka.freebsd_mailserver/vars/main.yml
-```
-
-4) Generate OpenSSL Diffie-Hellman parameters
+5) Generate OpenSSL Diffie-Hellman parameters
 
 By default the file *dovecot_ssl_dh* is created by the Ansible module *openssl_dhparam*
 
@@ -107,7 +103,7 @@ dovecot_ssl_dh_cmd_generate: false
 dovecot_ssl_dh_path: <path-to-generated-Diffie-Hellman-file>
 ```
 
-5) Create playbook and inventory
+6) Create playbook and inventory
 
 ```yaml
 shell> cat freebsd-mailserver.yml
@@ -130,20 +126,21 @@ ansible_python_interpreter=/usr/local/bin/python3.9
 ansible_perl_interpreter=/usr/local/bin/perl
 ```
 
-6) Check the syntax
+7) Check the syntax
 
 ```bash
 shell> ansible-playbook freebsd-mailserver.yml --syntax-check
 ```
 
-7) Install packages
+8) Install packages
 
 * Install packages from the role vbotka.freebsd_mailserver
 
 ```bash
-shell> ansible-playbook freebsd-mailserver.yml -t fm-packages
+shell> ansible-playbook freebsd-mailserver.yml -t fm-packages -e fm_install=true
 
 ```
+
 * If you enable *sieve*
 
 ```yaml
@@ -153,28 +150,40 @@ freebsd_mailserver_dovecot_protocols: imap pop3 lmtp sieve
 install packages from the role vbotka.freebsd_mailserver_sieve
 
 ```bash
-shell> ansible-playbook freebsd-mailserver-sieve.yml -t fm-ds-packages -e fm_ds_install=true
+shell> ansible-playbook freebsd-mailserver-sieve.yml -t fm_ds_packages -e fm_ds_install=true
 ```
 
-8) Create default configuration for Dovecot
+* If you enable *spamassassin*
+
+```yaml
+postfix_master_cf_service_def: "inet  n       -       -       -       -       smtpd -o content_filter=spamfilter"
+```
+
+install packages from the role vbotka.freebsd_mailserver_spamassassin
+
+```bash
+shell> ansible-playbook freebsd-mailserver-spamassassin.yml -t fm_sa_packages -e fm_sa_install=true
+```
+
+9) Create default configuration for Dovecot
 
 ```bash
 shell> ansible-playbook freebsd-mailserver.yml -t dovecot_example_conf
 ```
 
-9) Dry-run and display changes
+10) Dry-run and display changes
 
 ```bash
 shell> ansible-playbook freebsd-mailserver.yml --check --diff
 ```
 
-10) Install and configure the mailserver
+11) Install and configure the mailserver
 
 ```bash
 shell> ansible-playbook freebsd-mailserver.yml
 ```
 
-11) Consider to test the mailserver with http://mxtoolbox.com/
+12) Consider to test the mailserver in http://mxtoolbox.com/
 
 
 ## Check mode

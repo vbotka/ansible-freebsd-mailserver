@@ -22,7 +22,11 @@ Minor Changes
 * Update debug
 * Add var fm_role_version
 * Add var al_supported_versions_override_rel
-
+* Update handlers listen to lowercase names
+* Fix lint
+* Set ownership and permissions of DKIM private keys. Skip check mode
+  in fm_dkim_create_keys
+  
 Bugfixes
 --------
 

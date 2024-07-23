@@ -1,28 +1,26 @@
 ---
-
-- name: "dirs: Create DKIM dirs"
+- name: "Dirs: Create DKIM dirs"
   ansible.builtin.file:
     state: directory
     path: "{{ item }}"
     owner: root
     group: wheel
-    mode: '0755'
+    mode: "0755"
   loop:
     - "{{ fm_dkim_dir }}"
     - "{{ fm_dkim_dir_keys }}"
   tags: fm-dirs-dkim
 
-- name: "dirs: Create DKIM domain key dirs"
+- name: "Dirs: Create DKIM domain key dirs"
   ansible.builtin.file:
     state: directory
     path: "{{ fm_dkim_dir_keys }}/{{ item.name }}"
     owner: root
     group: wheel
-    mode: '0755'
+    mode: "0755"
   loop: "{{ fm_dkim_domains }}"
   loop_control:
     label: "{{ fm_dkim_dir_keys }}/{{ item.name }}"
   tags: fm-dirs-dkim-domains
 
 # EOF
-...
