@@ -1,5 +1,6 @@
 ---
 # defaults for freebsd_mailserver
+fm_role_version: 2.6.0
 
 fm_install: true
 fm_debug: false
@@ -29,7 +30,7 @@ rc_conf_hostname: srv.example.com
 postmaster_address: postmaster@example.com
 postfix_main_cf_myhostname: mail.example.com
 postfix_main_cf_mydomain: example.com
-postfix_main_cf_virtual_alias_domains: 'example.net, example.org, example.co'
+postfix_main_cf_virtual_alias_domains: example.net, example.org, example.co
 postfix_main_cf_message_size_limit: 40960000
 
 aliases: []
@@ -50,8 +51,8 @@ virtual_aliases: []
 # playbook with both roles freebsd-ansible-maiserver and
 # freebsd-ansible-maiserver-spamassasin would change it repeatidly and
 # report as changed. When not sure, keep the default.
-postfix_master_cf_service_def: 'inet  n       -       -       -       -       smtpd'
-#postfix_master_cf_service_def: 'inet  n       -       -       -       -       smtpd -o content_filter=spamfilter'
+postfix_master_cf_service_def: inet  n       -       -       -       -       smtpd
+# postfix_master_cf_service_def: 'inet  n       -       -       -       -       smtpd -o content_filter=spamfilter'
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - CHANGE AT LEAST THIS < < <
 
@@ -73,7 +74,11 @@ fm_sanity: true
 fm_sanity_platform: true
 fm_sanity_ansible_version: true
 # sanity: override supported versions
-al_supported_versions_override: ['12.2', '13.0']
+al_supported_versions_override: "{{ al_supported_versions_override_rel | flatten }}"
+al_supported_versions_override_rel:
+  - ["12.2", "12.3", "12.4"]
+  - ["13.0", "13.1", "13.2", "13.3"]
+  - ["14.0", "14.1"]
 
 # rc.conf
 fm_postfix_rcconf: []
@@ -92,10 +97,10 @@ postfix_mailerconf:
 
 # /etc/periodic.conf.local
 fm_periodic_conf:
-  - {regexp: daily_clean_hoststat_enable, value: 'NO'}
-  - {regexp: daily_status_mail_rejects_enable, value: 'NO'}
-  - {regexp: daily_status_include_submit_mailq, value: 'NO'}
-  - {regexp: daily_submit_queuerun, value: 'NO'}
+  - {regexp: daily_clean_hoststat_enable, value: "NO"}
+  - {regexp: daily_status_mail_rejects_enable, value: "NO"}
+  - {regexp: daily_status_include_submit_mailq, value: "NO"}
+  - {regexp: daily_submit_queuerun, value: "NO"}
 
 # NOTES
 #
@@ -107,4 +112,3 @@ fm_periodic_conf:
 # https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=225078
 
 # EOF
-...

@@ -1,70 +1,71 @@
 ---
-
-- name: "dkim: Debug"
+- name: "Dkim: Debug fm_debug={{ fm_debug }}"
   ansible.builtin.debug:
     var: fm_dkim_domains
-  when: fm_debug|bool
+  when: fm_debug | bool
   tags: fm-dkim-debug
 
-- name: "dkim: Create DKIM keys"
+- name: "Dkim: Create DKIM keys"
   ansible.builtin.command:
-    cmd: "opendkim-genkey -r -s {{ item.selector }} -d {{ item.name }} -D {{ fm_dkim_dir_keys }}/{{ item.name }}"
+    cmd: opendkim-genkey -r -s {{ item.selector }} -d {{ item.name }} -D {{ fm_dkim_dir_keys }}/{{ item.name }}
     creates: "{{ fm_dkim_dir_keys }}/{{ item.name }}/default.txt"
   loop: "{{ fm_dkim_domains }}"
   loop_control:
     label: "{{ item.selector }} {{ item.name }}"
-  when: fm_dkim_create_keys|bool
+  when: fm_dkim_create_keys | bool
   tags: fm-dkim-create-keys
 
-- name: "dkim: Set ownership and permissions of DKIM private keys"
-  ansible.builtin.file:
-    path: "{{ fm_dkim_dir_keys }}/{{ item.name }}/{{ item.selector }}.private"
-    owner: "{{ fm_dkim_milteropendkim_uid }}"
-    group: "{{ fm_dkim_milteropendkim_gid }}"
-    mode: "{{ fm_dkim_private_key_mode }}"
-  loop: "{{ fm_dkim_domains }}"
-  loop_control:
-    label: "{{ item.selector }} {{ item.name }}"
-  when: not ansible_check_mode
-  tags: fm-dkim-keys-private-mod
+- name: Skip in check mode if fm_dkim_create_keys
+  when: not (ansible_check_mode and fm_dkim_create_keys|bool)
+  block:
 
-- name: "dkim: Set ownership and permissions of DKIM public keys"
-  ansible.builtin.file:
-    path: "{{ fm_dkim_dir_keys }}/{{ item.name }}/{{ item.selector }}.txt"
-    owner: "{{ fm_dkim_milteropendkim_uid }}"
-    group: "{{ fm_dkim_milteropendkim_gid }}"
-    mode: "{{ fm_dkim_public_key_mode }}"
-  loop: "{{ fm_dkim_domains }}"
-  loop_control:
-    label: "{{ item.selector }}/{{ item.name }}"
-  when: not ansible_check_mode
-  tags: fm-dkim-keys-public-mod
+    - name: "Dkim: Set ownership and permissions of DKIM private keys"
+      ansible.builtin.file:
+        path: "{{ fm_dkim_dir_keys }}/{{ item.name }}/{{ item.selector }}.private"
+        owner: "{{ fm_dkim_milteropendkim_uid }}"
+        group: "{{ fm_dkim_milteropendkim_gid }}"
+        mode: "{{ fm_dkim_private_key_mode }}"
+      loop: "{{ fm_dkim_domains }}"
+      loop_control:
+        label: "{{ item.selector }} {{ item.name }}"
+      tags: fm-dkim-keys-private-mod
 
-- name: "dkim: Create {{ fm_dkim_dir }}/TrustedHosts"
+    - name: "Dkim: Set ownership and permissions of DKIM public keys"
+      ansible.builtin.file:
+        path: "{{ fm_dkim_dir_keys }}/{{ item.name }}/{{ item.selector }}.txt"
+        owner: "{{ fm_dkim_milteropendkim_uid }}"
+        group: "{{ fm_dkim_milteropendkim_gid }}"
+        mode: "{{ fm_dkim_public_key_mode }}"
+      loop: "{{ fm_dkim_domains }}"
+      loop_control:
+        label: "{{ item.selector }}/{{ item.name }}"
+      tags: fm-dkim-keys-public-mod
+
+- name: "Dkim: Create {{ fm_dkim_dir ~ '/TrustedHosts' }}"
   ansible.builtin.template:
     src: TrustedHosts.j2
     dest: "{{ fm_dkim_dir }}/TrustedHosts"
     mode: "0644"
-  when: fm_dkim_create_trusted_hosts|bool
+  when: fm_dkim_create_trusted_hosts | bool
   tags: fm-dkim-create-TrustedHosts
 
-- name: "dkim: Create {{ fm_dkim_dir }}/SigningTable"
+- name: "Dkim: Create {{ fm_dkim_dir ~ '/SigningTable' }}"
   ansible.builtin.template:
     src: SigningTable.j2
     dest: "{{ fm_dkim_dir }}/SigningTable"
     mode: "0644"
-  when: fm_dkim_create_signingtable|bool
+  when: fm_dkim_create_signingtable | bool
   tags: fm-dkim-create-SigningTable
 
-- name: "dkim: Create {{ fm_dkim_dir }}/KeyTable"
+- name: "Dkim: Create {{ fm_dkim_dir ~ '/KeyTable' }}"
   ansible.builtin.template:
     src: KeyTable.j2
     dest: "{{ fm_dkim_dir }}/KeyTable"
     mode: "0644"
-  when: fm_dkim_create_keytable|bool
+  when: fm_dkim_create_keytable | bool
   tags: fm-dkim-create-KeyTable
 
-- name: "dkim: Set ownership and permissions of DKIM run dir"
+- name: "Dkim: Set ownership and permissions of DKIM run dir"
   ansible.builtin.file:
     state: directory
     path: "{{ fm_dkim_run_dir }}"
@@ -74,41 +75,44 @@
   tags: fm-dkim-run
 
 - name: Configure opendkim.conf
+  when: fm_dkim_conf|length > 0
+  tags: fm-dkim-conf
   block:
 
-    - name: "dkim:opendkim.conf: Stat {{ fm_dkim_conf_path }}"
+    - name: "Dkim:opendkim.conf: Stat {{ fm_dkim_conf_path }}"
       ansible.builtin.stat:
         path: "{{ fm_dkim_conf_path }}"
       register: conf
 
-    - name: "dkim:opendkim.conf: Create name of the backup file"
+    - name: "Dkim:opendkim.conf: Create name of the backup file"
       ansible.builtin.set_fact:
-        fm_dkim_conf_path_backup: "{{ fm_dkim_conf_path }}.{{ '%Y-%m-%d@%H:%M:%S'|strftime }}~"
+        fm_dkim_conf_path_backup: "{{ fm_dkim_conf_path }}.{{ '%Y-%m-%d@%H:%M:%S' | strftime }}~"
       when: conf.stat.exists
 
-    - name: "dkim:opendkim.conf: Backup"
+    - name: "Dkim:opendkim.conf: Backup"
       ansible.builtin.copy:
         remote_src: true
         src: "{{ fm_dkim_conf_path }}"
         dest: "{{ fm_dkim_conf_path_backup }}"
+        mode: "0644"
       changed_when: false
       when: conf.stat.exists
 
-    - name: "dkim:opendkim.conf: Configure {{ fm_dkim_conf_path }}"
+    - name: "Dkim:opendkim.conf: Configure {{ fm_dkim_conf_path }}"
       ansible.builtin.lineinfile:
         create: true
         dest: "{{ fm_dkim_conf_path }}"
-        regexp: '^\s*{{ item.regexp }}\s+(.*)$'
+        regexp: ^\s*{{ item.regexp }}\s+(.*)$
         line: "{{ item.regexp }} {{ item.value }}"
         mode: "0644"
       loop: "{{ fm_dkim_conf }}"
       register: result
 
-    - name: "dkim:opendkim.conf: Validate {{ fm_dkim_conf_path }}"
+    - name: "Dkim:opendkim.conf: Validate {{ fm_dkim_conf_path }}" # noqa: no-handler no-changed-when
       ansible.builtin.command: "{{ fm_dkim_bin }} -x {{ fm_dkim_conf_path }} -n"
       when: result.changed
 
-    - name: "dkim:opendkim.conf: Remove backup"
+    - name: "Dkim:opendkim.conf: Remove backup"
       ansible.builtin.file:
         state: absent
         path: "{{ fm_dkim_conf_path_backup }}"
@@ -117,32 +121,29 @@
 
   rescue:
 
-    - name: "dkim:opendkim.conf:rescue: Restore from backup"
+    - name: "Dkim:opendkim.conf:rescue: Restore from backup"
       ansible.builtin.copy:
         remote_src: true
         src: "{{ fm_dkim_conf_path_backup }}"
         dest: "{{ fm_dkim_conf_path }}"
+        mode: "0644"
       when: conf.stat.exists
 
-    - name: "dkim:opendkim.conf:rescue: Remove not valid {{ fm_dkim_conf_path }}"
+    - name: "Dkim:opendkim.conf:rescue: Remove not valid {{ fm_dkim_conf_path }}"
       ansible.builtin.file:
         state: absent
         path: "{{ fm_dkim_conf_path }}"
       when: not conf.stat.exists
 
-    - name: "dkim:opendkim.conf:rescue: Make sure all handlers run"
+    - name: "Dkim:opendkim.conf:rescue: Make sure all handlers run"
       ansible.builtin.meta: flush_handlers
 
-    - name: "dkim:opendkim.conf:rescue: Fail"
+    - name: "Dkim:opendkim.conf:rescue: Fail"
       ansible.builtin.fail:
         msg: |
           ansible_failed_task:
-            {{ ansible_failed_task|to_yaml(indent=2)|indent(2) }}
+            {{ ansible_failed_task | to_yaml(indent=2) | indent(2) }}
           ansible_failed_result:
-            {{ ansible_failed_result|to_yaml(indent=2)|indent(2) }}
-
-  when: fm_dkim_conf|length > 0
-  tags: fm-dkim-conf
+            {{ ansible_failed_result | to_yaml(indent=2) | indent(2) }}
 
 # EOF
-...

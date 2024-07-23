@@ -9,15 +9,23 @@ postfix_alias: /etc/mail/aliases
 # main.cf
 postfix_main_cf_inet_interfaces: all
 postfix_main_cf_mynetworks_style: host
-postfix_main_cf_mydestination: $myhostname, localhost.$mydomain, localhost, $mydomain, mail.$mydomain, www.$mydomain, ftp.$mydomain
+postfix_main_cf_mydestination: "{{ postfix_main_cf_mydestination_list | join(', ') }}"
+postfix_main_cf_mydestination_list:
+  - $myhostname
+  - localhost.$mydomain
+  - localhost
+  - $mydomain
+  - mail.$mydomain
+  - www.$mydomain
+  - ftp.$mydomain
 postfix_main_cf_relay_domains: $mydestination
 postfix_main_cf_alias_maps: hash:/etc/mail/aliases
 postfix_main_cf_alias_database: hash:/etc/mail/aliases
 postfix_main_cf_recipient_delimiter: +
 postfix_main_cf_home_mailbox: Maildir/
 postfix_main_cf_smtpd_banner: $myhostname ESMTP $mail_name
-postfix_main_cf_html_directory: 'no'
-postfix_main_cf_readme_directory: 'no'
+postfix_main_cf_html_directory: "no"
+postfix_main_cf_readme_directory: "no"
 postfix_main_cf_meta_directory: /usr/local/libexec/postfix
 postfix_main_cf_shlib_directory: /usr/local/lib/postfix
 postfix_main_cf_spf_policy_time_limit: 3600
@@ -44,21 +52,21 @@ postfix_main_cf_mydestination_pcre: []
 postfix_main_cf_mydestination_pcre_file: /usr/local/etc/postfix/mydestinations
 
 # relayhost
-postfix_main_cf_relayhost: ''
+postfix_main_cf_relayhost: ""
 
 # virtual domains
 postfix_main_cf_virtual_alias_maps: hash:/usr/local/etc/postfix/virtual
 postfix_main_cf_virtual_alias_maps_conf:
-  - {regexp: virtual_alias_domains, value: "{{ postfix_main_cf_virtual_alias_domains }}"}
-  - {regexp: virtual_alias_maps, value: "{{ postfix_main_cf_virtual_alias_maps }}"}
+  - { regexp: virtual_alias_domains, value: "{{ postfix_main_cf_virtual_alias_domains }}" }
+  - { regexp: virtual_alias_maps, value: "{{ postfix_main_cf_virtual_alias_maps }}" }
 
 # smtpd
 postfix_main_cf_tls_random_source: dev:/dev/urandom
-postfix_main_cf_smtpd_tls_received_header: 'yes'
+postfix_main_cf_smtpd_tls_received_header: "yes"
 postfix_main_cf_smtpd_tls_security_level: may
 postfix_main_cf_smtpd_tls_ciphers: medium
 postfix_main_cf_smtpd_tls_exclude_ciphers: aNULL, DES, 3DES, MD5, DES+MD5, RC4
-postfix_main_cf_smtpd_tls_protocols: '!SSLv2, !SSLv3'
+postfix_main_cf_smtpd_tls_protocols: "!SSLv2, !SSLv3"
 postfix_main_cf_smtpd_tls_session_cache_database: btree:${data_directory}/smtpd_scache
 postfix_main_cf_smtpd_tls_session_cache_timeout: 3600s
 postfix_main_cf_smtpd_relay_restrictions: permit_mynetworks permit_sasl_authenticated reject_unauth_destination
@@ -74,8 +82,8 @@ postfix_main_cf_smtpd_relay_restrictions: permit_mynetworks permit_sasl_authenti
 postfix_main_cf_smtpd_recipient_restrictions: >-
   permit_mynetworks, permit_sasl_authenticated, reject_unauth_destination,
   check_policy_service unix:private/spf-policy
-postfix_main_cf_smtpd_use_tls: 'yes'
-postfix_main_cf_smtpd_tls_auth_only: 'yes'
+postfix_main_cf_smtpd_use_tls: "yes"
+postfix_main_cf_smtpd_tls_auth_only: "yes"
 postfix_main_cf_smtpd_tls_loglevel: 1
 postfix_main_cf_smtpd_tls_cafile: /etc/ssl/cert.pem
 
@@ -102,9 +110,9 @@ postfix_main_cf_smtpd_conf:
   - {regexp: milter_default_action, value: "{{ postfix_main_cf_milter_default_action }}"}
 
 # smtp
-postfix_main_cf_smtp_use_tls: 'yes'
+postfix_main_cf_smtp_use_tls: "yes"
 postfix_main_cf_smtp_tls_cafile: /etc/ssl/cert.pem
-postfix_main_cf_smtp_tls_note_starttls_offer: 'yes'
+postfix_main_cf_smtp_tls_note_starttls_offer: "yes"
 postfix_main_cf_smtp_tls_loglevel: 1
 postfix_main_cf_smtp_conf:
   - {regexp: smtp_use_tls, value: "{{ postfix_main_cf_smtp_use_tls }}"}
@@ -113,10 +121,10 @@ postfix_main_cf_smtp_conf:
   - {regexp: smtp_tls_loglevel, value: "{{ postfix_main_cf_smtp_tls_loglevel }}"}
 
 # smtpd sasl
-postfix_main_cf_smtpd_sasl_auth_enable: 'yes'
+postfix_main_cf_smtpd_sasl_auth_enable: "yes"
 postfix_main_cf_smtpd_sasl_type: dovecot
 postfix_main_cf_smtpd_sasl_path: private/auth
-postfix_main_cf_broken_sasl_auth_clients: 'no'
+postfix_main_cf_broken_sasl_auth_clients: "no"
 postfix_main_cf_smtpd_sasl_conf:
   - {regexp: smtpd_sasl_auth_enable, value: "{{ postfix_main_cf_smtpd_sasl_auth_enable }}"}
   - {regexp: smtpd_sasl_type, value: "{{ postfix_main_cf_smtpd_sasl_type }}"}
@@ -131,20 +139,19 @@ postfix_main_cf_smtp_sasl_tls_security_options: noanonymous
 postfix_main_cf_smtp_tls_security_level_no: may
 postfix_main_cf_smtp_tls_security_level_yes: encrypt
 postfix_main_cf_smtp_sasl_enable_conf:
-  - {regexp: smtp_sasl_auth_enable, value: 'yes'}
+  - {regexp: smtp_sasl_auth_enable, value: "yes"}
   - {regexp: smtp_sasl_tls_security_options, value: "{{ postfix_main_cf_smtp_sasl_tls_security_options }}"}
   - {regexp: smtp_tls_security_level, value: "{{ postfix_main_cf_smtp_tls_security_level_yes }}"}
 postfix_main_cf_smtp_sasl_disable_conf:
-  - {regexp: smtp_sasl_auth_enable, value: 'no'}
+  - {regexp: smtp_sasl_auth_enable, value: "no"}
   - {regexp: smtp_sasl_tls_security_options, value: "{{ postfix_main_cf_smtp_sasl_tls_security_options }}"}
   - {regexp: smtp_tls_security_level, value: "{{ postfix_main_cf_smtp_tls_security_level_no }}"}
 
 postfix_main_cf_smtp_sasl_password_maps: /usr/local/etc/postfix/sasl_passwd
 postfix_smtp_sasl_passwords: []
-
 # master.cf
 postfix_master_cf_smtpd_tls_security_level: encrypt
-postfix_master_cf_smtpd_sasl_auth_enable: 'yes'
+postfix_master_cf_smtpd_sasl_auth_enable: "yes"
 postfix_master_cf_smtpd_sasl_type: dovecot
 postfix_master_cf_smtpd_sasl_path: private/auth
 postfix_master_cf_smtpd_sasl_security_options: noanonymous
@@ -152,5 +159,5 @@ postfix_master_cf_smtpd_sasl_local_domain: $myhostname
 postfix_master_cf_smtpd_client_restrictions: permit_sasl_authenticated,reject
 postfix_master_cf_smtpd_recipient_restrictions: permit_sasl_authenticated,reject
 postfix_master_cf_smtpd_relay_restrictions: permit_sasl_authenticated,reject
-postfix_master_cf_smtpd_reject_unlisted_recipient: 'no'
-#postfix_master_cf_content_filter=spamfilter
+postfix_master_cf_smtpd_reject_unlisted_recipient: "no"
+# postfix_master_cf_content_filter=spamfilter

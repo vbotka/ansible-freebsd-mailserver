@@ -1,27 +1,26 @@
 ---
-
-- name: "virtual_aliases: Create empty {{ postfix_virtual }}"
+- name: "Virtual_aliases: Create empty {{ postfix_virtual }}"
   ansible.builtin.command:
-    cmd: "touch {{ postfix_virtual }}"
+    cmd: touch {{ postfix_virtual }}
     creates: "{{ postfix_virtual }}"
   notify:
     - postmap virtual aliases
     - postfix check
     - reload postfix
 
-- name: "virtual_aliases: Create empty {{ postfix_virtual }}.db"
+- name: "Virtual_aliases: Create empty {{ postfix_virtual ~ '.db' }}"
   ansible.builtin.command:
-    cmd: "/usr/local/sbin/postmap {{ postfix_virtual }}"
+    cmd: /usr/local/sbin/postmap {{ postfix_virtual }}
     creates: "{{ postfix_virtual }}.db"
   notify:
     - postfix check
     - reload postfix
 
-- name: "virtual_aliases: Configure virtual aliases {{ postfix_virtual }}"
+- name: "Virtual_aliases: Configure virtual aliases {{ postfix_virtual }}"
   ansible.builtin.lineinfile:
     dest: "{{ postfix_virtual }}"
-    regexp: '^\s*{{ item.alias }}(?!\S).*$'
-    line: "{{ item.alias }}\t {{ item.user }}"  # noqa no-tabs
+    regexp: ^\s*{{ item.alias }}(?!\S).*$
+    line: "{{ item.alias }}\t {{ item.user }}" # noqa no-tabs
     owner: root
     group: wheel
     mode: "0644"
@@ -34,4 +33,3 @@
     - reload postfix
 
 # EOF
-...

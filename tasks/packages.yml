@@ -1,6 +1,5 @@
 ---
-
-- name: "packages: Install packages flavor"
+- name: "Packages: Install packages flavor"
   community.general.pkgng:
     name: "{{ freebsd_mailserver_packages_flavor }}"
   register: result
@@ -8,7 +7,7 @@
   until: result is succeeded
   delay: "{{ freebsd_install_delay }}"
 
-- name: "packages: Install packages"
+- name: "Packages: Install packages"
   community.general.pkgng:
     name: "{{ freebsd_mailserver_packages }}"
   register: result
@@ -17,7 +16,7 @@
   delay: "{{ freebsd_install_delay }}"
   when: freebsd_install_method|lower == 'packages'
 
-- name: "packages: Install ports"
+- name: "Packages: Install ports"
   community.general.portinstall:
     name: "{{ item }}"
     use_packages: "{{ freebsd_use_packages }}"
@@ -29,4 +28,3 @@
   when: freebsd_install_method|lower == 'ports'
 
 # EOF
-...

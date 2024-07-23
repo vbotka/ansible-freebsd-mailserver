@@ -1,110 +1,127 @@
 ---
 # handlers for freebsd_mailserver
 
-- name: postfix check
+- name: Postfix check # noqa: no-changed-when
+  listen: postfix check
   ansible.builtin.command:
     cmd: /usr/local/sbin/postfix check
 
-- name: newaliases
+- name: Newaliases # noqa: no-changed-when
+  listen: newaliases
   ansible.builtin.command:
     cmd: /usr/bin/newaliases
 
-- name: postmap smtp sasl passwords
+- name: Postmap smtp sasl passwords # noqa: no-changed-when
+  listen: postmap smtp sasl passwords
   ansible.builtin.command:
-    cmd: "/usr/local/sbin/postmap {{ postfix_main_cf_smtp_sasl_password_maps }}"
+    cmd: /usr/local/sbin/postmap {{ postfix_main_cf_smtp_sasl_password_maps }}
 
-- name: postmap virtual aliases
+- name: Postmap virtual aliases # noqa: no-changed-when
+  listen: postmap virtual aliases
   ansible.builtin.command:
-    cmd: "/usr/local/sbin/postmap {{ postfix_virtual }}"
+    cmd: /usr/local/sbin/postmap {{ postfix_virtual }}
 
-- name: set hostname
+- name: Set hostname # noqa: no-changed-when
+  listen: set hostname
   ansible.builtin.command:
-    cmd: "/bin/hostname {{ rc_conf_hostname }}"
+    cmd: /bin/hostname {{ rc_conf_hostname }}
 
 # Postfix
 
-- name: enable and start postfix
+- name: Enable and start postfix
+  listen: enable and start postfix
   ansible.builtin.service:
     name: postfix
     state: started
     enabled: true
 
-- name: disable and stop postfix
+- name: Disable and stop postfix
+  listen: disable and stop postfix
   ansible.builtin.service:
     name: postfix
     state: stopped
     enabled: false
 
-- name: reload postfix
+- name: Reload postfix
+  listen: reload postfix
   ansible.builtin.service:
     name: postfix
     state: reloaded
-  when: fm_postfix_enable|bool
+  when: fm_postfix_enable | bool
 
-- name: restart postfix
+- name: Restart postfix
+  listen: restart postfix
   ansible.builtin.service:
     name: postfix
     state: restarted
-  when: fm_postfix_enable|bool
+  when: fm_postfix_enable | bool
 
 # Dovecot
 
-- name: enable and start dovecot
+- name: Enable and start dovecot
+  listen: enable and start dovecot
   ansible.builtin.service:
     name: dovecot
     state: started
     enabled: true
 
-- name: disable and stop dovecot
+- name: Disable and stop dovecot
+  listen: disable and stop dovecot
   ansible.builtin.service:
     name: dovecot
     state: stopped
     enabled: false
 
-- name: reload dovecot
+- name: Reload dovecot
+  listen: reload dovecot
   ansible.builtin.service:
     name: dovecot
     state: reloaded
-  when: fm_dovecot_enable|bool
+  when: fm_dovecot_enable | bool
 
-- name: restart dovecot
+- name: Restart dovecot
+  listen: restart dovecot
   ansible.builtin.service:
     name: dovecot
     state: restarted
-  when: fm_dovecot_enable|bool
+  when: fm_dovecot_enable | bool
 
 # Sendmail
 
-- name: stop sendmail
+- name: Stop sendmail
+  listen: stop sendmail
   ansible.builtin.service:
     name: sendmail
     state: stopped
 
 # DKIM
 
-- name: enable and start dkim
+- name: Enable and start dkim
+  listen: enable and start dkim
   ansible.builtin.service:
     name: milter-opendkim
     state: started
     enabled: true
 
-- name: disable and stop dkim
+- name: Disable and stop dkim
+  listen: disable and stop dkim
   ansible.builtin.service:
     name: milter-opendkim
     state: stopped
     enabled: false
 
-- name: reload dkim
+- name: Reload dkim
+  listen: reload dkim
   ansible.builtin.service:
     name: milter-opendkim
     state: reloaded
-  when: fm_dkim_enable|bool
+  when: fm_dkim_enable | bool
 
-- name: restart dkim
+- name: Restart dkim
+  listen: restart dkim
   ansible.builtin.service:
     name: milter-opendkim
     state: restarted
-  when: fm_dkim_enable|bool
+  when: fm_dkim_enable | bool
 
 # EOF
-...
