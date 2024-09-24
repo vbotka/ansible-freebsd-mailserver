@@ -3,6 +3,24 @@ vbotka.freebsd_mailserver 2.6 Release Notes
 ===========================================
 
 .. contents:: Topics
+# BEGIN Commits 2.6.1
+- Start devel 2.6.1
+- Update tests/test.yml playbook
+# END Commits 2.6.1
+# BEGIN Release notes 2.6.1
+2.6.1
+=====
+Release Summary
+---------------
+Major Changes
+-------------
+Minor Changes
+-------------
+Bugfixes
+--------
+Breaking Changes / Porting Guide
+--------------------------------
+# END Release notes 2.6.1
 
 
 2.6.1
