@@ -4,6 +4,7 @@ vbotka.freebsd_mailserver 2.6 Release Notes
 
 .. contents:: Topics
 # BEGIN Commits 2.6.1
+- Update python 3.11 in .travis.yml
 - Start devel 2.6.1
 - Update tests/test.yml playbook
 # END Commits 2.6.1
@@ -16,6 +17,10 @@ Major Changes
 -------------
 Minor Changes
 -------------
+- Update python 3.11 in .travis.yml
+- Start devel 2.6.1
+- Update tests/test.yml playbook
+
 Bugfixes
 --------
 Breaking Changes / Porting Guide
