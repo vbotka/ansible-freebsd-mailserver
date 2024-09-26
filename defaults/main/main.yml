@@ -1,6 +1,6 @@
 ---
 # defaults for freebsd_mailserver
-fm_role_version: 2.6.0
+fm_role_version: 2.6.1
 
 fm_install: true
 fm_debug: false
