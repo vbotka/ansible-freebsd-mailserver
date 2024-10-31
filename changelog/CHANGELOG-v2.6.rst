@@ -14,6 +14,7 @@ Maintenance update.
 
 Major Changes
 -------------
+* Supported 13.4 and 14.1
 
 Minor Changes
 -------------
