@@ -111,6 +111,8 @@
         {{ fm_dkim_domains | to_yaml(indent=2) | indent(2) }}
       postfix_mailerconf:
         {{ postfix_mailerconf | to_nice_yaml(indent=2) | indent(2) }}
+      fm_pam_conf:
+        {{ fm_pam_conf | to_nice_yaml(indent=2) | indent(2) }}
   ansible.builtin.debug:
     msg: "{{ '{}'.format(msg) }}"
 

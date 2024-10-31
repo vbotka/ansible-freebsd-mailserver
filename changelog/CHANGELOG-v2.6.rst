@@ -18,6 +18,12 @@ Major Changes
 * Add variable dovecot_conf_example_recreate (default=false). If true,
   force copy examples to etc/dovecot
 * Update tasks/debug.yml and dovecot.yml
+* Add tasks/pam.yml
+* Add variable fm_pam_conf (default={})
+* Add template pam.j2
+* Update tasks/debug.yml and main.yml
+* Add vars/pam.yml.sample
+
 
 Minor Changes
 -------------

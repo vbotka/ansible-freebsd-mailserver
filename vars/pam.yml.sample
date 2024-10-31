@@ -1,0 +1,5 @@
+---
+fm_pam_conf:
+  dovecot: |-
+    auth       required    pam_unix.so    no_warn try_first_pass
+    account    required    pam_unix.so

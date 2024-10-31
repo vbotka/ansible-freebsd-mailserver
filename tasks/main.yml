@@ -76,4 +76,8 @@
   ansible.builtin.import_tasks: dovecot.yml
   tags: fm-dovecot
 
+- name: Import pam.yml
+  ansible.builtin.import_tasks: pam.yml
+  tags: fm-pam
+
 # EOF
