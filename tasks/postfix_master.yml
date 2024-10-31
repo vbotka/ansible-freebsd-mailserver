@@ -1,5 +1,9 @@
 ---
 - name: "Postfix_master: Configure submission options {{ postfix_master_cf }}"
+  tags: potfix_master_cf_submission
+  notify:
+    - postfix check
+    - reload postfix
   ansible.builtin.blockinfile:
     dest: "{{ postfix_master_cf }}"
     marker: "# {mark} submission options ANSIBLE MANAGED BLOCK"
@@ -17,12 +21,12 @@
         -o smtpd_reject_unlisted_recipient={{ postfix_master_cf_smtpd_reject_unlisted_recipient }}
         -o smtpd_relay_restrictions={{ postfix_master_cf_smtpd_relay_restrictions }}
     backup: "{{ fm_backup_conf }}"
+
+- name: "Postfix_master: Configure smtps options {{ postfix_master_cf }}"
+  tags: potfix_master_cf_smtps
   notify:
     - postfix check
     - reload postfix
-  tags: potfix_master_cf_submission
-
-- name: "Postfix_master: Configure smtps options {{ postfix_master_cf }}"
   ansible.builtin.blockinfile:
     dest: "{{ postfix_master_cf }}"
     marker: "# {mark} smtps options ANSIBLE MANAGED BLOCK"
@@ -34,9 +38,5 @@
         -o smtpd_reject_unlisted_recipient={{ postfix_master_cf_smtpd_reject_unlisted_recipient }}
         -o smtpd_relay_restrictions={{ postfix_master_cf_smtpd_relay_restrictions }}
     backup: "{{ fm_backup_conf }}"
-  notify:
-    - postfix check
-    - reload postfix
-  tags: potfix_master_cf_smtps
 
 # EOF

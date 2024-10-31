@@ -1,61 +1,66 @@
 ---
 # smtpd sasl
 - name: "Postfix_sasl: Configure SASL {{ postfix_main_cf }}"
+  tags: postfix_main_cf_smtpd_sasl
+  notify:
+    - postfix check
+    - reload postfix
   ansible.builtin.lineinfile:
     dest: "{{ postfix_main_cf }}"
     regexp: ^\s*{{ item.regexp }}\s*=(.*)$
     line: "{{ item.regexp }} = {{ item.value }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ postfix_main_cf_smtpd_sasl_conf }}"
-  notify:
-    - postfix check
-    - reload postfix
-  tags: postfix_main_cf_smtpd_sasl
 
 # smtp sasl
 - name: "Postfix_sasl: Enable SASL {{ postfix_main_cf }}"
+  when: postfix_main_cf_smtp_sasl_auth_enable | bool
+  tags: postfix_main_cf_smtp_sasl_enable
+  notify:
+    - postfix check
+    - reload postfix
   ansible.builtin.lineinfile:
     dest: "{{ postfix_main_cf }}"
     regexp: ^\s*{{ item.regexp }}\s*=(.*)$
     line: "{{ item.regexp }} = {{ item.value }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ postfix_main_cf_smtp_sasl_enable_conf }}"
-  when: postfix_main_cf_smtp_sasl_auth_enable|bool
+
+- name: "Postfix_sasl: Disable SASL {{ postfix_main_cf }}"
+  when: not postfix_main_cf_smtp_sasl_auth_enable | bool
+  tags: postfix_main_cf_smtp_sasl_disable
   notify:
     - postfix check
     - reload postfix
-  tags: postfix_main_cf_smtp_sasl_enable
-
-- name: "Postfix_sasl: Disable SASL {{ postfix_main_cf }}"
   ansible.builtin.lineinfile:
     dest: "{{ postfix_main_cf }}"
     regexp: ^\s*{{ item.regexp }}\s*=(.*)$
     line: "{{ item.regexp }} = {{ item.value }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ postfix_main_cf_smtp_sasl_disable_conf }}"
-  when: not postfix_main_cf_smtp_sasl_auth_enable|bool
-  notify:
-    - postfix check
-    - reload postfix
-  tags: postfix_main_cf_smtp_sasl_disable
 
 # smtp_sasl_password_maps
 - name: "Postfix_sasl: Configure smtp_sasl_password_maps in {{ postfix_main_cf }}"
+  when:
+    - postfix_main_cf_smtp_sasl_password_maps|length > 0
+    - postfix_main_cf_smtp_sasl_auth_enable|bool
+  tags: postfix_main_cf_smtp_sasl_password_maps
+  notify:
+    - postfix check
+    - reload postfix
   ansible.builtin.lineinfile:
     dest: "{{ postfix_main_cf }}"
     regexp: ^\s*smtp_sasl_password_maps\s*=(.*)$
     line: smtp_sasl_password_maps = hash:{{ postfix_main_cf_smtp_sasl_password_maps }}
     backup: "{{ fm_backup_conf }}"
-  when:
-    - postfix_main_cf_smtp_sasl_password_maps|length > 0
-    - postfix_main_cf_smtp_sasl_auth_enable|bool
-  notify:
-    - postfix check
-    - reload postfix
-  tags: postfix_main_cf_smtp_sasl_password_maps
 
 # smtp_sasl_passwords
 - name: "Postfix_sasl: Create {{ postfix_main_cf_smtp_sasl_password_maps }}"
+  tags: postfix_smtp_sasl_passwd_create
+  notify:
+    - postmap smtp sasl passwords
+    - postfix check
+    - reload postfix
   ansible.builtin.template:
     src: sasl_passwd.j2
     dest: "{{ postfix_main_cf_smtp_sasl_password_maps }}"
@@ -63,10 +68,5 @@
     group: wheel
     mode: "0640"
     backup: "{{ fm_backup_conf }}"
-  notify:
-    - postmap smtp sasl passwords
-    - postfix check
-    - reload postfix
-  tags: postfix_smtp_sasl_passwd_create
 
 # EOF

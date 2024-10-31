@@ -1,22 +1,26 @@
 ---
 - name: "Virtual_aliases: Create empty {{ postfix_virtual }}"
-  ansible.builtin.command:
-    cmd: touch {{ postfix_virtual }}
-    creates: "{{ postfix_virtual }}"
   notify:
     - postmap virtual aliases
     - postfix check
     - reload postfix
+  ansible.builtin.command:
+    cmd: touch {{ postfix_virtual }}
+    creates: "{{ postfix_virtual }}"
 
 - name: "Virtual_aliases: Create empty {{ postfix_virtual ~ '.db' }}"
-  ansible.builtin.command:
-    cmd: /usr/local/sbin/postmap {{ postfix_virtual }}
-    creates: "{{ postfix_virtual }}.db"
   notify:
     - postfix check
     - reload postfix
+  ansible.builtin.command:
+    cmd: /usr/local/sbin/postmap {{ postfix_virtual }}
+    creates: "{{ postfix_virtual }}.db"
 
 - name: "Virtual_aliases: Configure virtual aliases {{ postfix_virtual }}"
+  notify:
+    - postmap virtual aliases
+    - postfix check
+    - reload postfix
   ansible.builtin.lineinfile:
     dest: "{{ postfix_virtual }}"
     regexp: ^\s*{{ item.alias }}(?!\S).*$
@@ -27,9 +31,5 @@
     backup: "{{ fm_backup_conf }}"
     create: true
   loop: "{{ virtual_aliases }}"
-  notify:
-    - postmap virtual aliases
-    - postfix check
-    - reload postfix
 
 # EOF

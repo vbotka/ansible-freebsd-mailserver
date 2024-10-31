@@ -120,6 +120,6 @@
         {{ postfix_smtp_sasl_passwords | to_yaml(indent=2) | indent(2) }}
   ansible.builtin.debug:
     msg: "{{ '{}'.format(msg) }}"
-  when: fm_debug_classified|bool
+  when: fm_debug_classified | bool
 
 # EOF

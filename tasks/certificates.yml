@@ -19,28 +19,28 @@
     mode: "0700"
 
 - name: "Certificates: Chmod 755 /usr/local/share/examples/dovecot/mkcert.sh"
+  when: postfix_create_cert | bool
   ansible.builtin.file:
     path: /usr/local/share/examples/dovecot/mkcert.sh
     mode: "0755"
-  when: postfix_create_cert|bool
 
 - name: "Certificates: Create Self-signed SSL certificates"
+  when: postfix_create_cert | bool
+  register: result
+  changed_when: result.stdout is search("dovecot-certificate-changed")
+  notify:
+    - postfix check
+    - reload postfix
   ansible.builtin.command:
     cmd: >
       sh -c "env OPENSSLCONFIG=/usr/local/share/examples/dovecot/dovecot-openssl.cnf
       /usr/local/share/examples/dovecot/mkcert.sh;
       printf 'dovecot-certificate-changed'"
     creates: /etc/ssl/certs/dovecot.pem
-  register: result
-  changed_when: result.stdout is search("dovecot-certificate-changed")
-  when: postfix_create_cert|bool
-  notify:
-    - postfix check
-    - reload postfix
 
-- name: "Certificates: Debug result"
+- name: "Certificates: Debug result fm_debug={{ fm_debug }}"
+  when: fm_debug | bool
   ansible.builtin.debug:
     var: result
-  when: fm_debug|bool
 
 # EOF

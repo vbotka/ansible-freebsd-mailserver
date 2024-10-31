@@ -1,6 +1,7 @@
 ---
   # example conf
 - name: "Dovecot: Copy example conf to /usr/local/etc/dovecot/"
+  tags: dovecot_example_conf
   ansible.builtin.shell:
     cmd: >
       cd /usr/local/etc/dovecot && cp -R example-config/{{ item }} .
@@ -12,18 +13,17 @@
     - dovecot-ldap.conf.ext
     - dovecot-sql.conf.ext
     - dovecot.conf
-  tags: dovecot_example_conf
 
   # dovecot.conf
 - name: "Dovecot: Configure {{ dovecot_conf_path }}"
+  tags: dovecot_conf
+  notify: reload dovecot
   ansible.builtin.lineinfile:
     dest: "{{ dovecot_conf_path }}"
     regexp: ^\s*{{ item.regexp }}\s*=(.*)$
     line: "{{ item.regexp }} = {{ item.value }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ dovecot_conf }}"
-  notify: reload dovecot
-  tags: dovecot_conf
 
 - name: Directory /var/run/dovecot
   when: dovecot_conf_link | bool
@@ -44,6 +44,8 @@
 
   # conf.d/10-master.conf
 - name: "Dovecot: Configure /usr/local/etc/dovecot/conf.d/10-master.conf"
+  tags: dovecot_master_conf
+  notify: reload dovecot
   ansible.builtin.blockinfile:
     dest: /usr/local/etc/dovecot/conf.d/10-master.conf
     backup: "{{ fm_backup_conf }}"
@@ -55,99 +57,99 @@
       user = postfix
       group = postfix
       }
-  notify: reload dovecot
-  tags: dovecot_master_conf
 
 - name: Create dh.pem
   tags: dovecot_ssl_dh
   block:
 
     - name: "Dovecot: Copy {{ dovecot_ssl_dh_custom_path ~ ' to ' ~ dovecot_ssl_dh }}"
+      when: dovecot_ssl_dh_custom | bool
       ansible.builtin.copy:
         src: "{{ dovecot_ssl_dh_custom_path }}"
         dest: "{{ dovecot_ssl_dh }}"
         owner: root
         group: wheel
         mode: "0644"
-      when: dovecot_ssl_dh_custom | bool
 
     - name: >-
         Dovecot: Generate Diffie-Hellman by command {{ dovecot_ssl_dh_cmd }}.
         ***This is going to take a long time***.
+      when: dovecot_ssl_dh_cmd_generate | bool
       ansible.builtin.command: # noqa: name[template]
         cmd: "{{ dovecot_ssl_dh_cmd }}"
         creates: "{{ dovecot_ssl_dh }}"
-      when: dovecot_ssl_dh_cmd_generate | bool
 
     - name: >-
         Dovecot: Generate OpenSSL Diffie-Hellman Parameters by openssl_dhparam.
         ***This is going to take a long time***. # noqa: name[template]
+      when: dovecot_ssl_dh_generate | bool
       community.crypto.openssl_dhparam:
         path: "{{ dovecot_ssl_dh }}"
         size: "{{ dovecot_ssl_dh_bits }}"
         owner: root
         group: wheel
         mode: "0644"
-      when: dovecot_ssl_dh_generate | bool
 
     - name: "Dovecot: Copy {{ dovecot_ssl_dh_path ~ ' to ' ~ dovecot_ssl_dh }}"
+      when:
+        - not dovecot_ssl_dh_custom | bool
+        - not dovecot_ssl_dh_cmd_generate | bool
+        - not dovecot_ssl_dh_generate | bool
       ansible.builtin.copy:
         src: "{{ dovecot_ssl_dh_path }}"
         dest: "{{ dovecot_ssl_dh }}"
         owner: root
         group: wheel
         mode: "0644"
-      when:
-        - not dovecot_ssl_dh_custom | bool
-        - not dovecot_ssl_dh_cmd_generate | bool
-        - not dovecot_ssl_dh_generate | bool
 
   # conf.d/10-ssl.conf
 - name: "Dovecot: Configure /usr/local/etc/dovecot/conf.d/10-ssl.conf"
+  tags: dovecot_ssl_conf
+  notify: reload dovecot
   ansible.builtin.lineinfile:
     dest: /usr/local/etc/dovecot/conf.d/10-ssl.conf
     regexp: ^\s*{{ item.regexp }}\s*=(.*)$
     line: "{{ item.regexp }} = {{ item.value }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ dovecot_ssl_conf }}"
-  notify: reload dovecot
-  tags: dovecot_ssl_conf
 
   # conf.d/10-mail.conf
 - name: "Dovecot: Configure /usr/local/etc/dovecot/conf.d/10-mail.conf"
+  tags: dovecot_mail_conf
+  notify: reload dovecot
   ansible.builtin.lineinfile:
     dest: /usr/local/etc/dovecot/conf.d/10-mail.conf
     regexp: ^\s*{{ item.regexp }}\s*=(.*)$
     line: "{{ item.regexp }} = {{ item.value }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ dovecot_mail_conf }}"
-  notify: reload dovecot
-  tags: dovecot_mail_conf
 
   # conf.d/10-auth.conf
 - name: "Dovecot: Configure /usr/local/etc/dovecot/conf.d/10-auth.conf"
+  tags: dovecot_auth_conf
+  notify: reload dovecot
   ansible.builtin.lineinfile:
     dest: /usr/local/etc/dovecot/conf.d/10-auth.conf
     regexp: ^\s*{{ item.regexp }}\s*=(.*)$
     line: "{{ item.regexp }} = {{ item.value }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ dovecot_auth_conf }}"
-  notify: reload dovecot
-  tags: dovecot_auth_conf
 
   # conf.d/10-logging.conf
 - name: "Dovecot: Configure /usr/local/etc/dovecot/conf.d/10-logging.conf"
+  tags: dovecot_logging_conf
+  notify: reload dovecot
   ansible.builtin.lineinfile:
     dest: /usr/local/etc/dovecot/conf.d/10-logging.conf
     regexp: ^\s*{{ item.regexp }}\s*=(.*)$
     line: "{{ item.regexp }} = {{ item.value }}"
     backup: "{{ fm_backup_conf }}"
   loop: "{{ dovecot_logging_conf }}"
-  notify: reload dovecot
-  tags: dovecot_logging_conf
 
   # conf.d/15-lda.conf
 - name: "Dovecot: Configure /usr/local/etc/dovecot/conf.d/15-lda.conf"
+  tags: dovecot_lda_conf
+  notify: reload dovecot
   ansible.builtin.lineinfile:
     dest: /usr/local/etc/dovecot/conf.d/15-lda.conf
     regexp: ^\s*{{ item.regexp }}\s*=(.*)$
@@ -155,8 +157,6 @@
     insertafter: protocol lda {
     backup: "{{ fm_backup_conf }}"
   loop: "{{ dovecot_lda_conf }}"
-  notify: reload dovecot
-  tags: dovecot_lda_conf
 
 # conf.d/15-mailboxes.conf
 # - name: Configure /usr/local/etc/dovecot/conf.d/15-mailboxes.conf

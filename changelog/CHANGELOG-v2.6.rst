@@ -18,6 +18,7 @@ Major Changes
 
 Minor Changes
 -------------
+* Tasks formatting improved.
 
 
 2.6.1

@@ -3,12 +3,12 @@
 
 - name: Import debug.yml
   ansible.builtin.import_tasks: debug.yml
-  when: fm_debug|bool
+  when: fm_debug | bool
   tags: fm-debug
 
 - name: Import packages.yml
   ansible.builtin.import_tasks: packages.yml
-  when: fm_install|bool
+  when: fm_install | bool
   tags: fm-packages
 
 - name: Import files.yml
@@ -21,7 +21,7 @@
 
 - name: Import sanity.yml
   ansible.builtin.import_tasks: sanity.yml
-  when: fm_sanity|bool
+  when: fm_sanity | bool
   tags: fm-sanity
 
 - name: Import certificates.yml
