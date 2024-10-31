@@ -1,4 +1,5 @@
 ---
+dovecot_conf_example_recreate: false
 dovecot_conf_path: /usr/local/etc/dovecot/dovecot.conf
 dovecot_conf_link_dir: /var/run/dovecot
 dovecot_conf_link_path: "{{ dovecot_conf_link_dir }}/dovecot.conf"

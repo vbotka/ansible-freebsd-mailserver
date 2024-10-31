@@ -15,6 +15,9 @@ Maintenance update.
 Major Changes
 -------------
 * Supported 13.4 and 14.1
+* Add variable dovecot_conf_example_recreate (default=false). If true,
+  force copy examples to etc/dovecot
+* Update tasks/debug.yml and dovecot.yml
 
 Minor Changes
 -------------
