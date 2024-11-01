@@ -1,0 +1,23 @@
+# dovecot_ssl_protocols: "!SSLv2 !SSLv3"
+dovecot_ssl_dh_custom: true
+dovecot_ssl_dh_custom_path: "~/.ansible/copy/{{ inventory_hostname }}/dh.pem"
+dovecot_ssl_dh_cmd_generate: false
+dovecot_ssl_dh_generate: false
+dovecot_auth_verbose: "yes"
+dovecot_auth_debug: "no"
+dovecot_mail_debug: "no"
+dovecot_verbose_ssl: "yes"
+freebsd_mailserver_dovecot_protocols: "imap pop3 lmtp sieve"
+
+dovecot_pop3_conf:
+  - { regexp: pop3_no_flag_updates, value: "yes" }
+  - { regexp: pop3_lock_session, value: "yes" }
+  - { regexp: pop3_fast_size_lookups, value: "yes" }
+dovecot_confd_legacy: false
+dovecot_confd_lines:
+  10-ssl: "{{ dovecot_ssl_conf }}"
+  10-mail: "{{ dovecot_mail_conf }}"
+  10-auth: "{{ dovecot_auth_conf }}"
+  10-logging: "{{ dovecot_logging_conf }}"
+  15-lda: "{{ dovecot_lda_conf }}"
+  20-pop3: "{{ dovecot_pop3_conf }}"

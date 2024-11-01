@@ -5,6 +5,39 @@ vbotka.freebsd_mailserver 2.6 Release Notes
 .. contents:: Topics
 
 
+2.6.2
+=====
+
+Release Summary
+---------------
+Maintenance update.
+
+Major Changes
+-------------
+* Supported 13.4 and 14.1
+* Add variable dovecot_conf_example_recreate (default=false). If true,
+  force copy examples to etc/dovecot
+* Update tasks/debug.yml and dovecot.yml
+* Add tasks/pam.yml
+* Add variable fm_pam_conf (default={})
+* Add template pam.j2
+* Update tasks/debug.yml and main.yml
+* Add vars/pam.yml.sample
+* Add block to unify the configuration /usr/local/etc/dovecot/conf.d/*
+* Add variables dovecot_confd_blocks and dovecot_confd_lines
+* Add variable dovecot_confd_legacy (default=true)
+
+Minor Changes
+-------------
+* Tasks formatting improved.
+
+Breaking Changes / Porting Guide
+--------------------------------
+* dovecot_master_conf is a list. The block marks must be unique. See
+  variable dovecot_confd_blocks. Rebuild the dovecot
+  configuration. Set dovecot_conf_example_recreate=true
+
+
 2.6.1
 =====
 

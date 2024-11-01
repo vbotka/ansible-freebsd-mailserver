@@ -188,7 +188,8 @@ shell> ansible-playbook freebsd-mailserver.yml
 
 ## Check mode
 
-Create default configuration files of Dovecot to avoid error missing files
+Create default configuration files of Dovecot to avoid error missing
+files
 
 ```bash
 shell> ansible-playbook freebsd-mailserver.yml -t dovecot_example_conf
@@ -201,11 +202,31 @@ shell> ansible-playbook freebsd-mailserver.yml --check
 ```
 
 
+## Upgrade
+
+### Dovecot
+
+* Set *dovecot_conf_example_recreate=true* and rebuild the Dovecot
+  configuration
+
+```bash
+shell> ansible-playbook freebsd-mailserver.yml -t fm-dovecot -e dovecot_conf_example_recreate=true
+```
+
+* Optionally, set the variables *dovecot_confd_blocks* and
+  *dovecot_confd_lines* to your needs and bypass the legacy
+  configuration. See tasks/dovecot.yml
+
+```bash
+shell> ansible-playbook freebsd-mailserver.yml -t fm-dovecot -e dovecot_confd_legacy=false
+```
+
+
 ## Ansible lint
 
 Use the configuration file *.ansible-lint.local* when running
-*ansible-lint*. Some rules might be disabled and some warnings might
-be ignored. See the notes in the configuration file.
+*ansible-lint*. Some rules might be disabled and some warnings might be
+ignored. See the notes in the configuration file.
 
 ```bash
 shell> ansible-lint -c .ansible-lint.local

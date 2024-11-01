@@ -1,4 +1,5 @@
 ---
+dovecot_conf_example_recreate: false
 dovecot_conf_path: /usr/local/etc/dovecot/dovecot.conf
 dovecot_conf_link_dir: /var/run/dovecot
 dovecot_conf_link_path: "{{ dovecot_conf_link_dir }}/dovecot.conf"
@@ -60,3 +61,21 @@ dovecot_lda_conf:
   - { regexp: log_path, value: "" }
   - { regexp: info_log_path, value: "" }
   - { regexp: syslog_facility, value: mail }
+dovecot_master_conf:
+  - insertafter: Postfix smtp-auth
+    block: |
+      unix_listener /var/spool/postfix/private/auth {
+      mode = 0660
+      user = postfix
+      group = postfix
+      }
+
+dovecot_confd_legacy: true
+dovecot_confd_lines:
+  10-ssl: "{{ dovecot_ssl_conf }}"
+  10-mail: "{{ dovecot_mail_conf }}"
+  10-auth: "{{ dovecot_auth_conf }}"
+  10-logging: "{{ dovecot_logging_conf }}"
+  15-lda: "{{ dovecot_lda_conf }}"
+dovecot_confd_blocks:
+  10-master: "{{ dovecot_master_conf }}"

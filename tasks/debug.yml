@@ -71,6 +71,7 @@
         {{ postfix_main_cf_smtp_sasl_disable_conf | to_yaml(indent=2) | indent(2) }}
       postfix_main_cf_smtp_sasl_password_maps: {{ postfix_main_cf_smtp_sasl_password_maps }}
 
+      dovecot_conf_example_recreate: {{ dovecot_conf_example_recreate }}
       dovecot_conf_path: {{ dovecot_conf_path }}
       dovecot_conf_link_dir: {{ dovecot_conf_link_dir }}
       dovecot_conf_link_path: {{ dovecot_conf_link_path }}
@@ -95,6 +96,11 @@
         {{ dovecot_logging_conf | to_yaml(indent=2) | indent(2) }}
       dovecot_lda_conf:
         {{ dovecot_lda_conf | to_yaml(indent=2) | indent(2) }}
+      dovecot_confd_legacy: {{ dovecot_confd_legacy }}
+      dovecot_confd_blocks:
+        {{ dovecot_confd_blocks | to_yaml(indent=2) | indent(2) }}
+      dovecot_confd_lines:
+        {{ dovecot_confd_lines | to_yaml(indent=2) | indent(2) }}
       fm_dkim_milteropendkim_uid: {{ fm_dkim_milteropendkim_uid }}
       fm_dkim_milteropendkim_gid: {{ fm_dkim_milteropendkim_gid }}
       fm_dkim_private_key_mode: {{ fm_dkim_private_key_mode }}
@@ -110,6 +116,8 @@
         {{ fm_dkim_domains | to_yaml(indent=2) | indent(2) }}
       postfix_mailerconf:
         {{ postfix_mailerconf | to_nice_yaml(indent=2) | indent(2) }}
+      fm_pam_conf:
+        {{ fm_pam_conf | to_nice_yaml(indent=2) | indent(2) }}
   ansible.builtin.debug:
     msg: "{{ '{}'.format(msg) }}"
 
@@ -120,6 +128,6 @@
         {{ postfix_smtp_sasl_passwords | to_yaml(indent=2) | indent(2) }}
   ansible.builtin.debug:
     msg: "{{ '{}'.format(msg) }}"
-  when: fm_debug_classified|bool
+  when: fm_debug_classified | bool
 
 # EOF

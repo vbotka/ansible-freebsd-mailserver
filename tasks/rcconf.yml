@@ -1,5 +1,7 @@
 ---
 - name: "Rcconf: Configure hostname in /etc/rc.conf"
+  tags: fm-rcconf-hostname
+  notify: set hostname
   ansible.builtin.lineinfile:
     dest: /etc/rc.conf
     regexp: ^\s*{{ item.regexp }}\s*=(.*)$
@@ -7,10 +9,10 @@
     backup: "{{ fm_backup_conf }}"
   loop:
     - { regexp: hostname, value: "{{ rc_conf_hostname }}" }
-  notify: set hostname
-  tags: fm-rcconf-hostname
 
 - name: "Rcconf: Disable sendmail in /etc/rc.conf"
+  tags: fm-rcconf-sendmail
+  notify: stop sendmail
   ansible.builtin.lineinfile:
     dest: /etc/rc.conf
     regexp: ^\s*{{ item.regexp }}\s*=(.*)$
@@ -21,111 +23,112 @@
     - { regexp: sendmail_submit_enable, value: "NO" }
     - { regexp: sendmail_outbound_enable, value: "NO" }
     - { regexp: sendmail_msp_queue_enable, value: "NO" }
-  notify: stop sendmail
-  tags: fm-rcconf-sendmail
 
-- name: "Rcconf: Enable and Start Postfix"
-  ansible.builtin.lineinfile:
-    dest: /etc/rc.conf
-    regexp: ^\s*{{ item.regexp }}\s*=(.*)$
-    line: '{{ item.regexp }}="{{ item.value }}"'
-    backup: "{{ fm_backup_conf }}"
-  loop:
-    - { regexp: postfix_enable, value: "YES" }
-  when: fm_postfix_enable|bool
-  notify:
-    - postfix check
-    - enable and start postfix
+- name: Postfix
   tags: fm-rcconf-postfix
+  block:
 
-- name: "Rcconf: Enable and Start Dovecot"
-  ansible.builtin.lineinfile:
-    dest: /etc/rc.conf
-    regexp: ^\s*{{ item.regexp }}\s*=(.*)$
-    line: '{{ item.regexp }}="{{ item.value }}"'
-    backup: "{{ fm_backup_conf }}"
-  loop:
-    - { regexp: dovecot_enable, value: "YES" }
-  when: fm_dovecot_enable|bool
-  notify: enable and start dovecot
+    - name: "Rcconf: Configure Postfix"
+      notify: reload postfix
+      ansible.builtin.lineinfile:
+        dest: /etc/rc.conf
+        regexp: ^\s*{{ item.regexp }}\s*=(.*)$
+        line: '{{ item.regexp }}="{{ item.value }}"'
+        backup: "{{ fm_backup_conf }}"
+      loop: "{{ fm_postfix_rcconf }}"
+
+    - name: "Rcconf: Enable and Start Postfix"
+      when: fm_postfix_enable | bool
+      notify:
+        - postfix check
+        - enable and start postfix
+      ansible.builtin.lineinfile:
+        dest: /etc/rc.conf
+        regexp: ^\s*{{ item.regexp }}\s*=(.*)$
+        line: '{{ item.regexp }}="{{ item.value }}"'
+        backup: "{{ fm_backup_conf }}"
+      loop:
+        - { regexp: postfix_enable, value: "YES" }
+
+    - name: "Rcconf: Disable and Stop Postfix"
+      when: not fm_postfix_enable | bool
+      notify: disable and stop postfix
+      ansible.builtin.lineinfile:
+        dest: /etc/rc.conf
+        regexp: ^\s*{{ item.regexp }}\s*=(.*)$
+        line: '{{ item.regexp }}="{{ item.value }}"'
+        backup: "{{ fm_backup_conf }}"
+      loop:
+        - { regexp: postfix_enable, value: "NO" }
+
+- name: Dovecot
   tags: fm-rcconf-dovecot
+  block:
 
-- name: "Rcconf: Enable and Start DKIM"
-  ansible.builtin.lineinfile:
-    dest: /etc/rc.conf
-    regexp: ^\s*{{ item.regexp }}\s*=(.*)$
-    line: '{{ item.regexp }}="{{ item.value }}"'
-    backup: "{{ fm_backup_conf }}"
-  loop:
-    - { regexp: milteropendkim_enable, value: "YES" }
-  when: fm_dkim_enable|bool
-  notify: enable and start dkim
+    - name: "Rcconf: Configure Dovecot"
+      notify: reload dovecot
+      ansible.builtin.lineinfile:
+        dest: /etc/rc.conf
+        regexp: ^\s*{{ item.regexp }}\s*=(.*)$
+        line: '{{ item.regexp }}="{{ item.value }}"'
+        backup: "{{ fm_backup_conf }}"
+      loop: "{{ fm_dovecot_rcconf }}"
+
+    - name: "Rcconf: Enable and Start Dovecot"
+      when: fm_dovecot_enable | bool
+      notify: enable and start dovecot
+      ansible.builtin.lineinfile:
+        dest: /etc/rc.conf
+        regexp: ^\s*{{ item.regexp }}\s*=(.*)$
+        line: '{{ item.regexp }}="{{ item.value }}"'
+        backup: "{{ fm_backup_conf }}"
+      loop:
+        - { regexp: dovecot_enable, value: "YES" }
+
+    - name: "Rcconf: Disable and Stop Dovecot"
+      when: not fm_dovecot_enable | bool
+      notify: disable and stop dovecot
+      ansible.builtin.lineinfile:
+        dest: /etc/rc.conf
+        regexp: ^\s*{{ item.regexp }}\s*=(.*)$
+        line: '{{ item.regexp }}="{{ item.value }}"'
+        backup: "{{ fm_backup_conf }}"
+      loop:
+        - { regexp: dovecot_enable, value: "NO" }
+
+- name: DKIM
   tags: fm-rcconf-dkim
+  block:
 
-- name: "Rcconf: Disable and Stop Postfix"
-  ansible.builtin.lineinfile:
-    dest: /etc/rc.conf
-    regexp: ^\s*{{ item.regexp }}\s*=(.*)$
-    line: '{{ item.regexp }}="{{ item.value }}"'
-    backup: "{{ fm_backup_conf }}"
-  loop:
-    - { regexp: postfix_enable, value: "NO" }
-  when: not fm_postfix_enable|bool
-  notify: disable and stop postfix
-  tags: fm-rcconf-postfix
+    - name: "Rcconf: Configure DKIM"
+      notify: reload dkim
+      ansible.builtin.lineinfile:
+        dest: /etc/rc.conf
+        regexp: ^\s*{{ item.regexp }}\s*=(.*)$
+        line: '{{ item.regexp }}="{{ item.value }}"'
+        backup: "{{ fm_backup_conf }}"
+      loop: "{{ fm_dkim_rcconf }}"
 
-- name: "Rcconf: Disable and Stop Dovecot"
-  ansible.builtin.lineinfile:
-    dest: /etc/rc.conf
-    regexp: ^\s*{{ item.regexp }}\s*=(.*)$
-    line: '{{ item.regexp }}="{{ item.value }}"'
-    backup: "{{ fm_backup_conf }}"
-  loop:
-    - { regexp: dovecot_enable, value: "NO" }
-  when: not fm_dovecot_enable|bool
-  notify: disable and stop dovecot
-  tags: fm-rcconf-dovecot
+    - name: "Rcconf: Enable and Start DKIM"
+      when: fm_dkim_enable | bool
+      notify: enable and start dkim
+      ansible.builtin.lineinfile:
+        dest: /etc/rc.conf
+        regexp: ^\s*{{ item.regexp }}\s*=(.*)$
+        line: '{{ item.regexp }}="{{ item.value }}"'
+        backup: "{{ fm_backup_conf }}"
+      loop:
+        - { regexp: milteropendkim_enable, value: "YES" }
 
-- name: "Rcconf: Disable and Stop DKIM"
-  ansible.builtin.lineinfile:
-    dest: /etc/rc.conf
-    regexp: ^\s*{{ item.regexp }}\s*=(.*)$
-    line: '{{ item.regexp }}="{{ item.value }}"'
-    backup: "{{ fm_backup_conf }}"
-  loop:
-    - { regexp: milteropendkim_enable, value: "NO" }
-  when: not fm_dkim_enable|bool
-  notify: disable and stop dkim
-  tags: fm-rcconf-dkim
-
-- name: "Rcconf: Configure Postfix"
-  ansible.builtin.lineinfile:
-    dest: /etc/rc.conf
-    regexp: ^\s*{{ item.regexp }}\s*=(.*)$
-    line: '{{ item.regexp }}="{{ item.value }}"'
-    backup: "{{ fm_backup_conf }}"
-  loop: "{{ fm_postfix_rcconf }}"
-  notify: reload postfix
-  tags: fm-rcconf-postfix
-
-- name: "Rcconf: Configure Dovecot"
-  ansible.builtin.lineinfile:
-    dest: /etc/rc.conf
-    regexp: ^\s*{{ item.regexp }}\s*=(.*)$
-    line: '{{ item.regexp }}="{{ item.value }}"'
-    backup: "{{ fm_backup_conf }}"
-  loop: "{{ fm_dovecot_rcconf }}"
-  notify: reload dovecot
-  tags: fm-rcconf-dovecot
-
-- name: "Rcconf: Configure DKIM"
-  ansible.builtin.lineinfile:
-    dest: /etc/rc.conf
-    regexp: ^\s*{{ item.regexp }}\s*=(.*)$
-    line: '{{ item.regexp }}="{{ item.value }}"'
-    backup: "{{ fm_backup_conf }}"
-  loop: "{{ fm_dkim_rcconf }}"
-  notify: reload dkim
-  tags: fm-rcconf-dkim
+    - name: "Rcconf: Disable and Stop DKIM"
+      when: not fm_dkim_enable | bool
+      notify: disable and stop dkim
+      ansible.builtin.lineinfile:
+        dest: /etc/rc.conf
+        regexp: ^\s*{{ item.regexp }}\s*=(.*)$
+        line: '{{ item.regexp }}="{{ item.value }}"'
+        backup: "{{ fm_backup_conf }}"
+      loop:
+        - { regexp: milteropendkim_enable, value: "NO" }
 
 # EOF

@@ -1,5 +1,6 @@
 ---
 - name: "Dirs: Create DKIM dirs"
+  tags: fm-dirs-dkim
   ansible.builtin.file:
     state: directory
     path: "{{ item }}"
@@ -9,9 +10,9 @@
   loop:
     - "{{ fm_dkim_dir }}"
     - "{{ fm_dkim_dir_keys }}"
-  tags: fm-dirs-dkim
 
 - name: "Dirs: Create DKIM domain key dirs"
+  tags: fm-dirs-dkim-domains
   ansible.builtin.file:
     state: directory
     path: "{{ fm_dkim_dir_keys }}/{{ item.name }}"
@@ -21,6 +22,5 @@
   loop: "{{ fm_dkim_domains }}"
   loop_control:
     label: "{{ fm_dkim_dir_keys }}/{{ item.name }}"
-  tags: fm-dirs-dkim-domains
 
 # EOF
