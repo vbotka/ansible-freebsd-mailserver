@@ -96,6 +96,11 @@
         {{ dovecot_logging_conf | to_yaml(indent=2) | indent(2) }}
       dovecot_lda_conf:
         {{ dovecot_lda_conf | to_yaml(indent=2) | indent(2) }}
+      dovecot_confd_legacy: {{ dovecot_confd_legacy }}
+      dovecot_confd_blocks:
+        {{ dovecot_confd_blocks | to_yaml(indent=2) | indent(2) }}
+      dovecot_confd_lines:
+        {{ dovecot_confd_lines | to_yaml(indent=2) | indent(2) }}
       fm_dkim_milteropendkim_uid: {{ fm_dkim_milteropendkim_uid }}
       fm_dkim_milteropendkim_gid: {{ fm_dkim_milteropendkim_gid }}
       fm_dkim_private_key_mode: {{ fm_dkim_private_key_mode }}

@@ -23,11 +23,19 @@ Major Changes
 * Add template pam.j2
 * Update tasks/debug.yml and main.yml
 * Add vars/pam.yml.sample
-
+* Add block to unify the configuration /usr/local/etc/dovecot/conf.d/*
+* Add variables dovecot_confd_blocks and dovecot_confd_lines
+* Add variable dovecot_confd_legacy (default=true)
 
 Minor Changes
 -------------
 * Tasks formatting improved.
+
+Breaking Changes / Porting Guide
+--------------------------------
+* dovecot_master_conf is a list. The block marks must be unique. See
+  variable dovecot_confd_blocks. Rebuild the dovecot
+  configuration. Set dovecot_conf_example_recreate=true
 
 
 2.6.1

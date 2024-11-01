@@ -1,22 +1,28 @@
 ---
-- name: Copy example conf to /usr/local/etc/dovecot/
+- name: Copy example-conf files to /usr/local/etc/dovecot/
   tags: dovecot_conf_example
   block:
 
+    - name: "Dovecot: Stat example-config files"
+      register: config_results
+      ansible.builtin.find:
+        paths: /usr/local/etc/dovecot/example-config
+        file_type: file
+
+    - name: "Dovecot: Debug example-config files fm_debug={{ fm_debug }}"
+      when: fm_debug | bool
+      ansible.builtin.debug:
+        var: config_results
+
     - name: "Dovecot: Copy example-config files to /usr/local/etc/dovecot/"
       ansible.builtin.copy:
-        src: "/usr/local/etc/dovecot/example-config/{{ item }}"
-        dest: "/usr/local/etc/dovecot/{{ item }}"
+        src: "{{ item }}"
+        dest: "/usr/local/etc/dovecot"
         backup: "{{ fm_backup_conf }}"
         remote_src: true
         mode: preserve
         force: "{{ dovecot_conf_example_recreate | bool }}"
-      loop:
-        - dovecot-dict-auth.conf.ext
-        - dovecot-dict-sql.conf.ext
-        - dovecot-ldap.conf.ext
-        - dovecot-sql.conf.ext
-        - dovecot.conf
+      loop: "{{ config_results.files | map(attribute='path') }}"
 
     - name: "Dovecot: Stat example-config/conf.d files"
       register: confd_results
@@ -29,7 +35,7 @@
       ansible.builtin.debug:
         var: confd_results
 
-    - name: "Dovecot: Copy example-config/conf.d files to /usr/local/etc/dovecot/"
+    - name: "Dovecot: Copy example-config/conf.d files to /usr/local/etc/dovecot/conf.d/"
       ansible.builtin.copy:
         src: "{{ item }}"
         dest: "/usr/local/etc/dovecot/conf.d"
@@ -112,6 +118,35 @@
         mode: "0644"
 
 - name: Configure /usr/local/etc/dovecot/conf.d/*
+  when: not dovecot_confd_legacy | bool
+  tags: dovecot_confd
+  notify: reload dovecot
+  block:
+
+    - name: "Dovecot: Configure blocks in /usr/local/etc/dovecot/conf.d/*"
+      ansible.builtin.blockinfile:
+        dest: /usr/local/etc/dovecot/conf.d/{{ item.0.key }}.conf
+        marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item.1.insertafter }}"
+        insertafter: "{{ item.1.insertafter }}"
+        block: "{{ item.1.block }}"
+        backup: "{{ fm_backup_conf }}"
+      loop: "{{ dovecot_confd_blocks | dict2items | subelements('value') }}"
+      loop_control:
+        label: "{{ item.0.key }}.conf {{ item.1.insertafter }}"
+
+    - name: "Dovecot: Configure lines in /usr/local/etc/dovecot/conf.d/*"
+      ansible.builtin.lineinfile:
+        dest: /usr/local/etc/dovecot/conf.d/{{ item.0.key }}.conf
+        regexp: ^\s*{{ item.1.regexp }}\s*=(.*)$
+        line: "{{ item.1.regexp }} = {{ item.1.value }}"
+        backup: "{{ fm_backup_conf }}"
+      loop: "{{ dovecot_confd_lines | dict2items | subelements('value') }}"
+      loop_control:
+        label: "{{ item.0.key }}.conf {{ item.1.regexp }} = {{ item.1.value }}"
+
+- name: Legacy configure /usr/local/etc/dovecot/conf.d/*
+  when: dovecot_confd_legacy | bool
+  tags: dovecot_confd_legacy
   notify: reload dovecot
   block:
 
@@ -119,15 +154,13 @@
       tags: dovecot_master_conf
       ansible.builtin.blockinfile:
         dest: /usr/local/etc/dovecot/conf.d/10-master.conf
+        marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item.insertafter }}"
+        insertafter: "{{ item.insertafter }}"
+        block: "{{ item.block }}"
         backup: "{{ fm_backup_conf }}"
-        marker: "# {mark} ANSIBLE MANAGED BLOCK"
-        insertafter: Postfix smtp-auth
-        block: |
-          unix_listener /var/spool/postfix/private/auth {
-          mode = 0660
-          user = postfix
-          group = postfix
-          }
+      loop: "{{ dovecot_master_conf }}"
+      loop_control:
+        label: "{{ item.insertafter }}"
 
     - name: "Dovecot: Configure /usr/local/etc/dovecot/conf.d/10-ssl.conf"
       tags: dovecot_ssl_conf
@@ -175,7 +208,6 @@
         backup: "{{ fm_backup_conf }}"
       loop: "{{ dovecot_lda_conf }}"
 
-    # conf.d/15-mailboxes.conf
     # - name: Configure /usr/local/etc/dovecot/conf.d/15-mailboxes.conf
     #   tags: config_dovecot_mailboxes
     #   lineinfile:
